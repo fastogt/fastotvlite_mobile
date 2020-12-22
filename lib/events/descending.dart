@@ -1,0 +1,3 @@
+class StreamsAddedEvent {
+  StreamsAddedEvent();
+}
