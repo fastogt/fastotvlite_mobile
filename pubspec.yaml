@@ -7,13 +7,21 @@ version: 1.13.0+25
 module:
   androidX: true
 
+environment:
+  sdk: ">=2.9.0 <3.0.0"
+
 dependencies:
-  flutter:
-    sdk: flutter
+  event_bus: ^1.1.1
   fastotv_dart:
     git:
       url: https://github.com/fastogt/fastotv_dart.git
       ref: master
+  fastotv_device_info:
+    git:
+      url: https://github.com/fastogt/fastotv_device_info.git
+      ref: master
+  flutter:
+    sdk: flutter
   flutter_common:
     git:
       url: https://github.com/fastogt/flutter_common.git
@@ -22,22 +30,28 @@ dependencies:
     git:
       url: https://github.com/fastogt/flutter_fastotv_common.git
       ref: master
-  fastotv_device_info:
-    git:
-      url: https://github.com/fastogt/fastotv_device_info.git
-      ref: master
-  cupertino_icons: ^1.0.0
-  flutter_speed_dial: ^1.2.5
-  unicorndial: ^1.1.5
-  shared_preferences: ^0.5.12
-  file_picker: ^2.0.6
-  flutter_tags: ^0.4.9
-  event_bus: ^1.1.1
-  numberpicker: ^1.2.1
-  get_it: ^5.0.1
-  rxdart: ^0.24.1
-  double_back_to_close_app: ^1.2.0
   flutter_localizations:
+    sdk: flutter
+  get_it: ^5.0.1
+  numberpicker: ^1.1.0
+  player:
+    git:
+      url: https://github.com/fastogt/flutter_fastotv_player.git
+      ref: main
+  rxdart: ^0.24.0
+  shared_preferences: ^0.5.7+1
+  url_launcher: ^5.4.2
+  double_back_to_close_app: ^2.0.1
+
+dependency_overrides:
+  intl: ^0.17.0-nullsafety.2
+
+dev_dependencies:
+  dart_rules:
+    git:
+      url: https://github.com/fastogt/dart_rules.git
+      ref: main
+  flutter_test:
     sdk: flutter
 
 flutter:
