@@ -44,6 +44,8 @@ class LocalStorageService {
   static const String _primaryColorKey = 'primaryColor';
   static const String _accentColorKey = 'accentColor';
 
+  static const String _switchGuideKey = 'switch_guide';
+
   String langCode() {
     return _preferences.getString(_langCodeKey);
   }
@@ -178,5 +180,13 @@ class LocalStorageService {
       return null;
     }
     return Color(_colorValue);
+  }
+
+  bool switchGuide() {
+    return _preferences.getBool(_switchGuideKey) ?? false;
+  }
+
+  void setSwitchGuide(bool value) {
+    _preferences.setBool(_switchGuideKey, value);
   }
 }

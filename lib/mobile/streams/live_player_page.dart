@@ -1,84 +1,164 @@
 import 'dart:async';
 import 'dart:core';
-
+import 'package:fastotvlite/player/mobile_player.dart';
+import 'package:fastotvlite/service_locator.dart';
+import 'package:fastotvlite/shared_prefs.dart';
 import 'package:fastotvlite/base/streams/live_bottom_controls.dart';
 import 'package:fastotvlite/base/streams/program_bloc.dart';
 import 'package:fastotvlite/base/streams/programs_list.dart';
 import 'package:fastotvlite/channels/live_stream.dart';
-import 'package:fastotvlite/player/common_player.dart';
-import 'package:fastotvlite/player/stream_player.dart';
+import 'package:fastotvlite/player/controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_common/base/controls/player_buttons.dart';
 import 'package:flutter_common/localization/app_localizations.dart';
 import 'package:flutter_common/screen_orientation.dart' as orientation;
+import 'package:flutter_fastotv_common/appbar_player.dart';
 import 'package:flutter_fastotv_common/base/controls/custom_appbar.dart';
 import 'package:flutter_fastotv_common/base/controls/fullscreen_button.dart';
-import 'package:flutter_fastotv_common/chromecast/chromecast_filler.dart';
 import 'package:flutter_fastotv_common/chromecast/chromecast_info.dart';
+import 'package:player/common/states.dart';
 
 class ChannelPage extends StatefulWidget {
   final List<LiveStream> channels;
   final int position;
-  final StreamController<LiveStream> stream;
+  final void Function(LiveStream stream) addRecent;
 
-  ChannelPage({this.channels, this.position, this.stream});
+  ChannelPage({this.channels, this.position, this.addRecent});
 
   @override
   _ChannelPageState createState() => _ChannelPageState();
 }
 
-class _ChannelPageState extends AppBarPlayerLive<ChannelPage> {
+class _ChannelPageState extends PlayerPageMobileState<ChannelPage> {
+  LivePlayerController _controller;
+
+  @override
+  LivePlayerController get controller => _controller;
+
   ProgramsBloc programsBloc;
   int currentPos;
-  StreamPlayerPage _playerPage;
 
-  double bottomControlsHeight() {
-    if (programsBloc.currentProgramIndex != null) {
-      return 4 + BUTTONS_LINE_HEIGHT + TEXT_HEIGHT + TIMELINE_HEIGHT + TEXT_PADDING;
-    } else {
-      return 4 + BUTTONS_LINE_HEIGHT;
-    }
-  }
-
-  bool isPlaying() {
-    if (ChromeCastInfo().castConnected) {
-      return ChromeCastInfo().isPlaying();
-    } else {
-      return _playerPage.isPlaying();
-    }
-  }
-
-  void play() => _playerPage.play();
-
-  void pause() => _playerPage.pause();
-
-  void onLongTapLeft() {}
-
-  void onLongTapRight() {}
-
-  Widget sideListContent() {
-    return Expanded(flex: 2, child: ProgramsListView(programsBloc: programsBloc, textColor: overlaysTextColor));
-  }
+  LiveStream get _currentChannel => widget.channels[currentPos];
 
   @override
   void initState() {
-    super.initState();
     _initProgramsBloc(widget.position);
     currentPos = widget.position;
-    _initPlayer();
+    super.initState();
   }
 
   @override
   void dispose() {
     super.dispose();
-    sendRecent(currentPos);
     programsBloc.dispose();
-    orientation.allowAll();
   }
 
   @override
-  Widget playerArea() {
-    return _playerArea();
+  Widget build(BuildContext context) {
+    final settings = locator<LocalStorageService>();
+    return WillPopScope(
+        onWillPop: () {
+          _sendRecent();
+          Navigator.of(context).pop(currentPos);
+          return Future.value(true);
+        },
+        child: AppBarPlayer.sideList(
+            appbar: appBar,
+            child: (_) => playerArea(_currentChannel.icon()),
+            bottomControls: bottomControls,
+            sideList: (_, textColor) => sideListContent(textColor),
+            bottomControlsHeight: bottomControlsHeight(),
+            onDoubleTap: () {
+              if (isPlaying()) {
+                pause();
+              } else {
+                play();
+              }
+            },
+            absoulteBrightness: settings.brightnessChange(),
+            absoulteSound: settings.soundChange()));
+  }
+
+  double bottomControlsHeight() {
+    if (programsBloc.currentProgramIndex >= 0) {
+      return 4 + BUTTONS_LINE_HEIGHT + TEXT_HEIGHT + TIMELINE_HEIGHT + TEXT_PADDING + 16;
+    } else {
+      return 4 + BUTTONS_LINE_HEIGHT;
+    }
+  }
+
+  Widget appBar(BuildContext context, Color back, Color text) {
+    return ChannelPageAppBar(
+        backgroundColor: back,
+        textColor: text,
+        link: _currentChannel.primaryUrl(),
+        title: AppLocalizations.toUtf8(_currentChannel.displayName()),
+        onExit: () {
+          _sendRecent();
+          Navigator.of(context).pop(currentPos);
+        },
+        onChromeCast: () {
+          chromeCastCallback(_currentChannel.primaryUrl(), _currentChannel.displayName());
+        },
+        actions: <Widget>[
+          if (orientation.isPortrait(context))
+            const FullscreenButton.open()
+          else
+            const FullscreenButton.close()
+        ]);
+  }
+
+  Widget bottomControls(BuildContext context, Color back, Color text, Widget sideListButton) {
+    return Container(
+        color: back ?? Theme.of(context).primaryColor,
+        width: MediaQuery.of(context).size.width,
+        height: bottomControlsHeight(),
+        child: _controls(back, text, sideListButton));
+  }
+
+  Widget sideListContent(Color text) {
+    return ProgramsListView(programsBloc: programsBloc, textColor: text);
+  }
+
+  Widget _controls(Color back, Color text, Widget sideListButton) {
+    return BottomControls(
+        programsBloc: programsBloc,
+        buttons: <Widget>[
+          PlayerButtons.previous(onPressed: _moveToPrevChannel, color: text),
+          _playPause(text),
+          PlayerButtons.next(onPressed: _moveToNextChannel, color: text),
+          sideListButton
+        ],
+        textColor: text,
+        backgroundColor: back);
+  }
+
+  Widget _playPause(Color text) {
+    return PlayerStateListener(controller, builder: (context) {
+      return createPlayPauseButton(text);
+    },
+        placeholder: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Icon(Icons.play_arrow, color: text.withOpacity(0.5))));
+  }
+
+  void _moveToPrevChannel() {
+    _sendRecent();
+    currentPos == 0 ? currentPos = widget.channels.length - 1 : currentPos--;
+    _playChannel();
+    _initProgramsBloc(currentPos);
+  }
+
+  void _moveToNextChannel() {
+    _sendRecent();
+    currentPos == widget.channels.length - 1 ? currentPos = 0 : currentPos++;
+    _playChannel();
+    _initProgramsBloc(currentPos);
+  }
+
+  void _sendRecent() {
+    _controller.sendRecent(_currentChannel);
+    widget.addRecent(_currentChannel);
   }
 
   void _initProgramsBloc(int position) {
@@ -88,95 +168,18 @@ class _ChannelPageState extends AppBarPlayerLive<ChannelPage> {
     });
   }
 
-  void moveToPrevChannel() {
-    sendRecent(currentPos);
-    currentPos == 0 ? currentPos = widget.channels.length - 1 : currentPos--;
-    _playChannel();
-    _initProgramsBloc(currentPos);
-  }
-
-  void moveToNextChannel() {
-    sendRecent(currentPos);
-    currentPos == widget.channels.length - 1 ? currentPos = 0 : currentPos++;
-    _playChannel();
-    _initProgramsBloc(currentPos);
-  }
-
-  LiveStream currentChannel() {
-    return widget.channels[currentPos];
-  }
-
-  void sendRecent(int recent) {
-    final channel = widget.channels[recent];
-    final now = DateTime.now();
-    final msec = now.millisecondsSinceEpoch;
-    channel.setRecentTime(msec);
-    widget.stream.add(channel);
-  }
-
-  // private:
-
-  final playerKey = GlobalKey();
-
-  Widget bottomControls() {
-    return BottomControls(
-        programsBloc: programsBloc,
-        buttons: <Widget>[
-          PlayerButtons.previous(onPressed: () => moveToPrevChannel(), color: overlaysTextColor),
-          createPlayPauseButton(),
-          PlayerButtons.next(onPressed: () => moveToNextChannel(), color: overlaysTextColor),
-          sideBarButton()
-        ],
-        textColor: overlaysTextColor,
-        backgroundColor: backgroundColor?.withOpacity(overlaysOpacity));
-  }
-
-  Widget appBar() {
-    final cur = currentChannel();
-    return ChannelPageAppBar(
-      backgroundColor: backgroundColor?.withOpacity(overlaysOpacity),
-      textColor: overlaysTextColor,
-      link: cur.primaryUrl(),
-      title: AppLocalizations.toUtf8(cur.displayName()),
-      onChromeCast: () => _callback(),
-      actions: <Widget>[
-        orientation.isPortrait(context)
-            ? FullscreenButton.open(onTap: () {
-                isVisiblePrograms = false;
-                setTimerOverlays();
-              })
-            : FullscreenButton.close()
-      ],
-    );
-  }
-
-  void _callback() {
-    if (!ChromeCastInfo().castConnected) {
-      _initPlayer();
+  void _playChannel() {
+    if (castConnected) {
+      ChromeCastInfo().initVideo(
+          _currentChannel.primaryUrl(), AppLocalizations.toUtf8(_currentChannel.displayName()));
+    } else {
+      _controller.playStream(_currentChannel);
     }
     setState(() {});
   }
 
-  void _initPlayer() {
-    final cur = currentChannel();
-    ChromeCastInfo().castConnected
-        ? ChromeCastInfo().initVideo(cur.primaryUrl(), AppLocalizations.toUtf8(cur.displayName()))
-        : _playerPage = StreamPlayerPage(channel: cur);
-  }
-
-  Widget chromeCastFiller() {
-    final cur = currentChannel();
-    return AspectRatio(aspectRatio: 16 / 9, child: ChromeCastFiller.live(cur.icon(), size: Size.square(128)));
-  }
-
-  Widget _playerArea() {
-    return ChromeCastInfo().castConnected ? chromeCastFiller() : KeyedSubtree(key: playerKey, child: _playerPage);
-  }
-
-  void _playChannel() {
-    final cur = currentChannel();
-    ChromeCastInfo().castConnected
-        ? ChromeCastInfo().initVideo(cur.primaryUrl(), AppLocalizations.toUtf8(cur.displayName()))
-        : _playerPage.playChannel(cur);
+  @override
+  void initPlayer() {
+    _controller = LivePlayerController(_currentChannel);
   }
 }

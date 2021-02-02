@@ -11,13 +11,11 @@ import 'package:flutter_fastotv_common/base/controls/preview_icon.dart';
 abstract class ILiveFutureTileObserver {
   void onTap(List<LiveStream> streams, int position);
 
-  void onLongTap(LiveStream stream);
+  void edit(LiveStream stream, List<String> prevGroups);
 
-  void onDelete(LiveStream stream);
+  void delete(LiveStream stream);
 
-  void onAddFavorite(LiveStream stream);
-
-  void onDeleteFavorite(LiveStream stream);
+  void handleFavorite(bool value, LiveStream stream);
 }
 
 class LiveFutureTile extends StatefulWidget {
@@ -34,6 +32,8 @@ class LiveFutureTile extends StatefulWidget {
 class _LiveFutureTileState extends State<LiveFutureTile> {
   ProgramsBloc programsBloc;
 
+  LiveStream get _stream => widget.channels[widget.index];
+
   @override
   void initState() {
     super.initState();
@@ -49,48 +49,47 @@ class _LiveFutureTileState extends State<LiveFutureTile> {
 
   @override
   Widget build(BuildContext context) {
-    var channel = widget.channels[widget.index];
-
-    return Container(
-        child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+    return Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
       ListTile(
-          leading: PreviewIcon.live(channel.icon(), height: 40, width: 40),
-          title: Text(AppLocalizations.toUtf8(channel.displayName())),
+          leading: PreviewIcon.live(_stream.icon(), height: 40, width: 40),
+          title: Text(AppLocalizations.toUtf8(_stream.displayName())),
           subtitle: programNameWidget(),
-          onTap: () {
-            if (widget.observer != null) {
-              widget.observer.onTap(widget.channels, widget.index);
-            }
-          },
-          onLongPress: () async {
-            final epgUrl = channel.epgUrl();
-            LiveStream response =
-                await Navigator.of(context).push(MaterialPageRoute(builder: (context) => LiveEditPage(channel)));
-            if (response != null) {
-              if (response.epgUrl() != epgUrl) {
-                channel.setRequested(false);
-                programsBloc = ProgramsBloc(channel);
-              }
-            }
-            if (widget.observer != null) {
-              if (response == null) {
-                widget.observer.onDelete(channel);
-              }
-              widget.observer.onLongTap(channel);
-            }
-          },
-          trailing: FavoriteStarButton(
-            channel.favorite(),
-            onFavoriteChanged: (bool value) => handleFavorite(value),
-          )),
+          onTap: onTap,
+          onLongPress: onLongPressed,
+          trailing: FavoriteStarButton(_stream.favorite(), onFavoriteChanged: handleFavorite)),
       Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[timeLine()])
-    ]));
+    ]);
+  }
+
+  void onTap() {
+    if (widget.observer != null) {
+      widget.observer.onTap(widget.channels, widget.index);
+    }
+  }
+
+  void onLongPressed() async {
+    final epgUrl = _stream.epgUrl();
+    final List<String> oldGroups = [];
+    oldGroups.addAll(_stream.groups());
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+      return LiveEditPage(_stream);
+    })).then((result) {
+      if (result != null) {
+        if (result.epgUrl() != epgUrl) {
+          _stream.setRequested(false);
+          programsBloc = ProgramsBloc(_stream);
+        }
+        if (result.id() == null) {
+          widget.observer.delete(_stream);
+        } else {
+          widget.observer.edit(_stream, oldGroups);
+        }
+      }
+    });
   }
 
   void handleFavorite(bool value) {
-    final channel = widget.channels[widget.index];
-    channel.setFavorite(value);
-    channel.favorite() ? widget.observer.onAddFavorite(channel) : widget.observer.onDeleteFavorite(channel);
+    widget.observer.handleFavorite(value, _stream);
   }
 
   Widget programNameWidget() {
@@ -102,18 +101,13 @@ class _LiveFutureTileState extends State<LiveFutureTile> {
     }
 
     return StreamBuilder<ProgrammeInfo>(
-      stream: programsBloc.currentProgram,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Text('Loading...', softWrap: true, maxLines: 3);
-        }
-        return Text(
-          title(snapshot.data),
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        );
-      },
-    );
+        stream: programsBloc.currentProgram,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Text('Loading...', softWrap: true, maxLines: 3);
+          }
+          return Text(title(snapshot.data), maxLines: 1, overflow: TextOverflow.ellipsis);
+        });
   }
 
   Widget timeLine() {

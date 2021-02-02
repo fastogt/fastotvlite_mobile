@@ -7,7 +7,6 @@ import 'package:fastotvlite/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_common/tv/key_code.dart';
-import 'package:flutter_common/wrap.dart';
 
 class SelectStreamTV extends StatefulWidget {
   final String m3uText;
@@ -68,7 +67,8 @@ class _SelectStreamTVState extends BaseSelectStreamPage<SelectStreamTV> {
                     leading: _backButton(),
                     actions: <Widget>[_saveButton()],
                     elevation: 0,
-                    title: Text('Add', style: TextStyle(color: Theming.of(context).onCustomColor(primaryColor))),
+                    title: Text('Add',
+                        style: TextStyle(color: Theming.of(context).onCustomColor(primaryColor))),
                     centerTitle: true),
                 backgroundColor: primaryColor,
                 body: _body())));
@@ -95,7 +95,10 @@ class _SelectStreamTVState extends BaseSelectStreamPage<SelectStreamTV> {
         focusNode: _saveButtonNode,
         onKey: _onAppBar,
         child: IconButton(
-            icon: Icon(Icons.save), iconSize: 32, color: _buttonColor(_saveButtonNode), onPressed: () => onSave()));
+            icon: Icon(Icons.save),
+            iconSize: 32,
+            color: _buttonColor(_saveButtonNode),
+            onPressed: () => onSave()));
   }
 
   bool _onAppBar(FocusNode node, RawKeyEvent event) {
@@ -183,21 +186,24 @@ class _SelectStreamTVState extends BaseSelectStreamPage<SelectStreamTV> {
   }
 
   Widget _cardList() {
-    return CustomWrap(
-        width: MediaQuery.of(context).size.width * scale,
-        itemWidth: CARD_WIDTH + BORDER_WIDTH,
-        horizontalPadding: EDGE_INSETS,
-        verticalPadding: EDGE_INSETS,
+    return Wrap(
+        runAlignment: WrapAlignment.start,
+        runSpacing: EDGE_INSETS,
+        spacing: EDGE_INSETS,
         children: List<Widget>.generate(vods.length, (int index) {
           final node = nodes[index];
-          return Focus(
-              onKey: _onCard,
-              focusNode: node,
-              child: Container(
-                  decoration: BoxDecoration(
-                      border:
-                          Border.all(color: node.hasFocus ? Colors.amber : Colors.transparent, width: BORDER_WIDTH)),
-                  child: VodSelectCard(vods[index], checkValues[index], () => onCheckBox(index))));
+          return SizedBox(
+              width: CARD_WIDTH + BORDER_WIDTH,
+              child: Focus(
+                  onKey: _onCard,
+                  focusNode: node,
+                  child: Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                              color: node.hasFocus ? Colors.amber : Colors.transparent,
+                              width: BORDER_WIDTH)),
+                      child: VodSelectCard(
+                          vods[index], checkValues[index], () => onCheckBox(index)))));
         }));
   }
 
@@ -217,14 +223,16 @@ class _SelectStreamTVState extends BaseSelectStreamPage<SelectStreamTV> {
             _channelsScope.focusInDirection(TraversalDirection.left);
           } else {
             _channelsScope.focusInDirection(TraversalDirection.up);
-            while (MediaQuery.of(context).size.width - _channelsScope.focusedChild.offset.dx > CARD_WIDTH * 2) {
+            while (MediaQuery.of(context).size.width - _channelsScope.focusedChild.offset.dx >
+                CARD_WIDTH * 2) {
               _channelsScope.focusInDirection(TraversalDirection.right);
             }
           }
           break;
 
         case KEY_RIGHT:
-          if (MediaQuery.of(context).size.width - _channelsScope.focusedChild.offset.dx > CARD_WIDTH * 2) {
+          if (MediaQuery.of(context).size.width - _channelsScope.focusedChild.offset.dx >
+              CARD_WIDTH * 2) {
             _channelsScope.focusInDirection(TraversalDirection.right);
           } else {
             while (_channelsScope.focusedChild.offset.dx > CARD_WIDTH) {

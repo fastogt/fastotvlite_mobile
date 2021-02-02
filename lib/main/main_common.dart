@@ -39,7 +39,11 @@ class _MyAppState extends State<MyApp> {
         shortcuts: {LogicalKeySet(LogicalKeyboardKey.select): const ActivateIntent()},
         child: AppLocalizations(
             init: savedLocale,
-            locales: {Locale('en', 'US'): 'English', Locale('ru', 'RU'): 'Русский', Locale('fr', 'CA'): 'Français'},
+            locales: {
+              Locale('en', 'US'): 'English',
+              Locale('ru', 'RU'): 'Русский',
+              Locale('fr', 'CA'): 'Français'
+            },
             child: Builder(builder: (context) {
               return MaterialApp(
                   debugShowCheckedModeBanner: false,
@@ -69,7 +73,7 @@ class _MyAppState extends State<MyApp> {
 
   Widget home() {
     final device = locator<RuntimeDevice>();
-    return device.hasTouch ? HomePage(channels, vods) : HomeTV(channels, vods);
+    return device.hasTouch ? HomeMobile(channels, vods) : HomeTV(channels, vods);
   }
 
   void _loadLocale() {

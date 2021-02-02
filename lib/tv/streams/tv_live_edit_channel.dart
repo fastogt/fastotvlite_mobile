@@ -20,16 +20,6 @@ abstract class AbstractLiveEditPageState extends EditStreamPageTV<AbstractLiveEd
   @override
   Widget deleteButton() => SizedBox();
 
-  @override
-  void initState() {
-    super.initState();
-    iarcController = TextEditingController(text: widget.stream.iarc().toString());
-    nameController = TextEditingController(text: AppLocalizations.toUtf8(widget.stream.displayName()));
-    iconController = TextEditingController(text: widget.stream.icon());
-    videoLinkController = TextEditingController(text: widget.stream.primaryUrl());
-    validator = videoLinkController.text.isNotEmpty;
-  }
-
   Widget editingPage() {
     final size = MediaQuery.of(context).size;
     return Center(
@@ -46,29 +36,6 @@ abstract class AbstractLiveEditPageState extends EditStreamPageTV<AbstractLiveEd
             textField('IARC', iarcFieldNode, iarcController)
           ])))
     ]));
-  }
-
-  void enterAction(FocusNode node) {
-    if (node == nameFieldNode.main) {
-      setFocus(nameFieldNode.text);
-    } else if (node == urlFieldNode.main) {
-      setFocus(urlFieldNode.text);
-    } else if (node == iconFieldNode.main) {
-      setFocus(iconFieldNode.text);
-    } else if (node == iarcFieldNode.main) {
-      setFocus(iarcFieldNode.text);
-    } else if (node == backButtonNode) {
-      exitAndResetChanges();
-    } else if (node == saveButtonNode) {
-      exitAndSaveChanges();
-    }
-  }
-
-  void onSave() {
-    widget.stream.setDisplayName(nameController.text);
-    widget.stream.setPrimaryUrl(videoLinkController.text);
-    widget.stream.setIcon(iconController.text);
-    widget.stream.setIarc(int.tryParse(iarcController.text) ?? DEFAULT_IARC);
   }
 }
 

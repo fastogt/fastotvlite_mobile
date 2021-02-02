@@ -1,12 +1,16 @@
 import 'package:fastotvlite/base/stream_parser.dart';
 import 'package:fastotvlite/base/vods/constants.dart';
 import 'package:fastotvlite/base/vods/vod_card_favorite_pos.dart';
+import 'package:fastotvlite/bloc/vod_bloc.dart';
 import 'package:fastotvlite/channels/vod_stream.dart';
+import 'package:fastotvlite/events/ascending.dart';
 import 'package:fastotvlite/events/search_events.dart';
+import 'package:fastotvlite/events/stream_list_events.dart';
 import 'package:fastotvlite/localization/translations.dart';
 import 'package:fastotvlite/service_locator.dart';
 import 'package:fastotvlite/theme/theme.dart';
 import 'package:fastotvlite/tv/vods/tv_vod_description.dart';
+import 'package:fastotvlite/tv/vods/tv_vod_edit_channel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_common/base/controls/no_channels.dart';
@@ -15,10 +19,9 @@ import 'package:flutter_common/tv/key_code.dart';
 import 'package:flutter_fastotv_common/base/vods/vod_card.dart';
 
 class TVVodPage extends StatefulWidget {
-  final Key key;
-  final List<VodStream> channels;
+  final VodStreamBloc vodStreamsBloc;
 
-  TVVodPage(this.channels) : key = GlobalKey();
+  TVVodPage(this.vodStreamsBloc);
 
   @override
   _TVVodPageState createState() => _TVVodPageState();
@@ -29,22 +32,22 @@ class _TVVodPageState extends State<TVVodPage> with TickerProviderStateMixin {
 
   static const TABBAR_FONT_SIZE = 24.0;
 
-  Map<String, List<VodStream>> channelsMap = {};
+  Map<String, List<VodStream>> get channelsMap => widget.vodStreamsBloc.map;
 
   TabController _tabController;
   int currentCategory = 2;
 
   void _initTabController() async {
-    _tabController = new TabController(vsync: this, length: channelsMap.keys.length, initialIndex: 2);
+    _tabController =
+        new TabController(vsync: this, length: channelsMap.keys.length, initialIndex: 2);
   }
 
   @override
   void initState() {
     super.initState();
-    channelsMap = StreamsParser<VodStream>(widget.channels).parseChannels();
     _initTabController();
     final _search = locator<SearchEvents>();
-    _search.subscribe<SearchEvent<VodStream>>().listen((event) => _onSearch(event.stream));
+    _search.subscribe<StreamSearchEvent<VodStream>>().listen((event) => _onSearch(event.stream));
   }
 
   @override
@@ -62,8 +65,10 @@ class _TVVodPageState extends State<TVVodPage> with TickerProviderStateMixin {
   /// TabBar
 
   Widget _tabBar() {
-    final active =
-        TextStyle(fontSize: TABBAR_FONT_SIZE, color: Theming.of(context).onBrightness(), fontWeight: FontWeight.bold);
+    final active = TextStyle(
+        fontSize: TABBAR_FONT_SIZE,
+        color: Theming.of(context).onBrightness(),
+        fontWeight: FontWeight.bold);
     final inactive = TextStyle(
         fontSize: TABBAR_FONT_SIZE,
         color: Theming.of(context).onBrightness(light: Colors.black87, dark: Colors.white70),
@@ -84,7 +89,8 @@ class _TVVodPageState extends State<TVVodPage> with TickerProviderStateMixin {
       return List.generate(channelsMap.keys.length, (int index) {
         return Tab(
             child: Container(
-                child: Text(_title(channelsMap.keys.toList()[index]), style: isActive(index) ? active : inactive)));
+                child: Text(_title(channelsMap.keys.toList()[index]),
+                    style: isActive(index) ? active : inactive)));
       });
     }
 
@@ -134,14 +140,16 @@ class _TVVodPageState extends State<TVVodPage> with TickerProviderStateMixin {
                 itemBuilder: (BuildContext context, int index) {
                   final node = _list[index];
                   return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: EDGE_INSETS, vertical: EDGE_INSETS * 1.5),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: EDGE_INSETS, vertical: EDGE_INSETS * 1.5),
                       child: Center(child: _CardWrap(node, _onCard, CARD_WIDTH_TV, BORDER_WIDTH)));
                 })));
   }
 
   void _onCardTap(VodStream channel) async {
     final previousFavorite = channel.favorite();
-    await Navigator.push(context, MaterialPageRoute(builder: (context) => TvVodDescription(channel: channel)));
+    await Navigator.push(
+        context, MaterialPageRoute(builder: (context) => TvVodDescription(channel)));
     if (previousFavorite != channel.favorite()) handleFavorite(channel);
     addRecent(channel);
     if (mounted) {
@@ -159,20 +167,27 @@ class _TVVodPageState extends State<TVVodPage> with TickerProviderStateMixin {
           _onCardTap(channel);
           break;
 
+        case MENU:
+        case MENU_KEY:
+          _onEdit(channel);
+          break;
+
         case KEY_LEFT:
           if (FocusScope.of(context).focusedChild.offset.dx > CARD_WIDTH_TV) {
             FocusScope.of(context).focusInDirection(TraversalDirection.left);
           } else {
             FocusScope.of(context).focusInDirection(TraversalDirection.up);
             while (
-                MediaQuery.of(context).size.width - FocusScope.of(context).focusedChild.offset.dx > CARD_WIDTH_TV * 2) {
+                MediaQuery.of(context).size.width - FocusScope.of(context).focusedChild.offset.dx >
+                    CARD_WIDTH_TV * 2) {
               FocusScope.of(context).focusInDirection(TraversalDirection.right);
             }
           }
           break;
 
         case KEY_RIGHT:
-          if (MediaQuery.of(context).size.width - FocusScope.of(context).focusedChild.offset.dx > CARD_WIDTH_TV * 2) {
+          if (MediaQuery.of(context).size.width - FocusScope.of(context).focusedChild.offset.dx >
+              CARD_WIDTH_TV * 2) {
             FocusScope.of(context).focusInDirection(TraversalDirection.right);
           } else {
             while (FocusScope.of(context).focusedChild.offset.dx > CARD_WIDTH_TV) {
@@ -230,6 +245,28 @@ class _TVVodPageState extends State<TVVodPage> with TickerProviderStateMixin {
       }
     }
   }
+
+  void _onEdit(VodStream stream) {
+    final List<String> oldGroups = [];
+    oldGroups.addAll(stream.groups());
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+      return VodEditPageTV(stream);
+    })).then((value) {
+      if (value != null) {
+        if (value.id() == null) {
+          widget.vodStreamsBloc.delete(stream);
+          widget.vodStreamsBloc.updateMap();
+          if (widget.vodStreamsBloc.map[TR_ALL].isEmpty) {
+            final listEvents = locator<StreamListEvent>();
+            listEvents.publish(StreamsListEmptyEvent());
+          }
+        } else {
+          widget.vodStreamsBloc.edit(stream, oldGroups);
+          widget.vodStreamsBloc.updateMap();
+        }
+      }
+    });
+  }
 }
 
 class _CardWrap extends StatefulWidget {
@@ -266,8 +303,9 @@ class _CardWrapState extends State<_CardWrap> {
         onKey: (node, event) => widget.onKey(event, widget.channel),
         child: Container(
             decoration: BoxDecoration(
-                border:
-                    Border.all(color: _node.hasFocus ? Colors.amber : Colors.transparent, width: widget.borderWidth)),
+                border: Border.all(
+                    color: _node.hasFocus ? Colors.amber : Colors.transparent,
+                    width: widget.borderWidth)),
             child: Stack(children: <Widget>[
               VodCard(
                   iconLink: widget.channel.icon(),

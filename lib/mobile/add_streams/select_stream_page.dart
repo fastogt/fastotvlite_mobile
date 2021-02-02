@@ -3,7 +3,6 @@ import 'package:fastotvlite/base/add_streams/select_streams.dart';
 import 'package:fastotvlite/base/vods/constants.dart';
 import 'package:fastotvlite/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_common/wrap.dart';
 
 class ChannelsPreviewPage extends StatefulWidget {
   final String m3uText;
@@ -43,7 +42,8 @@ class _ChannelsPreviewPageState extends BaseSelectStreamPage<ChannelsPreviewPage
     return Scaffold(
         appBar: AppBar(
             iconTheme: IconThemeData(color: appBarTextColor),
-            title: Text('Add channels ' + '($count/${current.length})', style: TextStyle(color: appBarTextColor))),
+            title: Text('Add channels ' + '($count/${current.length})',
+                style: TextStyle(color: appBarTextColor))),
         body: _body(),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         floatingActionButton: _floatingButton());
@@ -54,7 +54,8 @@ class _ChannelsPreviewPageState extends BaseSelectStreamPage<ChannelsPreviewPage
     final textColor = Theming.of(context).onCustomColor(accentColor);
     return RaisedButton(
         onPressed: () => onSave(),
-        child: Container(height: 48, child: Center(child: Text('Add selected', style: TextStyle(fontSize: 16)))),
+        child: Container(
+            height: 48, child: Center(child: Text('Add selected', style: TextStyle(fontSize: 16)))),
         color: accentColor,
         textColor: textColor);
   }
@@ -68,13 +69,14 @@ class _ChannelsPreviewPageState extends BaseSelectStreamPage<ChannelsPreviewPage
   }
 
   Widget _cardList() {
-    return CustomWrap(
-        width: MediaQuery.of(context).size.width,
-        itemWidth: CARD_WIDTH + BORDER_WIDTH,
-        horizontalPadding: EDGE_INSETS,
-        verticalPadding: EDGE_INSETS,
+    return Wrap(
+        runAlignment: WrapAlignment.start,
+        runSpacing: EDGE_INSETS,
+        spacing: EDGE_INSETS,
         children: List<Widget>.generate(vods.length, (int index) {
-          return VodSelectCard(vods[index], checkValues[index], () => onCheckBox(index));
+          return SizedBox(
+              width: CARD_WIDTH + BORDER_WIDTH,
+              child: VodSelectCard(vods[index], checkValues[index], () => onCheckBox(index)));
         }));
   }
 }

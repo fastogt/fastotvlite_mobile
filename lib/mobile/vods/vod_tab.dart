@@ -1,72 +1,38 @@
 import 'package:fastotvlite/base/vods/constants.dart';
 import 'package:fastotvlite/base/vods/vod_card_favorite_pos.dart';
+import 'package:fastotvlite/bloc/vod_bloc.dart';
 import 'package:fastotvlite/channels/vod_stream.dart';
 import 'package:fastotvlite/localization/translations.dart';
 import 'package:fastotvlite/mobile/base_tab.dart';
-import 'package:fastotvlite/mobile/vods/movie_desc.dart';
 import 'package:fastotvlite/mobile/vods/vod_edit_channel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_common/base/controls/favorite_button.dart';
 import 'package:flutter_common/localization/app_localizations.dart';
 import 'package:flutter_fastotv_common/base/vods/vod_card.dart';
 
-class VodTab extends BaseListTab<VodStream> {
-  VodTab(key, channels) : super(key, channels);
+class VodTab extends StatefulWidget {
+  final VodStreamBloc bloc;
+  VodTab(Key key, this.bloc) : super(key: key);
 
   @override
   VodVideoAppState createState() => VodVideoAppState();
 }
 
-class VodVideoAppState extends VideoAppState<VodStream> {
-  String noRecent() => AppLocalizations.of(context).translate(TR_RECENT_LIVE);
+class VodVideoAppState extends IStreamBaseListPage<VodStream, VodTab> {
+  @override
+  VodStreamBloc get bloc => widget.bloc;
 
-  String noFavorite() => AppLocalizations.of(context).translate(TR_FAVORITE_LIVE);
-
-  void onAddFavorite(VodStream stream) {
-    addFavorite(stream);
+  @override
+  String noRecent() {
+    return AppLocalizations.of(context).translate(TR_RECENT_VOD);
   }
 
-  void onDeleteFavorite(VodStream stream) {
-    deleteFavorite(stream);
+  @override
+  String noFavorite() {
+    return AppLocalizations.of(context).translate(TR_FAVORITE_VOD);
   }
 
-  Widget tile(int index, List<VodStream> channels) {
-    var channel = channels[index];
-    return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: EDGE_INSETS, vertical: EDGE_INSETS * 1.5),
-        child: Stack(children: <Widget>[
-          VodCard(
-              iconLink: channel.icon(),
-              duration: channel.duration(),
-              interruptTime: channel.interruptTime(),
-              width: CARD_WIDTH,
-              onPressed: () => onTapped(channels, index)),
-          VodFavoriteButton(
-              width: 72,
-              height: 36,
-              child:
-                  Row(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-                Container(
-                    width: 36,
-                    child: FavoriteStarButton(channel.favorite(),
-                        onFavoriteChanged: (bool value) => handleFavorite(value, channel))),
-                Container(
-                    width: 36,
-                    child: IconButton(
-                        padding: EdgeInsets.all(0.0),
-                        icon: Icon(Icons.settings),
-                        onPressed: () async {
-                          VodStream response = await Navigator.of(context)
-                              .push(MaterialPageRoute(builder: (context) => VodEditPage(channel)));
-                          if (response == null) {
-                            widget.channels.remove(channel);
-                          }
-                          handleStreamEdit();
-                        }))
-              ]))
-        ]));
-  }
-
+  @override
   Widget listBuilder(List<VodStream> channels) {
     return Center(
         child: Padding(
@@ -81,15 +47,57 @@ class VodVideoAppState extends VideoAppState<VodStream> {
                 itemBuilder: (BuildContext context, int index) => tile(index, channels))));
   }
 
-  void onSearch(VodStream stream) {
-    onTapped([stream], 0);
+  Widget tile(int index, List<VodStream> channels) {
+    var channel = channels[index];
+    return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: EDGE_INSETS, vertical: EDGE_INSETS * 1.5),
+        child: Stack(children: <Widget>[
+          VodCard(
+              iconLink: channel.icon(),
+              duration: channel.duration(),
+              interruptTime: channel.interruptTime(),
+              width: CARD_WIDTH,
+              onPressed: () {
+                bloc.onTap(channel);
+              }),
+          VodFavoriteButton(
+              width: 72,
+              height: 36,
+              child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                        width: 36,
+                        child:
+                            FavoriteStarButton(channel.favorite(), onFavoriteChanged: (bool value) {
+                          handleFavorite(value, channel);
+                        })),
+                    Container(
+                        width: 36,
+                        child: IconButton(
+                            padding: EdgeInsets.all(0.0),
+                            icon: Icon(Icons.settings),
+                            onPressed: () {
+                              onEdit(channel);
+                            }))
+                  ]))
+        ]));
   }
 
-  void onTapped(List<VodStream> channels, int position) async {
-    final channel = channels[position];
-    final prevFav = channel.favorite();
-    await Navigator.push(context, MaterialPageRoute(builder: (context) => VodDescription(vod: channel)));
-    if (channel.favorite() != prevFav) handleFavorite(channel.favorite(), channel);
-    addRecent(channel);
+  void onEdit(VodStream stream) {
+    final List<String> oldGroups = [];
+    oldGroups.addAll(stream.groups());
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+      return VodEditPage(stream);
+    })).then((value) {
+      if (value != null) {
+        if (value.id() == null) {
+          delete(value);
+        } else {
+          edit(value, oldGroups);
+        }
+      }
+    });
   }
 }

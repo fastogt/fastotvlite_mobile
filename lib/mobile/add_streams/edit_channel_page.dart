@@ -1,80 +1,110 @@
 import 'package:fastotvlite/channels/istream.dart';
 import 'package:fastotvlite/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_common/localization/app_localizations.dart';
+import 'package:flutter_fastotv_common/base/controls/preview_icon.dart';
 import 'package:flutter_tags/flutter_tags.dart';
 
-abstract class EditStreamPageState<T extends StatefulWidget> extends State<T> {
+import '../../channels/istream.dart';
+import '../../localization/translations.dart';
+
+enum EditResult { ADD, EDIT, DELETE }
+
+abstract class EditStreamPage<T extends IStream> extends StatefulWidget {
+  final T stream;
+
+  EditStreamPage(this.stream);
+}
+
+abstract class EditStreamPageState<T extends IStream> extends State<EditStreamPage<T>> {
+  static const int DEFAULT_IARC = 18;
+
+  TextEditingController descriptionController;
+  TextEditingController nameController;
+  TextEditingController iconController;
+  TextEditingController videoLinkController;
   TextEditingController iarcController;
+
   final GlobalKey<TagsState> _groupsStateKey = GlobalKey<TagsState>();
   List<String> groups = [];
 
   bool validator = true;
 
-  void onSave();
-
-  String appBarTitle();
-
-  Widget editingPage();
-
-  IStream stream();
+  String get appBarTitle;
 
   @override
   void initState() {
     super.initState();
-    groups = stream().groups();
-    iarcController = TextEditingController(text: stream().iarc().toString());
+    groups = widget.stream.groups();
+    nameController =
+        TextEditingController(text: AppLocalizations.toUtf8(widget.stream.displayName()));
+    iconController = TextEditingController(text: widget.stream.icon());
+    videoLinkController = TextEditingController(text: widget.stream.primaryUrl());
+    iarcController = TextEditingController(text: widget.stream.iarc().toString());
+    validator = videoLinkController.text.isNotEmpty;
   }
 
   @override
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).primaryColor;
     final appBarTextColor = Theming.of(context).onCustomColor(primaryColor);
-    return WillPopScope(
-      onWillPop: () async {
-        exitAndResetChanges();
-        return true;
-      },
-      child: Scaffold(
-          appBar: AppBar(
-              iconTheme: IconThemeData(color: appBarTextColor),
-              title: Text(appBarTitle(), style: TextStyle(color: appBarTextColor)),
-              leading: IconButton(icon: Icon(Icons.arrow_back), onPressed: () => exitAndResetChanges()),
-              actions: <Widget>[deleteButton()]),
-          floatingActionButton: _saveButton(),
-          body: SingleChildScrollView(child: Padding(padding: const EdgeInsets.all(16.0), child: editingPage()))),
-    );
+    return Scaffold(
+        appBar: AppBar(
+            iconTheme: IconThemeData(color: appBarTextColor),
+            actionsIconTheme: IconThemeData(color: appBarTextColor),
+            title: Text(translate(context, appBarTitle), style: TextStyle(color: appBarTextColor)),
+            leading: BackButton(),
+            actions: <Widget>[deleteButton()]),
+        floatingActionButton: _saveButton(),
+        body: SingleChildScrollView(
+            child:
+                Padding(padding: const EdgeInsets.all(16.0), child: Column(children: content()))));
   }
 
-  void exitAndResetChanges() => Navigator.of(context).pop(stream());
+  List<Widget> content() {
+    return <Widget>[
+      Container(
+          constraints: BoxConstraints(
+              maxWidth: MediaQuery.of(context).size.shortestSide,
+              maxHeight: MediaQuery.of(context).size.shortestSide),
+          child: PreviewIcon.live(iconController.text)),
+      textField(TR_EDIT_TITLE, nameController),
+      groupsField(),
+      textField(TR_EDIT_VIDEO_LINK, videoLinkController, onSubmitted: _validate),
+      textField(TR_EDIT_ICON, iconController, onSubmitted: _updateIcon),
+      textField('IARC', iarcController)
+    ];
+  }
 
   Widget _saveButton() {
     final accentColor = Theme.of(context).accentColor;
     return !validator
         ? null
         : FloatingActionButton(
-            onPressed: () {
-              onSave();
-              exitAndResetChanges();
-            },
+            onPressed: onSave,
             backgroundColor: accentColor,
             child: Icon(Icons.save, color: Theming.of(context).onCustomColor(accentColor)));
   }
 
-  Widget textField(String hintText, TextEditingController controller, {void Function() onSubmitted}) {
+  Widget textField(String hintText, TextEditingController controller,
+      {void Function() onSubmitted}) {
     return new TextFormField(
         controller: controller,
-        decoration: InputDecoration(labelText: hintText),
+        decoration: InputDecoration(labelText: translate(context, hintText) ?? hintText),
         keyboardType: TextInputType.text,
         textCapitalization: TextCapitalization.none,
         onFieldSubmitted: (String text) {
-          if (onSubmitted != null) {
-            onSubmitted();
-          }
+          onSubmitted?.call();
         });
   }
 
   Widget deleteButton() {
-    return IconButton(icon: Icon(Icons.delete), onPressed: () => Navigator.of(context).pop());
+    return IconButton(
+        icon: Icon(Icons.delete),
+        onPressed: () {
+          widget.stream.setId(null);
+          Navigator.of(context).pop(widget.stream);
+        });
   }
 
   Widget groupsField() {
@@ -108,5 +138,24 @@ abstract class EditStreamPageState<T extends StatefulWidget> extends State<T> {
                 return true;
               }));
         });
+  }
+
+  void _validate() {
+    setState(() {
+      validator = videoLinkController.text.isNotEmpty;
+    });
+  }
+
+  void _updateIcon() {
+    setState(() {});
+  }
+
+  void onSave() {
+    widget.stream.setDisplayName(nameController.text);
+    widget.stream.setPrimaryUrl(videoLinkController.text);
+    widget.stream.setIcon(iconController.text);
+    widget.stream.setIarc(int.tryParse(iarcController.text) ?? DEFAULT_IARC);
+    widget.stream.setGroups(groups);
+    Navigator.of(context).pop(widget.stream);
   }
 }

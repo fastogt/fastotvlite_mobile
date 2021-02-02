@@ -1,40 +1,32 @@
 import 'package:fastotvlite/base/focusable/actions.dart';
-import 'package:fastotvlite/channels/vod_stream.dart';
+import 'package:fastotvlite/channels/live_stream.dart';
 import 'package:fastotvlite/player/controller.dart';
 import 'package:fastotvlite/player/tv_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_common/tv/key_code.dart';
 
-class TvVodPlayerPage extends StatefulWidget {
-  final VodStream channel;
+class TvLivePlayerPage extends StatefulWidget {
+  final LiveStream channel;
 
-  const TvVodPlayerPage(this.channel);
+  const TvLivePlayerPage(this.channel);
 
   @override
-  _TvVodPlayerPageState createState() {
-    return _TvVodPlayerPageState();
-  }
+  _TvLivePlayerPageState createState() => _TvLivePlayerPageState();
 }
 
-class _TvVodPlayerPageState extends PlayerPageTVState<TvVodPlayerPage> {
-  VodPlayerController _controller;
+class _TvLivePlayerPageState extends PlayerPageTVState<TvLivePlayerPage> {
+  BasePlayerController<LiveStream> _controller;
 
   @override
-  VodPlayerController get controller => _controller;
+  BasePlayerController<LiveStream> get controller => _controller;
 
   @override
   String get name => widget.channel.displayName();
 
   @override
   void initPlayer() {
-    _controller = VodPlayerController(widget.channel);
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _controller.dispose();
+    _controller = BasePlayerController<LiveStream>(widget.channel);
   }
 
   @override
@@ -55,20 +47,10 @@ class _TvVodPlayerPageState extends PlayerPageTVState<TvVodPlayerPage> {
         case BACK:
         case BACKSPACE:
           _controller.sendRecent(widget.channel);
-          _controller.setInterruptTime(_controller.position().inMilliseconds);
           Navigator.of(context).pop();
           return true;
         case MENU:
           toggleSnackBar(ctx);
-          return true;
-
-        case KEY_LEFT:
-        case PREVIOUS:
-          _controller.seekBackward();
-          return true;
-        case KEY_RIGHT:
-        case NEXT:
-          _controller.seekBackward();
           return true;
       }
       return false;

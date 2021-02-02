@@ -16,7 +16,7 @@ class StreamFilePicker {
   Future<File> _openFileExplorer() async {
     try {
       final FilePickerResult result = await FilePicker.platform.pickFiles(type: FileType.any);
-      if (result != null) {
+      if (result == null) {
         return null;
       }
 
