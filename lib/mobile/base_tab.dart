@@ -1,121 +1,96 @@
-import 'package:fastotvlite/base/stream_parser.dart';
+import 'package:fastotvlite/base/tabbar.dart';
+import 'package:fastotvlite/bloc/base_bloc.dart';
 import 'package:fastotvlite/channels/istream.dart';
 import 'package:fastotvlite/events/ascending.dart';
-import 'package:fastotvlite/events/descending.dart';
-import 'package:fastotvlite/events/search_events.dart';
 import 'package:fastotvlite/events/stream_list_events.dart';
 import 'package:fastotvlite/localization/translations.dart';
 import 'package:fastotvlite/service_locator.dart';
-import 'package:fastotvlite/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_common/base/controls/no_channels.dart';
 import 'package:flutter_common/localization/app_localizations.dart';
 
-const TAB_BAR_HEIGHT = 46.0;
-
-abstract class BaseListTab<T extends IStream> extends StatefulWidget {
-  final Key key;
-  final List<T> channels;
-
-  BaseListTab(this.key, this.channels);
-}
-
-abstract class VideoAppState<T extends IStream> extends State<BaseListTab> with TickerProviderStateMixin {
+abstract class IStreamBaseListPage<T extends IStream, U extends StatefulWidget> extends State<U>
+    with TickerProviderStateMixin {
   TabController tabController;
-  Map<String, List<T>> channelsMap = {};
-  bool tabsVisibility = true;
+
+  BaseStreamBloc<T> get bloc;
+
+  Map<String, List<T>> get channelsMap => bloc.streamsMap;
+
+  Widget listBuilder(List<T> list);
 
   String noRecent();
 
   String noFavorite();
 
-  void onSearch(T stream);
-
   @override
   void initState() {
     super.initState();
-
-    parseChannels();
-    initTabController();
-
-    final _search = locator<SearchEvents>();
-    _search.subscribe<SearchEvent<T>>().listen((event) {
-      onSearch(event.stream);
-    });
-
-    final events = locator<StreamListEvent>();
-    events.subscribe<StreamsAddedEvent>().listen((_) {
-      parseChannels();
-      initTabController();
-    });
+    _initTabController();
   }
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> columnChildren = [
-      Material(elevation: 4, child: CustomTabBar(_makeTabBar())),
-      Expanded(child: TabBarView(controller: tabController, children: _generateList())),
-    ];
-
-    return Builder(builder: (BuildContext context) {
-      return Center(
-          child: Container(
-              height: MediaQuery.of(context).size.height,
-              child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: columnChildren)));
-    });
-  }
-
-  /// Splits channel list by groups
-  void parseChannels() async {
-    channelsMap = StreamsParser<T>(widget.channels).parseChannels();
-  }
-
-  /// TabBar
-
-  void initTabController({int customValue}) async {
-    tabController = new TabController(
-        vsync: this,
-        length: channelsMap.length,
-        initialIndex: customValue ?? channelsMap[TR_RECENT].isNotEmpty ? 1 : 2);
+    return StreamBuilder<Map<String, List<T>>>(
+        initialData: bloc.streamsMap,
+        stream: bloc.streamsMapUpdates,
+        builder: (context, snapshot) {
+          if (tabController.length != snapshot.data.length) {
+            _initTabController();
+          }
+          return Center(
+              key: UniqueKey(),
+              child: SizedBox(
+                  height: MediaQuery.of(context).size.height,
+                  child: Column(
+                      children: <Widget>[_makeTabBar(), Expanded(child: _makeTabListPage())])));
+        });
   }
 
   Widget _makeTabBar() {
-    final theme = Theme.of(context);
-    return new TabBar(
-        isScrollable: true,
-        indicatorColor: theme.accentColor,
-        labelColor: Theming.of(context).onCustomColor(theme.primaryColor),
-        labelStyle: new TextStyle(fontSize: 16.0),
-        indicatorSize: TabBarIndicatorSize.tab,
-        controller: tabController,
-        tabs: _generateTabs());
+    final categories = bloc.categories;
+    final tabBar = TabBarEx(
+        tabController, List<String>.generate(categories.length, (index) => categories[index]));
+    return Row(children: <Widget>[
+      Expanded(child: Material(elevation: 4, child: tabBar, color: Theme.of(context).primaryColor))
+    ]);
   }
 
-  List<Widget> _generateTabs() {
-    List<Widget> result = [];
-    for (final category in channelsMap.keys) {
-      result.add(_generateTab(category));
+  Widget _makeTabListPage() {
+    return TabBarView(controller: tabController, children: generateList());
+  }
+
+  void _initTabController() {
+    final String currentCategory = bloc.category;
+    int init;
+    if (bloc.categories.contains(currentCategory)) {
+      init = bloc.categories.indexOf(bloc.category);
+    } else {
+      init = bloc.categories.indexOf(TR_ALL);
     }
-    return result;
+    tabController = TabController(vsync: this, length: channelsMap.length, initialIndex: init);
+    tabController.addListener(() {
+      bloc.setCategory(channelsMap.keys.toList()[tabController.index]);
+    });
   }
 
-  Widget _generateTab(String title) {
+  // public:
+  Widget generateTab(String title) {
     if (title == TR_ALL || title == TR_RECENT || title == TR_FAVORITE) {
-      return new Tab(text: AppLocalizations.of(context).translate(title));
+      return Tab(text: AppLocalizations.of(context).translate(title));
     }
-    return new Tab(text: AppLocalizations.toUtf8(title));
+    return Tab(text: AppLocalizations.toUtf8(title));
   }
 
-  /// TabBarView
-  List<Widget> _generateList() {
-    List<Widget> result = [];
+  List<Widget> generateList() {
+    final List<Widget> result = [];
     for (final category in channelsMap.keys) {
-      if (category == TR_FAVORITE && channelsMap[TR_FAVORITE].length == 0) {
+      if (category == TR_FAVORITE && channelsMap[TR_FAVORITE].isEmpty) {
         result.add(NonAvailableBuffer(
           icon: Icons.favorite_border,
           message: noFavorite(),
         ));
-      } else if (category == TR_RECENT && channelsMap[TR_RECENT].length == 0) {
+      } else if (category == TR_RECENT && channelsMap[TR_RECENT].isEmpty) {
         result.add(NonAvailableBuffer(
           icon: Icons.replay,
           message: noRecent(),
@@ -127,100 +102,27 @@ abstract class VideoAppState<T extends IStream> extends State<BaseListTab> with 
     return result;
   }
 
-  Widget listBuilder(List<T> list);
+  void addFavorite(T stream) => bloc.addFavorite(stream);
 
-  String getCurrentGroup() {
-    int count = 0;
-    for (final category in channelsMap.keys) {
-      if (count == tabController.index) {
-        return category;
-      }
-    }
-    return TR_ALL;
+  void deleteFavorite(T stream) => bloc.deleteFavorite(stream);
+
+  void handleFavorite(bool value, T stream) => bloc.handleFavorite(value, stream);
+
+  void addRecent(T channel) => bloc.addRecent(channel);
+
+  void sortRecent() => bloc.sortRecent();
+
+  void edit(T stream, List<String> prevGroups) {
+    bloc.edit(stream, prevGroups);
+    bloc.updateMap();
   }
 
-  /// Favorite
-
-  void addFavorite(T channel) {
-    channelsMap[TR_FAVORITE].add(channel);
-    setState(() {});
-  }
-
-  void deleteFavorite(T channel) {
-    channelsMap[TR_FAVORITE].remove(channel);
-    setState(() {});
-  }
-
-  void handleFavorite(bool value, T stream) {
-    stream.setFavorite(value);
-    stream.favorite() ? addFavorite(stream) : deleteFavorite(stream);
-  }
-
-  /// Recent
-
-  void addRecent(T channel) {
-    if (tabController.index != 1) {
-      if (channelsMap[TR_RECENT].contains(channel)) {
-        sortRecent();
-      } else {
-        channelsMap[TR_RECENT].insert(0, channel);
-      }
-      setState(() {});
-    }
-  }
-
-  void sortRecent() {
-    channelsMap[TR_RECENT].sort((b, a) => a.recentTime().compareTo(b.recentTime()));
-  }
-
-  /// Edit
-
-  void handleStreamEdit() {
-    if (widget.channels.isNotEmpty) {
-      final startIndex = tabController.index;
-      final currentGroup = channelsMap.keys.toList().elementAt(startIndex);
-      parseChannels();
-      initTabController();
-      int index;
-      final _groupList = channelsMap.keys.toList();
-      if (_groupList.contains(currentGroup)) {
-        index = _groupList.indexOf(currentGroup);
-      } else {
-        index = startIndex - 1;
-      }
-      tabController.animateTo(index, duration: Duration(microseconds: 1));
-      setState(() {});
-    } else {
+  void delete(T stream) {
+    bloc.delete(stream);
+    bloc.updateMap();
+    if (bloc.map[TR_ALL].isEmpty) {
       final listEvents = locator<StreamListEvent>();
       listEvents.publish(StreamsListEmptyEvent());
     }
-  }
-
-  void onTapped(List<T> channels, int position);
-
-  void openChannel(List<T> channels, int position) {
-    tabController.animateTo(0);
-    onTapped(channels, position);
-  }
-}
-
-class CustomTabBar extends StatefulWidget {
-  final TabBar bar;
-
-  CustomTabBar(this.bar);
-
-  @override
-  _CustomTabBarState createState() => _CustomTabBarState();
-}
-
-class _CustomTabBarState extends State<CustomTabBar> {
-  // Todo set proper color, when theme.type is dark or colored dark
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        color: Theme.of(context).primaryColor,
-        height: TAB_BAR_HEIGHT,
-        width: MediaQuery.of(context).size.width,
-        child: Material(color: Theme.of(context).primaryColor, child: widget.bar));
   }
 }

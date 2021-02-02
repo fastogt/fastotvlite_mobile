@@ -1,0 +1,1 @@
+const TV_LIST_ITEM_SIZE = 64.0;

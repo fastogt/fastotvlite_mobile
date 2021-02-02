@@ -11,6 +11,7 @@ class StreamsParser<T extends IStream> {
   Map<String, List<T>> parseChannels() {
     _channelsMap[TR_FAVORITE] = [];
     _channelsMap[TR_RECENT] = [];
+    _channelsMap[TR_ALL] = [];
     channels.forEach((element) {
       _savePushFavorite(element);
       _savePushRecent(element);

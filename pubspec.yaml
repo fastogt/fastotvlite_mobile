@@ -4,6 +4,8 @@ description: FastoTV Lite IPTV player.
 homepage: https://fastotv.com
 version: 1.13.0+25
 
+publish_to: none
+
 module:
   androidX: true
 
@@ -20,6 +22,7 @@ dependencies:
     git:
       url: https://github.com/fastogt/fastotv_device_info.git
       ref: master
+  file_picker: ^2.1.5+1
   flutter:
     sdk: flutter
   flutter_common:
@@ -32,6 +35,7 @@ dependencies:
       ref: master
   flutter_localizations:
     sdk: flutter
+  flutter_tags: ^0.4.9+1
   get_it: ^5.0.1
   numberpicker: ^1.1.0
   player:
@@ -40,10 +44,14 @@ dependencies:
       ref: main
   rxdart: ^0.24.0
   shared_preferences: ^0.5.7+1
+  unicorndial: ^1.1.5
   url_launcher: ^5.4.2
+  uuid: 2.2.2
   double_back_to_close_app: ^2.0.1
 
 dependency_overrides:
+  volume: ^1.0.1
+  video_player: ^1.0.1
   intl: ^0.17.0-nullsafety.2
 
 dev_dependencies:

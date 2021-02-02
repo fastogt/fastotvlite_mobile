@@ -1,9 +1,12 @@
 import 'package:fastotvlite/channels/vod_stream.dart';
 import 'package:fastotvlite/mobile/vods/vod_player_page.dart';
 import 'package:fastotvlite/mobile/vods/vod_trailer_page.dart';
+import 'package:fastotvlite/service_locator.dart';
 import 'package:fastotvlite/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_common/base/controls/no_channels.dart';
 import 'package:flutter_common/localization/app_localizations.dart';
+import 'package:flutter_common/runtime_device.dart';
 import 'package:flutter_fastotv_common/base/vods/vod_description.dart';
 
 class SideInfo extends StatelessWidget {
@@ -50,62 +53,107 @@ class SideInfo extends StatelessWidget {
 
 class VodTrailerButton extends StatelessWidget {
   final VodStream channel;
-  final double fontSize;
-  final BuildContext context;
-  final Color color;
+  final FocusNode focus;
 
-  VodTrailerButton(this.channel, this.context, {this.fontSize, this.color});
-
-  void onTrailer(VodStream channel) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>
-                VodTrailer("Trailer: " + channel.displayName(), channel.trailerUrl(), channel.previewIcon())));
-  }
+  const VodTrailerButton(this.channel, {this.focus});
 
   @override
   Widget build(BuildContext context) {
+    Color buttonColor;
+    final device = locator<RuntimeDevice>();
+    if (device.hasTouch) {
+      buttonColor = Theme.of(context).accentColor;
+    } else {
+      buttonColor = Theming.of(context).onBrightness();
+    }
     return RaisedButton(
+      focusNode: focus,
+      focusColor: Theme.of(context).accentColor,
       elevation: 0,
       onPressed: () {
-        onTrailer(channel);
+        return _onTrailer(context);
       },
       color: Colors.transparent,
       shape: OutlineInputBorder(
           borderRadius: BorderRadius.circular(24),
-          borderSide: BorderSide(color: color ?? Theme.of(context).accentColor, width: 2)),
-      child: Center(child: Text(AppLocalizations.toUtf8("Trailer"), style: TextStyle(fontSize: fontSize ?? 14))),
+          borderSide: BorderSide(color: buttonColor, width: 2)),
+      child: Center(child: Text('Trailer')),
     );
+  }
+
+  // private:
+  void _onTrailer(BuildContext context) {
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+      return VodTrailer(
+          "Trailer: ${channel.displayName()}", channel.trailerUrl(), channel.previewIcon());
+    }));
   }
 }
 
 class VodPlayButton extends StatelessWidget {
+  final FocusNode focus;
   final VodStream channel;
-  final BuildContext context;
-  final double fontSize;
-  final Color color;
+  final void Function() onTap;
 
-  VodPlayButton(this.channel, this.context, {this.fontSize, this.color});
-
-  void onTapped(VodStream channel) async {
-    int interruptTime = await Navigator.push(context, MaterialPageRoute(builder: (context) => VodPlayer(channel)));
-    channel.setInterruptTime(interruptTime);
-  }
+  const VodPlayButton(this.channel, {this.onTap, this.focus});
 
   @override
   Widget build(BuildContext context) {
-    final _color = color ?? Theme.of(context).accentColor;
+    Color buttonColor;
+    final device = locator<RuntimeDevice>();
+    if (device.hasTouch) {
+      buttonColor = Theme.of(context).accentColor;
+    } else {
+      buttonColor = Theming.of(context).onBrightness();
+    }
+    final textColor = Theming.of(context).onCustomColor(buttonColor);
     return RaisedButton(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(24),
-        ),
+        focusNode: focus,
+        focusColor: Theme.of(context).accentColor,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
         onPressed: () {
-          onTapped(channel);
+          _onTapped(context, channel);
         },
-        color: _color,
+        color: buttonColor,
         child: Center(
-            child: Text(AppLocalizations.toUtf8("Play"),
-                style: TextStyle(fontSize: fontSize ?? 14, color: Theming.of(context).onCustomColor(_color)))));
+            child: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
+          Text('Play', style: TextStyle(fontSize: 14, color: textColor))
+        ])));
+  }
+
+  void _onTapped(BuildContext context, VodStream channel) async {
+    if (onTap != null) {
+      onTap();
+    } else {
+      Navigator.push(context, MaterialPageRoute(builder: (context) {
+        return VodPlayer(channel);
+      }));
+    }
+  }
+}
+
+class DescriptionText extends StatelessWidget {
+  final String text;
+  final ScrollController scrollController;
+  final double textSize;
+  final Color textColor;
+
+  const DescriptionText(this.text, {this.scrollController, this.textColor, this.textSize});
+
+  @override
+  Widget build(BuildContext context) {
+    return text?.isEmpty ?? false
+        ? Center(
+            child: NonAvailableBuffer(
+            message: 'No description',
+            color: textColor,
+            icon: Icons.description,
+          ))
+        : SingleChildScrollView(
+            controller: scrollController ?? ScrollController(),
+            child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(AppLocalizations.toUtf8(text),
+                    style: TextStyle(fontSize: textSize ?? 16, color: textColor))));
   }
 }

@@ -9,11 +9,10 @@ class ProgramsBloc {
   final LiveStream channel;
   final _currentProgramStream = BehaviorSubject<ProgrammeInfo>();
   final _programsListStream = BehaviorSubject<List<ProgrammeInfo>>();
-  List<ProgrammeInfo> programs;
-  int _current;
-  Stream _programsStream;
-  bool isClosed = false;
+  int _current = -1;
+  Stream<List<ProgrammeInfo>> _programsStream;
   Timer _timer;
+  bool isClosed = false;
 
   ProgramsBloc(this.channel) {
     if (channel.programs().isNotEmpty) {
@@ -38,7 +37,6 @@ class ProgramsBloc {
   }
 
   void _setPrograms(data) {
-    programs = data;
     if (!isClosed) {
       _addProgramList.add(data);
       if (data != null) {

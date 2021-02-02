@@ -32,3 +32,9 @@ class ClockFormatChanged {
 
   ClockFormatChanged(this.hour24);
 }
+
+class TvGuideSwitch {
+  final bool onScroll;
+
+  TvGuideSwitch(this.onScroll);
+}

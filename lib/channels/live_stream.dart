@@ -12,6 +12,7 @@ import 'package:fastotvlite/service_locator.dart';
 import 'package:flutter_common/time_manager.dart';
 import 'package:http/http.dart' as http;
 import 'package:quiver/core.dart';
+import 'package:uuid/uuid.dart';
 
 class LiveStream extends IStream {
   static const int MAX_PROGRAMS_COUNT = 100;
@@ -128,7 +129,7 @@ class LiveStream extends IStream {
     }
 
     final epgId = _channelInfo.epg.id;
-    if (epgId.isEmpty) {
+    if (epgId?.isEmpty ?? true) {
       return initializingCompleter.future;
     }
 
@@ -169,8 +170,8 @@ class LiveStream extends IStream {
   static const REQUESTED_FEILD = 'requested';
 
   LiveStream.empty()
-      : _channelInfo = ChannelInfo(
-            '', <String>[], 0, false, 0, 0, false, EpgInfo('', [''], '', '', []), true, true, null, 0, <MetaUrl>[]),
+      : _channelInfo = ChannelInfo(Uuid().v1(), <String>[], 0, false, 0, 0, false,
+            EpgInfo('', [''], '', '', []), true, true, null, 0, <MetaUrl>[]),
         _epgUrl = EPG_URL,
         _requested = false;
 
@@ -183,8 +184,8 @@ class LiveStream extends IStream {
             json[StreamBaseInfo.RECENT_FIELD],
             0,
             false,
-            EpgInfo(json[StreamBaseInfo.ID_FIELD], [json[EpgInfo.URLS_FIELD]], json[EpgInfo.DISPLAY_NAME_FIELD],
-                json[EpgInfo.ICON_FIELD], []),
+            EpgInfo(json[StreamBaseInfo.ID_FIELD], [json[EpgInfo.URLS_FIELD]],
+                json[EpgInfo.DISPLAY_NAME_FIELD], json[EpgInfo.ICON_FIELD], []),
             true,
             true,
             null,

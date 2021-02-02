@@ -21,7 +21,8 @@ class VodDescription extends StatefulWidget {
 }
 
 class _VodDescriptionState extends State<VodDescription> {
-  static const String INVALID_TRAILER_URL = "https://fastocloud.com/static/video/invalid_trailer.m3u8";
+  static const String INVALID_TRAILER_URL =
+      "https://fastocloud.com/static/video/invalid_trailer.m3u8";
 
   @override
   Widget build(BuildContext context) {
@@ -55,28 +56,35 @@ class _VodDescriptionState extends State<VodDescription> {
     }
 
     Widget landscape() {
-      return Row(crossAxisAlignment: CrossAxisAlignment.stretch, mainAxisSize: MainAxisSize.max, children: <Widget>[
-        Container(
-            width: 196,
-            child: Column(children: <Widget>[
-              Expanded(
-                  flex: 8,
-                  child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Center(child: PreviewIcon.vod(currentVod.previewIcon())))),
-              trailerButton(currentVod, padding: 8),
-              playButton(currentVod, padding: 8)
-            ])),
-        VerticalDivider(),
-        Expanded(
-            child: Column(children: <Widget>[
-          Padding(
-              padding: EdgeInsets.fromLTRB(16.0, 8.0, 8, 0),
-              child: Row(children: <Widget>[userScore(currentVod), VerticalDivider(), sideInfo(currentVod)])),
-          Divider(),
-          description(currentVod)
-        ]))
-      ]);
+      return Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.max,
+          children: <Widget>[
+            Container(
+                width: 196,
+                child: Column(children: <Widget>[
+                  Expanded(
+                      flex: 8,
+                      child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Center(child: PreviewIcon.vod(currentVod.previewIcon())))),
+                  trailerButton(currentVod, padding: 8),
+                  playButton(currentVod, padding: 8)
+                ])),
+            VerticalDivider(),
+            Expanded(
+                child: Column(children: <Widget>[
+              Padding(
+                  padding: EdgeInsets.fromLTRB(16.0, 8.0, 8, 0),
+                  child: Row(children: <Widget>[
+                    userScore(currentVod),
+                    VerticalDivider(),
+                    sideInfo(currentVod)
+                  ])),
+              Divider(),
+              description(currentVod)
+            ]))
+          ]);
     }
 
     return Scaffold(
@@ -85,7 +93,8 @@ class _VodDescriptionState extends State<VodDescription> {
             title: Text(AppLocalizations.toUtf8(currentVod.displayName()),
                 style: TextStyle(color: Theming.of(context).onPrimary())),
             actions: <Widget>[
-              FavoriteStarButton(widget.currentVod().favorite(), onFavoriteChanged: (bool value) => callback(value))
+              FavoriteStarButton(widget.currentVod().favorite(),
+                  onFavoriteChanged: (bool value) => callback(value))
             ]),
         body: OrientationBuilder(builder: (context, orientation) {
           return orientation == Orientation.portrait ? portrait() : landscape();
@@ -98,11 +107,13 @@ class _VodDescriptionState extends State<VodDescription> {
     return currentVod.trailerUrl() == INVALID_TRAILER_URL
         ? Spacer(flex: 1)
         : Padding(
-            padding: EdgeInsets.symmetric(horizontal: padding ?? 8), child: VodTrailerButton(currentVod, context));
+            padding: EdgeInsets.symmetric(horizontal: padding ?? 8),
+            child: VodTrailerButton(currentVod));
   }
 
   Widget playButton(VodStream currentVod, {double padding}) {
-    return Padding(padding: EdgeInsets.symmetric(horizontal: padding ?? 8), child: VodPlayButton(currentVod, context));
+    return Padding(
+        padding: EdgeInsets.symmetric(horizontal: padding ?? 8), child: VodPlayButton(currentVod));
   }
 
   Widget description(VodStream currentVod) {

@@ -1,13 +1,8 @@
 import 'package:event_bus/event_bus.dart';
-import 'package:fastotvlite/channels/istream.dart';
-import 'package:fastotvlite/channels/live_stream.dart';
-import 'package:fastotvlite/channels/vod_stream.dart';
 
 class SearchEvents {
   static Future<SearchEvents> getInstance() async {
-    if (_instance == null) {
-      _instance = SearchEvents();
-    }
+    _instance ??= SearchEvents();
     return _instance;
   }
 
@@ -24,20 +19,8 @@ class SearchEvents {
   final _bus = EventBus(sync: true);
 }
 
-class SearchEvent<T extends IStream> {
+class StreamSearchEvent<T> {
   final T stream;
 
-  SearchEvent(this.stream);
-}
-
-class LiveSearchEvent {
-  final LiveStream stream;
-
-  LiveSearchEvent(this.stream);
-}
-
-class VodSearchEvent {
-  final VodStream stream;
-
-  VodSearchEvent(this.stream);
+  StreamSearchEvent(this.stream);
 }
