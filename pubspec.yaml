@@ -47,11 +47,8 @@ dependencies:
   unicorndial: ^1.1.5
   url_launcher: ^5.4.2
   uuid: 2.2.2
-  double_back_to_close_app: ^2.0.1
 
 dependency_overrides:
-  volume: ^1.0.1
-  video_player: ^1.0.1
   intl: ^0.17.0-nullsafety.2
 
 dev_dependencies:
