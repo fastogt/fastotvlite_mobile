@@ -42,7 +42,8 @@ class _MyAppState extends State<MyApp> {
             locales: {
               Locale('en', 'US'): 'English',
               Locale('ru', 'RU'): 'Русский',
-              Locale('fr', 'CA'): 'Français'
+              Locale('fr', 'CA'): 'Français',
+              Locale('es', 'ES'): 'Español'
             },
             child: Builder(builder: (context) {
               return MaterialApp(
