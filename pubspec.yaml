@@ -13,42 +13,39 @@ environment:
   sdk: ">=2.9.0 <3.0.0"
 
 dependencies:
-  event_bus: ^1.1.1
-  fastotv_dart:
-    git:
-      url: https://github.com/fastogt/fastotv_dart.git
-      ref: master
-  fastotv_device_info:
-    git:
-      url: https://github.com/fastogt/fastotv_device_info.git
-      ref: master
-  file_picker: ^2.1.5+1
-  flutter:
-    sdk: flutter
-  flutter_common:
-    git:
-      url: https://github.com/fastogt/flutter_common.git
-      ref: master
-  flutter_fastotv_common:
-    git:
-      url: https://github.com/fastogt/flutter_fastotv_common.git
-      ref: master
-  flutter_localizations:
-    sdk: flutter
+  event_bus: ^2.0.0
   flutter_tags: ^0.4.9+1
   get_it: ^5.0.1
   numberpicker: ^1.1.0
-  player:
-    git:
-      url: https://github.com/fastogt/flutter_fastotv_player.git
-      ref: main
-  rxdart: ^0.24.0
   shared_preferences: ^0.5.7+1
   unicorndial: ^1.1.5
   uuid: 2.2.2
+  file_picker: ^2.1.5+1
+  flutter_localizations:
+    sdk: flutter
+  flutter:
+    sdk: flutter
 
-dependency_overrides:
-  intl: ^0.17.0-nullsafety.2
+  fastotv_dart:
+    git:
+      url: https://gitlab.com/fastogt/fastotv_dart.git
+      ref: master
+  fastotv_device_info:
+    git:
+      url: https://gitlab.com/fastogt/fastotv_device_info.git
+      ref: master
+  flutter_common:
+    git:
+      url: https://gitlab.com/fastogt/flutter_common.git
+      ref: master
+  flutter_fastotv_common:
+    git:
+      url: https://gitlab.com/fastogt/flutter_fastotv_common.git
+      ref: master
+  player:
+    git:
+      url: https://gitlab.com/fastogt/flutter_fastotv_player.git
+      ref: main
 
 dev_dependencies:
   dart_rules:
