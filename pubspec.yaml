@@ -15,12 +15,12 @@ environment:
 dependencies:
   event_bus: ^2.0.0
   flutter_tags: ^0.4.9+1
-  get_it: ^5.0.1
-  numberpicker: ^1.1.0
-  shared_preferences: ^0.5.7+1
+  get_it: ^6.0.0
+  numberpicker: ^2.0.0
+  shared_preferences: ^2.0.3
   unicorndial: ^1.1.5
-  uuid: 2.2.2
-  file_picker: ^2.1.5+1
+  uuid: 3.0.1
+  file_picker: ^3.0.0
   flutter_localizations:
     sdk: flutter
   flutter:
@@ -33,10 +33,6 @@ dependencies:
   fastotv_device_info:
     git:
       url: https://gitlab.com/fastogt/fastotv_device_info.git
-      ref: master
-  flutter_common:
-    git:
-      url: https://gitlab.com/fastogt/flutter_common.git
       ref: master
   flutter_fastotv_common:
     git:
