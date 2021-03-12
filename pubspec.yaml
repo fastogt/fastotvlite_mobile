@@ -15,12 +15,12 @@ environment:
 dependencies:
   event_bus: ^2.0.0
   flutter_tags: ^0.4.9+1
+  file_picker: ^3.0.0
   get_it: ^6.0.0
   numberpicker: ^2.0.0
-  shared_preferences: ^2.0.3
+  shared_preferences: ^2.0.4
   unicorndial: ^1.1.5
   uuid: 3.0.1
-  file_picker: ^3.0.0
   flutter_localizations:
     sdk: flutter
   flutter:

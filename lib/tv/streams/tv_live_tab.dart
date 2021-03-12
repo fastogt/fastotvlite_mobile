@@ -1,3 +1,4 @@
+import 'package:fastotv_dart/commands_info/programme_info.dart';
 import 'package:fastotvlite/base/focusable/actions.dart';
 import 'package:fastotvlite/base/streams/live_timeline.dart';
 import 'package:fastotvlite/base/streams/program_bloc.dart';
@@ -18,7 +19,6 @@ import 'package:fastotvlite/shared_prefs.dart';
 import 'package:fastotvlite/theme/theme.dart';
 import 'package:fastotvlite/tv/streams/common_widgets.dart';
 import 'package:fastotvlite/tv/streams/tv_live_channels.dart';
-import 'package:fastotv_dart/commands_info/programme_info.dart';
 import 'package:fastotvlite/tv/streams/tv_live_edit_channel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -529,9 +529,8 @@ class _ProgramDescription extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final ProgrammeInfo p = snapshot.data;
-            if (p.description.isPresent) {
-              return SingleChildScrollView(
-                  child: Text(AppLocalizations.toUtf8(p.description.value)));
+            if (p.description != null) {
+              return SingleChildScrollView(child: Text(AppLocalizations.toUtf8(p.description)));
             }
           }
           return const SizedBox();
