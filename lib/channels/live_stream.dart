@@ -9,9 +9,8 @@ import 'package:fastotv_dart/epg_parser.dart';
 import 'package:fastotvlite/channels/istream.dart';
 import 'package:fastotvlite/constants.dart';
 import 'package:fastotvlite/service_locator.dart';
-import 'package:flutter_common/time_manager.dart';
+import 'package:flutter_common/flutter_common.dart';
 import 'package:http/http.dart' as http;
-import 'package:quiver/core.dart';
 import 'package:uuid/uuid.dart';
 
 class LiveStream extends IStream {
@@ -104,8 +103,8 @@ class LiveStream extends IStream {
     return _httpRequest();
   }
 
-  Optional<ProgrammeInfo> findProgrammeByTime(int time) {
-    return _channelInfo.epg.FindProgrammeByTime(time);
+  ProgrammeInfo findProgrammeByTime(int time) {
+    return _channelInfo.epg.findProgrammeByTime(time);
   }
 
   List<ProgrammeInfo> programs() {
@@ -134,14 +133,14 @@ class LiveStream extends IStream {
     }
 
     try {
-      final response = await http.get('$_epgUrl/$epgId.xml');
+      final response = await http.get(Uri.parse('$_epgUrl/$epgId.xml'));
       if (response.statusCode != 200) {
         return initializingCompleter.future;
       }
       _channelInfo.epg.programs = parseXmlContent(response.body);
       if (_channelInfo.epg.programs.length > MAX_PROGRAMS_COUNT) {
         final _timeManager = locator<TimeManager>();
-        int curUtc = _timeManager.realTime();
+        int curUtc = await _timeManager.realTime();
         final last = _sliceLastByTime(_channelInfo.epg.programs, curUtc);
         if (last.length > MAX_PROGRAMS_COUNT) {
           last.length = MAX_PROGRAMS_COUNT;

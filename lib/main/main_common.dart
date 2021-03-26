@@ -7,8 +7,7 @@ import 'package:fastotvlite/theme/theme.dart';
 import 'package:fastotvlite/tv/tv_tabs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_common/localization/app_localizations.dart';
-import 'package:flutter_common/runtime_device.dart';
+import 'package:flutter_common/flutter_common.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 Future<void> mainCommon() async {

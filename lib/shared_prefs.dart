@@ -11,16 +11,12 @@ const MAX_IARC_AGE = IARC_DEFAULT_AGE;
 
 class LocalStorageService {
   static LocalStorageService _instance;
-  static SharedPreferences _preferences;
+  SharedPreferences _preferences;
 
   static Future<LocalStorageService> getInstance() async {
-    if (_instance == null) {
-      _instance = LocalStorageService();
-    }
+    _instance ??= LocalStorageService();
 
-    if (_preferences == null) {
-      _preferences = await SharedPreferences.getInstance();
-    }
+    _instance._preferences ??= await SharedPreferences.getInstance();
 
     return _instance;
   }
@@ -100,7 +96,7 @@ class LocalStorageService {
     return _preferences.getDouble(_screenScaleKey) ?? 1.0;
   }
 
-  void setscreenScale(double padding) {
+  void setScreenScale(double padding) {
     _preferences.setDouble(_screenScaleKey, padding);
   }
 

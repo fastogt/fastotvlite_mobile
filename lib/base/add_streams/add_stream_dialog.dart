@@ -12,8 +12,7 @@ import 'package:fastotvlite/tv/add_streams/tv_select_stream_page.dart';
 import 'package:fastotvlite/tv/streams/tv_live_edit_channel.dart';
 import 'package:fastotvlite/tv/vods/tv_vod_edit_channel.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_common/localization/app_localizations.dart';
-import 'package:flutter_common/runtime_device.dart';
+import 'package:flutter_common/flutter_common.dart';
 
 enum PickStreamFrom { PLAYLIST, SINGLE_STREAM }
 
@@ -88,7 +87,7 @@ abstract class BaseFilePickerDialogState extends State<BaseFilePickerDialog> {
         disabledColor: disabledColor,
         child: Text(text,
             style: hasTouch
-                ? TextStyle(color: Theming.of(context).onCustomColor(!validator ? disabledColor : activeColor))
+                ? TextStyle(color: backgroundColorBrightness(!validator ? disabledColor : activeColor))
                 : null),
         onPressed: onPressed);
   }

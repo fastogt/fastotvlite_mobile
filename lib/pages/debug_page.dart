@@ -3,18 +3,13 @@ import 'package:fastotvlite/localization/translations.dart';
 import 'package:fastotvlite/service_locator.dart';
 import 'package:fastotvlite/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_common/localization/app_localizations.dart';
-import 'package:flutter_common/package_manager.dart';
-import 'package:flutter_common/runtime_device.dart';
+import 'package:flutter_common/flutter_common.dart';
 
 const DEVELOPER_SETTINGS_COUNTER = 7;
 
-class DebugQueryInfo extends StatefulWidget {
-  @override
-  _DebugQueryInfoState createState() => _DebugQueryInfoState();
-}
+class DebugQueryInfo extends StatelessWidget {
+  const DebugQueryInfo();
 
-class _DebugQueryInfoState extends State<DebugQueryInfo> {
   List<Widget> get _device {
     final device = locator<RuntimeDevice>();
     final android = device.androidDetails;
@@ -42,14 +37,14 @@ class _DebugQueryInfoState extends State<DebugQueryInfo> {
         Text("Estimated Device: ${device.name}", style: estimatedColor),
         Text("os: ${device.os}"),
         Text("model: ${ios.utsname.machine}", style: red),
-        Text("manufacturer: " + APPLE_BRAND, style: red),
+        Text("manufacturer: $APPLE_BRAND", style: red),
         Text("name: ${ios.name}"),
         Text("systemName: ${ios.systemName}"),
         Text("systemVersion: ${ios.systemVersion}"),
         Text("localizedModel: ${ios.localizedModel}"),
         Text(
             "utsname: ${ios.utsname.sysname}\n${ios.utsname.nodename}\n${ios.utsname.release}\n${ios.utsname.version}\n${ios.utsname.machine}"),
-        Text("has touch: ${device.hasTouch}", style: red),
+        Text("has touch: ${device.hasTouch}", style: red)
       ];
     }
 
@@ -66,12 +61,12 @@ class _DebugQueryInfoState extends State<DebugQueryInfo> {
                 padding: const EdgeInsets.all(4.0),
                 child: IconButton(
                     focusColor: Colors.amber,
-                    icon: Icon(Icons.arrow_back),
+                    icon: const Icon(Icons.arrow_back),
                     iconSize: 32,
                     color: Theming.of(context).onPrimary(),
                     onPressed: Navigator.of(context).pop)),
-            title:
-                Text(AppLocalizations.toUtf8('Device info'), style: TextStyle(color: Theming.of(context).onPrimary()))),
+            title: Text(AppLocalizations.toUtf8('Device info'),
+                style: TextStyle(color: Theming.of(context).onPrimary()))),
         body: Padding(
             padding: const EdgeInsets.all(12.0),
             child: ListView(
@@ -83,34 +78,34 @@ class _DebugQueryInfoState extends State<DebugQueryInfo> {
                     Text("viewInsets: ${media.viewInsets}"),
                     Text("textScaleFactor: ${media.textScaleFactor}"),
                     Text("platformBrightness: ${media.platformBrightness}"),
-                    Text("boldText: ${media.boldText}"),
+                    Text("boldText: ${media.boldText}")
                   ]))));
   }
 }
 
 class VersionTile extends StatefulWidget {
-  final int increment;
-
   final int type;
 
-  const VersionTile.settings({this.increment}) : type = 0;
+  const VersionTile.settings() : type = 0;
 
-  const VersionTile.login({this.increment}) : type = 1;
+  const VersionTile.login() : type = 1;
 
   @override
-  VersionTileState createState() => VersionTileState();
+  VersionTileState createState() {
+    return VersionTileState();
+  }
 }
 
 class VersionTileState extends State<VersionTile> {
   int counter = 0;
 
   void toInfo() async {
-    await Navigator.push(context, MaterialPageRoute(builder: (context) => DebugQueryInfo()));
+    await Navigator.push(context, MaterialPageRoute(builder: (context) => const DebugQueryInfo()));
     counter = 0;
   }
 
   Widget _login(String version) {
-    return Opacity(opacity: 0.5, child: InkWell(child: Text(version), onTap: () => _increment()));
+    return Opacity(opacity: 0.5, child: TextButton(child: Text(version), onPressed: _increment));
   }
 
   Widget _settings(String version) {
@@ -118,7 +113,7 @@ class VersionTileState extends State<VersionTile> {
         leading: Icon(Icons.info, color: Theming.of(context).onBrightness()),
         title: Text(AppLocalizations.of(context).translate(TR_VERSION)),
         subtitle: Text(version),
-        onTap: () => _increment());
+        onTap: _increment);
   }
 
   @override
@@ -131,7 +126,7 @@ class VersionTileState extends State<VersionTile> {
     if (widget.type == 1) {
       return _login(version);
     }
-    return SizedBox();
+    return const SizedBox();
   }
 
   void _increment() {
