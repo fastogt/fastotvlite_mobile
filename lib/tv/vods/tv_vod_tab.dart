@@ -1,4 +1,3 @@
-import 'package:fastotvlite/base/stream_parser.dart';
 import 'package:fastotvlite/base/vods/constants.dart';
 import 'package:fastotvlite/base/vods/vod_card_favorite_pos.dart';
 import 'package:fastotvlite/bloc/vod_bloc.dart';
@@ -13,9 +12,7 @@ import 'package:fastotvlite/tv/vods/tv_vod_description.dart';
 import 'package:fastotvlite/tv/vods/tv_vod_edit_channel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_common/base/controls/no_channels.dart';
-import 'package:flutter_common/localization/app_localizations.dart';
-import 'package:flutter_common/tv/key_code.dart';
+import 'package:flutter_common/flutter_common.dart';
 import 'package:flutter_fastotv_common/base/vods/vod_card.dart';
 
 class TVVodPage extends StatefulWidget {
