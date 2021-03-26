@@ -1,3 +1,4 @@
+import 'package:fastotv_dart/commands_info.dart';
 import 'package:fastotvlite/base/streams/live_timeline.dart';
 import 'package:fastotvlite/base/streams/program_bloc.dart';
 import 'package:fastotvlite/base/streams/program_time.dart';
@@ -17,7 +18,6 @@ import 'package:fastotvlite/shared_prefs.dart';
 import 'package:fastotvlite/theme/theme.dart';
 import 'package:fastotvlite/tv/streams/common_widgets.dart';
 import 'package:fastotvlite/tv/streams/tv_live_channels.dart';
-import 'package:fastotv_dart/commands_info/programme_info.dart';
 import 'package:fastotvlite/tv/streams/tv_live_edit_channel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -420,7 +420,7 @@ class _ChannelsTabHomeTVState extends State<ChannelsTabHomeTV> {
 
   void setFullscreenOff(bool visibility) {
     notFullScreen = visibility;
-    TvChannelNotification(title: NotificationType.FULLSCREEN, visibility: notFullScreen)
+    TvChannelNotification(title: NotificationTypeTV.FULLSCREEN, visibility: notFullScreen)
         .dispatch(context);
     final settings = locator<LocalStorageService>();
     if (notFullScreen) {
@@ -526,8 +526,7 @@ class _ProgramDescription extends StatelessWidget {
           if (snapshot.hasData) {
             final ProgrammeInfo p = snapshot.data;
             if (p.description != null) {
-              return SingleChildScrollView(
-                  child: Text(AppLocalizations.toUtf8(p.description)));
+              return SingleChildScrollView(child: Text(AppLocalizations.toUtf8(p.description)));
             }
           }
           return const SizedBox();
