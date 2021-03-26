@@ -1,7 +1,6 @@
 import 'package:fastotvlite/channels/live_stream.dart';
 import 'package:fastotvlite/tv/add_streams/tv_edit_channel_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_common/localization/app_localizations.dart';
 import 'package:flutter_fastotv_common/base/controls/preview_icon.dart';
 
 abstract class AbstractLiveEditPage extends StatefulWidget {
@@ -46,10 +45,7 @@ class LiveAddPageTV extends AbstractLiveEditPage {
   _LiveAddPageTVState createState() => _LiveAddPageTVState();
 }
 
-class _LiveAddPageTVState extends AbstractLiveEditPageState {
-  @override
-  void exitAndResetChanges() => Navigator.of(context).pop();
-}
+class _LiveAddPageTVState extends AbstractLiveEditPageState {}
 
 class LiveEditPageTV extends AbstractLiveEditPage {
   LiveEditPageTV(stream) : super(stream);

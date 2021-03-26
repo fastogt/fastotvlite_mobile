@@ -1,10 +1,9 @@
-import 'package:fastotvlite/base/focusable/actions.dart';
 import 'package:fastotvlite/channels/live_stream.dart';
 import 'package:fastotvlite/player/controller.dart';
 import 'package:fastotvlite/player/tv_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_common/tv/key_code.dart';
+import 'package:flutter_common/utils.dart';
 
 class TvLivePlayerPage extends StatefulWidget {
   final LiveStream channel;

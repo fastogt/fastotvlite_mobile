@@ -1,4 +1,3 @@
-import 'package:fastotvlite/base/focusable/actions.dart';
 import 'package:fastotvlite/base/streams/live_timeline.dart';
 import 'package:fastotvlite/base/streams/program_bloc.dart';
 import 'package:fastotvlite/base/streams/program_time.dart';
@@ -22,10 +21,7 @@ import 'package:fastotv_dart/commands_info/programme_info.dart';
 import 'package:fastotvlite/tv/streams/tv_live_edit_channel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_common/base/controls/favorite_button.dart';
-import 'package:flutter_common/localization/app_localizations.dart';
-import 'package:flutter_common/scroll_controller_manager.dart';
-import 'package:flutter_common/tv/key_code.dart';
+import 'package:flutter_common/flutter_common.dart';
 import 'package:player/widgets/player.dart';
 
 class ChannelsTabHomeTV extends StatefulWidget {
@@ -529,9 +525,9 @@ class _ProgramDescription extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final ProgrammeInfo p = snapshot.data;
-            if (p.description.isPresent) {
+            if (p.description != null) {
               return SingleChildScrollView(
-                  child: Text(AppLocalizations.toUtf8(p.description.value)));
+                  child: Text(AppLocalizations.toUtf8(p.description)));
             }
           }
           return const SizedBox();
