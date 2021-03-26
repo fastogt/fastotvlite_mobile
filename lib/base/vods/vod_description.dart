@@ -1,4 +1,5 @@
 import 'package:fastotvlite/channels/vod_stream.dart';
+import 'package:fastotvlite/localization/translations.dart';
 import 'package:fastotvlite/mobile/vods/vod_player_page.dart';
 import 'package:fastotvlite/mobile/vods/vod_trailer_page.dart';
 import 'package:flutter/material.dart';
@@ -10,14 +11,12 @@ class SideInfo extends StatelessWidget {
   final int primeDate;
   final String country;
   final double fontSize;
-  final int views;
   final ScrollController scrollController;
 
   const SideInfo(
       {this.country,
       this.duration,
       this.primeDate,
-      this.views,
       this.fontSize,
       this.scrollController});
 
@@ -27,8 +26,7 @@ class SideInfo extends StatelessWidget {
     final List<Widget> info = [
       _sideDescription(translate(context, TR_COUNTRY), data: country),
       _sideDescription(translate(context, TR_DURATION), data: _getDuration(duration)),
-      _sideDescription(translate(context, TR_YEAR), data: pd.year.toString()),
-      _sideDescription(translate(context, TR_VIEWS), data: views.toString())
+      _sideDescription(translate(context, TR_YEAR), data: pd.year.toString())
     ];
     return SingleChildScrollView(
         controller: scrollController ?? ScrollController(),
