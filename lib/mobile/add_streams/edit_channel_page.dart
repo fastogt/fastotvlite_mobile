@@ -1,12 +1,9 @@
 import 'package:fastotvlite/channels/istream.dart';
-import 'package:fastotvlite/theme/theme.dart';
+import 'package:fastotvlite/localization/translations.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_common/localization/app_localizations.dart';
+import 'package:flutter_common/flutter_common.dart';
 import 'package:flutter_fastotv_common/base/controls/preview_icon.dart';
 import 'package:flutter_tags/flutter_tags.dart';
-
-import '../../channels/istream.dart';
-import '../../localization/translations.dart';
 
 enum EditResult { ADD, EDIT, DELETE }
 
@@ -47,7 +44,7 @@ abstract class EditStreamPageState<T extends IStream> extends State<EditStreamPa
   @override
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).primaryColor;
-    final appBarTextColor = Theming.of(context).onCustomColor(primaryColor);
+    final appBarTextColor = backgroundColorBrightness(primaryColor);
     return Scaffold(
         appBar: AppBar(
             iconTheme: IconThemeData(color: appBarTextColor),
@@ -83,7 +80,7 @@ abstract class EditStreamPageState<T extends IStream> extends State<EditStreamPa
         : FloatingActionButton(
             onPressed: onSave,
             backgroundColor: accentColor,
-            child: Icon(Icons.save, color: Theming.of(context).onCustomColor(accentColor)));
+            child: Icon(Icons.save, color: backgroundColorBrightness(accentColor)));
   }
 
   Widget textField(String hintText, TextEditingController controller,

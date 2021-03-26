@@ -3,6 +3,7 @@ import 'package:fastotvlite/base/add_streams/select_streams.dart';
 import 'package:fastotvlite/base/vods/constants.dart';
 import 'package:fastotvlite/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_common/utils.dart';
 
 class ChannelsPreviewPage extends StatefulWidget {
   final String m3uText;
@@ -21,7 +22,7 @@ class _ChannelsPreviewPageState extends BaseSelectStreamPage<ChannelsPreviewPage
 
   Widget layout() {
     final primaryColor = Theme.of(context).primaryColor;
-    final appBarTextColor = Theming.of(context).onCustomColor(primaryColor);
+    final appBarTextColor = backgroundColorBrightness(primaryColor);
     final current = selectedList();
 
     Widget _body() {
@@ -51,7 +52,7 @@ class _ChannelsPreviewPageState extends BaseSelectStreamPage<ChannelsPreviewPage
 
   Widget _floatingButton() {
     final accentColor = Theme.of(context).accentColor;
-    final textColor = Theming.of(context).onCustomColor(accentColor);
+    final textColor = backgroundColorBrightness(accentColor);
     return RaisedButton(
         onPressed: () => onSave(),
         child: Container(

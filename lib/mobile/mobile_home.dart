@@ -1,3 +1,4 @@
+import 'package:dart_chromecast/chromecast.dart';
 import 'package:fastotvlite/pages/home_page.dart';
 import 'package:fastotvlite/base/add_streams/add_stream_dialog.dart';
 import 'package:fastotvlite/base/add_streams/m3u_to_channels.dart';
@@ -11,9 +12,7 @@ import 'package:fastotvlite/mobile/streams/live_tab.dart';
 import 'package:fastotvlite/mobile/vods/vod_tab.dart';
 import 'package:fastotvlite/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_common/base/controls/logo.dart';
-import 'package:flutter_common/localization/app_localizations.dart';
-import 'package:flutter_fastotv_common/chromecast/chromecast_info.dart';
+import 'package:flutter_common/flutter_common.dart';
 import 'package:unicorndial/unicorndial.dart';
 
 class HomeMobile extends HomePage {
@@ -27,7 +26,7 @@ class _HomeMobileState extends VideoAppState {
   GlobalKey _liveKey = GlobalKey();
   GlobalKey _vodKey = GlobalKey();
 
-  GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
+  GlobalKey<ScaffoldMessengerState> _drawerKey = GlobalKey();
 
   @override
   void initState() {
@@ -39,12 +38,13 @@ class _HomeMobileState extends VideoAppState {
   Widget build(BuildContext context) {
     return WillPopScope(
         onWillPop: () async => false,
-        child: Scaffold(
+        child: ScaffoldMessenger(
             key: _drawerKey,
-            appBar: _appBar(),
-            body: _getCurrentTabWidget(),
-            drawer: _Drawer(videoTypesList, _setType),
-            floatingActionButton: _floatingButton()));
+            child: Scaffold(
+                appBar: _appBar(),
+                body: _getCurrentTabWidget(),
+                drawer: _Drawer(videoTypesList, _setType),
+                floatingActionButton: _floatingButton())));
   }
 
   Widget _getCurrentTabWidget() {
@@ -70,15 +70,14 @@ class _HomeMobileState extends VideoAppState {
       return 0;
     }
 
-    final Color iconColor = Theming.of(context).onCustomColor(Theme.of(context).primaryColor);
+    final Color iconColor = backgroundColorBrightness(Theme.of(context).primaryColor);
     return AppBar(
         elevation: _elevation(),
         iconTheme: IconThemeData(color: iconColor),
         actionsIconTheme: IconThemeData(color: iconColor),
         title: Text(translate(context, selectedType), style: TextStyle(color: iconColor)),
         actions: <Widget>[
-          if (selectedType != TR_EMPTY)
-            IconButton(icon: Icon(Icons.search), onPressed: _onSearch)
+          if (selectedType != TR_EMPTY) IconButton(icon: Icon(Icons.search), onPressed: _onSearch)
         ]);
   }
 

@@ -8,12 +8,11 @@ import 'package:fastotvlite/theme/color_picker.dart';
 import 'package:fastotvlite/theme/theme.dart';
 import 'package:fastotvlite/theme/theme_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_common/localization/app_localizations.dart';
-import 'package:flutter_common/localization/lang_picker.dart';
-import 'package:flutter_common/screen_orientation.dart' as orientation;
-import 'package:flutter_common/theming.dart';
+import 'package:flutter_common/flutter_common.dart';
 
 class SettingsPage extends StatefulWidget {
+  const SettingsPage();
+  
   @override
   _SettingsPageState createState() => _SettingsPageState();
 }
@@ -24,13 +23,13 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   void initState() {
     super.initState();
-    orientation.onlyPortrait();
+    onlyPortrait();
   }
 
   @override
   void dispose() {
     super.dispose();
-    orientation.allowAll();
+    allowAll();
   }
 
   @override

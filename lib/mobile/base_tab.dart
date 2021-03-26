@@ -6,8 +6,7 @@ import 'package:fastotvlite/events/stream_list_events.dart';
 import 'package:fastotvlite/localization/translations.dart';
 import 'package:fastotvlite/service_locator.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_common/base/controls/no_channels.dart';
-import 'package:flutter_common/localization/app_localizations.dart';
+import 'package:flutter_common/flutter_common.dart';
 
 abstract class IStreamBaseListPage<T extends IStream, U extends StatefulWidget> extends State<U>
     with TickerProviderStateMixin {

@@ -2,8 +2,7 @@ import 'package:fastotvlite/base/vods/vod_description.dart';
 import 'package:fastotvlite/channels/vod_stream.dart';
 import 'package:fastotvlite/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_common/base/controls/favorite_button.dart';
-import 'package:flutter_common/localization/app_localizations.dart';
+import 'package:flutter_common/flutter_common.dart';
 import 'package:flutter_fastotv_common/base/controls/preview_icon.dart';
 import 'package:flutter_fastotv_common/base/vods/vod_description.dart';
 

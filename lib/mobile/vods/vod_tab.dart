@@ -6,8 +6,7 @@ import 'package:fastotvlite/localization/translations.dart';
 import 'package:fastotvlite/mobile/base_tab.dart';
 import 'package:fastotvlite/mobile/vods/vod_edit_channel.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_common/base/controls/favorite_button.dart';
-import 'package:flutter_common/localization/app_localizations.dart';
+import 'package:flutter_common/flutter_common.dart';
 import 'package:flutter_fastotv_common/base/vods/vod_card.dart';
 
 class VodTab extends StatefulWidget {

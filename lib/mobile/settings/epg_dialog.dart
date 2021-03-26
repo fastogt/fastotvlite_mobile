@@ -5,10 +5,11 @@ import 'package:fastotvlite/service_locator.dart';
 import 'package:fastotvlite/shared_prefs.dart';
 import 'package:fastotvlite/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_common/localization/app_localizations.dart';
-import 'package:flutter_common/theming.dart';
+import 'package:flutter_common/flutter_common.dart';
 
 class EpgSettingsTile extends StatefulWidget {
+  const EpgSettingsTile();
+  
   @override
   _EpgSettingsTileState createState() => _EpgSettingsTileState();
 }
@@ -96,7 +97,8 @@ class _EpgDialogState extends State<EpgDialog> {
   void _validate() {
     String _text = _textEditingController.text;
     setState(() {
-      validator = _text.isNotEmpty && reg.hasMatch(_text) && _text.substring(_text.length - 1) == '/';
+      validator =
+          _text.isNotEmpty && reg.hasMatch(_text) && _text.substring(_text.length - 1) == '/';
       setGroupValue();
     });
   }
@@ -132,23 +134,25 @@ class _EpgDialogState extends State<EpgDialog> {
 
   Widget _content() {
     return SingleChildScrollView(
-        child:
-            Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.stretch, children: <Widget>[
-      listTile('FastoTV', 0),
-      listTile(_translate(TR_EPG_CUSTOM), 1),
-      Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: TextFormField(
-              focusNode: textFieldFocus,
-              controller: _textEditingController,
-              onChanged: (String text) => _validate(),
-              onFieldSubmitted: (String text) => _validate(),
-              decoration: InputDecoration(
-                  fillColor: Theme.of(context).accentColor,
-                  focusColor: Theme.of(context).accentColor,
-                  labelText: _translate(TR_EPG_URL),
-                  errorText: _errorText())))
-    ]));
+        child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+          listTile('FastoTV', 0),
+          listTile(_translate(TR_EPG_CUSTOM), 1),
+          Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: TextFormField(
+                  focusNode: textFieldFocus,
+                  controller: _textEditingController,
+                  onChanged: (String text) => _validate(),
+                  onFieldSubmitted: (String text) => _validate(),
+                  decoration: InputDecoration(
+                      fillColor: Theme.of(context).accentColor,
+                      focusColor: Theme.of(context).accentColor,
+                      labelText: _translate(TR_EPG_URL),
+                      errorText: _errorText())))
+        ]));
   }
 
   @override

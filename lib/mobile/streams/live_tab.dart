@@ -9,8 +9,7 @@ import 'package:fastotvlite/mobile/streams/live_tile.dart';
 import 'package:fastotvlite/service_locator.dart';
 import 'package:fastotvlite/shared_prefs.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_common/localization/app_localizations.dart';
-import 'package:flutter_common/screen_orientation.dart' as orientation;
+import 'package:flutter_common/flutter_common.dart';
 
 class LiveTab extends StatefulWidget {
   final LiveStreamBloc bloc;
@@ -65,7 +64,7 @@ class LiveVideoAppState extends IStreamBaseListPage<LiveStream, LiveTab>
 
   @override
   void onTap(List<LiveStream> channels, int position) async {
-    orientation.allowAll();
+    allowAll();
     bloc.onTap(channels, position);
   }
 

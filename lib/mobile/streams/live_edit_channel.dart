@@ -2,7 +2,7 @@ import 'package:fastotvlite/channels/live_stream.dart';
 import 'package:fastotvlite/localization/translations.dart';
 import 'package:fastotvlite/mobile/add_streams/edit_channel_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_common/localization/app_localizations.dart';
+import 'package:flutter_common/flutter_common.dart';
 
 abstract class _AbstractLiveEditPage extends EditStreamPage<LiveStream> {
   _AbstractLiveEditPage(LiveStream stream) : super(stream);

@@ -2,10 +2,8 @@ import 'package:fastotvlite/localization/translations.dart';
 import 'package:fastotvlite/mobile/settings/settings_page.dart';
 import 'package:fastotvlite/service_locator.dart';
 import 'package:fastotvlite/shared_prefs.dart';
-import 'package:fastotvlite/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_common/localization/app_localizations.dart';
-import 'package:flutter_common/theming.dart';
+import 'package:flutter_common/flutter_common.dart';
 import 'package:numberpicker/numberpicker.dart';
 
 class AgeSettingsTile extends StatefulWidget {
@@ -30,8 +28,9 @@ class _AgeSettingsTileState extends State<AgeSettingsTile> {
         title: Text(AppLocalizations.of(context).translate(TR_PARENTAL_CONTROL)),
         subtitle: Text(AppLocalizations.of(context).translate(TR_AGE_RESTRICTION)),
         onTap: () => _onTap(),
-        trailing:
-            Padding(padding: const EdgeInsets.all(8.0), child: Text('$ageRating', style: TextStyle(fontSize: 16))));
+        trailing: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text('$ageRating', style: TextStyle(fontSize: 16))));
   }
 
   void _onTap() async {
@@ -59,7 +58,7 @@ class AgeSelector extends StatefulWidget {
 
 class _AgeSelectorState extends State<AgeSelector> {
   int age = IARC_DEFAULT_AGE;
-  String password = '';
+  String password;
   static const ITEM_HEIGHT = 48.0;
   TextEditingController passwordController = TextEditingController();
   bool authorized = false;
@@ -70,9 +69,7 @@ class _AgeSelectorState extends State<AgeSelector> {
     super.initState();
     final settings = locator<LocalStorageService>();
     age = settings.ageRating();
-
-    // TODO нет данных аккаунта, надо сделать пароль и его хранить
-    //password = settings.password();
+    password = '';
     passwordController.text = '';
   }
 
@@ -82,7 +79,9 @@ class _AgeSelectorState extends State<AgeSelector> {
     super.dispose();
   }
 
-  String _translate(String key) => AppLocalizations.of(context).translate(key);
+  String _translate(String key) {
+    return AppLocalizations.of(context).translate(key) ?? '';
+  }
 
   String _errorText() {
     if (validatePassword) {
@@ -102,65 +101,68 @@ class _AgeSelectorState extends State<AgeSelector> {
   }
 
   Widget _passwordField() {
-    return Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.stretch, children: <Widget>[
-      TextFormField(
-          controller: passwordController,
-          obscureText: true,
-          onChanged: (String text) {
-            validatePassword = _validate();
-          },
-          onFieldSubmitted: (term) {
-            validatePassword = _validate();
-          },
-          decoration: InputDecoration(
-              fillColor: Colors.amber,
-              focusColor: Colors.amber,
-              labelStyle: new TextStyle(color: const Color(0xFF424242)),
-              hintText: _translate(TR_PASSWORD),
-              contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-              errorText: _errorText()))
-    ]);
+    return Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          TextFormField(
+              controller: passwordController,
+              obscureText: true,
+              onChanged: (String text) {
+                validatePassword = _validate();
+              },
+              onFieldSubmitted: (term) {
+                validatePassword = _validate();
+              },
+              decoration: InputDecoration(
+                  fillColor: Colors.amber,
+                  focusColor: Colors.amber,
+                  labelStyle: const TextStyle(color: Color(0xFF424242)),
+                  hintText: _translate(TR_PASSWORD),
+                  contentPadding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                  errorText: _errorText()))
+        ]);
   }
 
   Widget _picker() {
-    return Stack(fit: StackFit.loose, children: <Widget>[
-      Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.stretch, children: <Widget>[
-        NumberPicker.integer(
-            itemExtent: ITEM_HEIGHT,
-            initialValue: age,
-            minValue: 0,
-            maxValue: IARC_DEFAULT_AGE,
-            onChanged: (value) {
-              setState(() {
-                age = value;
-              });
-            })
-      ]),
-      Container(
+    return Stack(children: <Widget>[
+      Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            NumberPicker(
+                itemHeight: ITEM_HEIGHT,
+                value: age,
+                minValue: 0,
+                maxValue: IARC_DEFAULT_AGE,
+                onChanged: (value) {
+                  setState(() {
+                    age = value;
+                  });
+                })
+          ]),
+      SizedBox(
           height: ITEM_HEIGHT * 3,
           child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[Spacer(), Divider(), Spacer(), Divider(), Spacer()]))
+              children: const <Widget>[Spacer(), Divider(), Spacer(), Divider(), Spacer()]))
     ]);
   }
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-        title: Text(_translate(!authorized ? TR_PARENTAL_CONTROL : TR_AGE_RESTRICTION)),
-        content: SingleChildScrollView(child: !authorized ? _passwordField() : _picker()),
-        contentPadding: EdgeInsets.fromLTRB(0, 20.0, 0, 0.0),
+        title: Text(!authorized ? _translate(TR_PARENTAL_CONTROL) : _translate(TR_AGE_RESTRICTION)),
+        content: !authorized ? _passwordField() : _picker(),
+        contentPadding: const EdgeInsets.fromLTRB(0, 20.0, 0, 0.0),
         actions: <Widget>[
-          Opacity(
-              opacity: BUTTON_OPACITY,
-              child: FlatButton(
-                  textColor: Theming.of(context).onBrightness(),
-                  child: Text(_translate(TR_CANCEL), style: TextStyle(fontSize: 14)),
-                  onPressed: () => Navigator.of(context).pop(widget.age))),
-          FlatButton(
-              textColor: Theme.of(context).accentColor,
-              child: Text(_translate(!authorized ? TR_PROCEED : TR_SUBMIT), style: TextStyle(fontSize: 14)),
+          TextButtonEx(
+              onPressed: () {
+                Navigator.of(context).pop(widget.age);
+              },
+              text: translate(context, TR_CANCEL)),
+          TextButtonEx(
               onPressed: () {
                 if (!authorized) {
                   setState(() {
@@ -174,7 +176,8 @@ class _AgeSelectorState extends State<AgeSelector> {
                 } else {
                   Navigator.of(context).pop(age.toInt());
                 }
-              })
+              },
+              text: translate(context, !authorized ? TR_PROCEED : TR_SUBMIT))
         ]);
   }
 }
