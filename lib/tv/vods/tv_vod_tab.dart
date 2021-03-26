@@ -18,7 +18,7 @@ import 'package:flutter_fastotv_common/base/vods/vod_card.dart';
 class TVVodPage extends StatefulWidget {
   final VodStreamBloc vodStreamsBloc;
 
-  TVVodPage(this.vodStreamsBloc);
+  const TVVodPage(this.vodStreamsBloc);
 
   @override
   _TVVodPageState createState() => _TVVodPageState();
@@ -36,7 +36,7 @@ class _TVVodPageState extends State<TVVodPage> with TickerProviderStateMixin {
 
   void _initTabController() async {
     _tabController =
-        new TabController(vsync: this, length: channelsMap.keys.length, initialIndex: 2);
+        TabController(vsync: this, length: channelsMap.keys.length, initialIndex: 2);
   }
 
   @override
@@ -51,9 +51,9 @@ class _TVVodPageState extends State<TVVodPage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     final query = MediaQuery.of(context);
 
-    return Container(
+    return SizedBox(
         height: query.size.height,
-        child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
+        child: Column(children: <Widget>[
           _tabBar(),
           Expanded(child: TabBarView(controller: _tabController, children: _generateList()))
         ]));
@@ -85,14 +85,14 @@ class _TVVodPageState extends State<TVVodPage> with TickerProviderStateMixin {
     List<Widget> tabsGenerator() {
       return List.generate(channelsMap.keys.length, (int index) {
         return Tab(
-            child: Container(
+            child: SizedBox(
                 child: Text(_title(channelsMap.keys.toList()[index]),
                     style: isActive(index) ? active : inactive)));
       });
     }
 
-    Widget tabs = TabBar(
-        labelStyle: new TextStyle(fontSize: 16.0),
+    final Widget tabs = TabBar(
+        labelStyle: const TextStyle(fontSize: 16.0),
         indicatorSize: TabBarIndicatorSize.tab,
         indicatorColor: Theme.of(context).accentColor,
         controller: _tabController,
@@ -103,17 +103,17 @@ class _TVVodPageState extends State<TVVodPage> with TickerProviderStateMixin {
   }
 
   List<Widget> _generateList() {
-    List<Widget> result = [];
+    final List<Widget> result = [];
     for (final category in channelsMap.keys) {
-      if (category == TR_FAVORITE && channelsMap[TR_FAVORITE].length == 0) {
-        result.add(NonAvailableBuffer(
+      if (category == TR_FAVORITE && channelsMap[TR_FAVORITE].isEmpty) {
+        result.add(const NonAvailableBuffer(
           icon: Icons.favorite_border,
-          message: 'You dont\' have any favorite channels',
+          message: "You dont' have any favorite channels",
         ));
-      } else if (category == TR_RECENT && channelsMap[TR_RECENT].length == 0) {
-        result.add(NonAvailableBuffer(
+      } else if (category == TR_RECENT && channelsMap[TR_RECENT].isEmpty) {
+        result.add(const NonAvailableBuffer(
           icon: Icons.replay,
-          message: 'You dont\' have any recently viewed channels',
+          message: "You dont' have any recently viewed channels",
         ));
       } else {
         result.add(_cardList(category));
@@ -128,7 +128,7 @@ class _TVVodPageState extends State<TVVodPage> with TickerProviderStateMixin {
         child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: GridView.builder(
-                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                     maxCrossAxisExtent: CARD_WIDTH_TV + 2 * EDGE_INSETS,
                     crossAxisSpacing: EDGE_INSETS,
                     mainAxisSpacing: EDGE_INSETS,
@@ -156,8 +156,8 @@ class _TVVodPageState extends State<TVVodPage> with TickerProviderStateMixin {
 
   bool _onCard(RawKeyEvent event, VodStream channel) {
     if (event is RawKeyDownEvent && event.data is RawKeyEventDataAndroid) {
-      RawKeyDownEvent rawKeyDownEvent = event;
-      RawKeyEventDataAndroid rawKeyEventDataAndroid = rawKeyDownEvent.data;
+      final RawKeyDownEvent rawKeyDownEvent = event;
+      final RawKeyEventDataAndroid rawKeyEventDataAndroid = rawKeyDownEvent.data;
       switch (rawKeyEventDataAndroid.keyCode) {
         case ENTER:
         case KEY_CENTER:
@@ -272,14 +272,14 @@ class _CardWrap extends StatefulWidget {
   final double cardWidth;
   final double borderWidth;
 
-  _CardWrap(this.channel, this.onKey, this.cardWidth, this.borderWidth);
+  const _CardWrap(this.channel, this.onKey, this.cardWidth, this.borderWidth);
 
   @override
   _CardWrapState createState() => _CardWrapState();
 }
 
 class _CardWrapState extends State<_CardWrap> {
-  FocusNode _node = FocusNode();
+  final FocusNode _node = FocusNode();
 
   @override
   void initState() {

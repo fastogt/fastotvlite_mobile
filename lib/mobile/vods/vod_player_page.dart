@@ -82,7 +82,7 @@ class VodPlayerPageMobileState extends PlayerPageMobileState<VodPlayer> {
         if (!castConnected)
           PlayerButtons.seekForward(onPressed: controller.seekForward, color: color)
       ]);
-    }, placeholder: const SizedBox());
+    });
   }
 
   int position() {

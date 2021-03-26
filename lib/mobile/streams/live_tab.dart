@@ -13,7 +13,7 @@ import 'package:flutter_common/flutter_common.dart';
 
 class LiveTab extends StatefulWidget {
   final LiveStreamBloc bloc;
-  LiveTab(Key key, this.bloc) : super(key: key);
+  const LiveTab(Key key, this.bloc) : super(key: key);
 
   @override
   LiveVideoAppState createState() => LiveVideoAppState();

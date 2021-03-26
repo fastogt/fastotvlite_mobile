@@ -11,7 +11,7 @@ import 'package:flutter_fastotv_common/base/vods/vod_card.dart';
 
 class VodTab extends StatefulWidget {
   final VodStreamBloc bloc;
-  VodTab(Key key, this.bloc) : super(key: key);
+  const VodTab(Key key, this.bloc) : super(key: key);
 
   @override
   VodVideoAppState createState() => VodVideoAppState();
@@ -37,7 +37,7 @@ class VodVideoAppState extends IStreamBaseListPage<VodStream, VodTab> {
         child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: GridView.builder(
-                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                     maxCrossAxisExtent: CARD_WIDTH + 2 * EDGE_INSETS,
                     crossAxisSpacing: EDGE_INSETS,
                     mainAxisSpacing: EDGE_INSETS,
@@ -47,7 +47,7 @@ class VodVideoAppState extends IStreamBaseListPage<VodStream, VodTab> {
   }
 
   Widget tile(int index, List<VodStream> channels) {
-    var channel = channels[index];
+    final channel = channels[index];
     return Padding(
         padding: const EdgeInsets.symmetric(horizontal: EDGE_INSETS, vertical: EDGE_INSETS * 1.5),
         child: Stack(children: <Widget>[
@@ -66,17 +66,17 @@ class VodVideoAppState extends IStreamBaseListPage<VodStream, VodTab> {
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Container(
+                    SizedBox(
                         width: 36,
                         child:
                             FavoriteStarButton(channel.favorite(), onFavoriteChanged: (bool value) {
                           handleFavorite(value, channel);
                         })),
-                    Container(
+                    SizedBox(
                         width: 36,
                         child: IconButton(
-                            padding: EdgeInsets.all(0.0),
-                            icon: Icon(Icons.settings),
+                            padding: const EdgeInsets.all(0.0),
+                            icon: const Icon(Icons.settings),
                             onPressed: () {
                               onEdit(channel);
                             }))

@@ -92,8 +92,8 @@ class _HomeTVState extends VideoAppState with TickerProviderStateMixin {
                       child: IconTheme(
                           data: IconThemeData(color: Theming.of(context).onBrightness()),
                           child: AppBar(
-                              leading: Padding(
-                                  padding: const EdgeInsets.fromLTRB(16, 8, 0, 8),
+                              leading: const Padding(
+                                  padding: EdgeInsets.fromLTRB(16, 8, 0, 8),
                                   child: CustomAssetLogo(LOGO_PATH)),
                               backgroundColor: Colors.transparent,
                               elevation: 0,
@@ -177,17 +177,17 @@ class _HomeTVState extends VideoAppState with TickerProviderStateMixin {
   void _toSettings() async {
     final tvTabsEvents = locator<TvTabsEvents>();
     tvTabsEvents.publish(OpenedTvSettings(true));
-    double padding =
-        await Navigator.push(context, MaterialPageRoute(builder: (context) => SettingPageTV()));
+    final double padding =
+        await Navigator.push(context, MaterialPageRoute(builder: (context) => const SettingPageTV()));
     tvTabsEvents.publish(OpenedTvSettings(false));
     setState(() => _scale = padding);
   }
 
   void _onAdd() async {
-    PickStreamFrom _source =
-        await showDialog(context: context, builder: (BuildContext context) => StreamTypePickerTV());
+    final PickStreamFrom _source =
+        await showDialog(context: context, builder: (BuildContext context) => const StreamTypePickerTV());
     if (_source != null) {
-      AddStreamResponse response = await showDialog(
+      final AddStreamResponse response = await showDialog(
           context: context, builder: (BuildContext context) => FilePickerDialogTV(_source));
       if (response != null) {
         addStreams(response);

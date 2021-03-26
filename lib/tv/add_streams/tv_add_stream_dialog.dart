@@ -5,9 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_common/utils.dart';
 
 class FilePickerDialogTV extends BaseFilePickerDialog {
-  final PickStreamFrom source;
-
-  FilePickerDialogTV(this.source) : super(source);
+  const FilePickerDialogTV(PickStreamFrom source) : super(source);
 
   @override
   _FilePickerDialogTVState createState() => _FilePickerDialogTVState();
@@ -36,8 +34,8 @@ class _FilePickerDialogTVState extends BaseFilePickerDialogState {
 
   bool _nodeAction(FocusNode node, RawKeyEvent event) {
     if (event is RawKeyDownEvent && event.data is RawKeyEventDataAndroid) {
-      RawKeyDownEvent rawKeyDownEvent = event;
-      RawKeyEventDataAndroid rawKeyEventDataAndroid = rawKeyDownEvent.data;
+      final RawKeyDownEvent rawKeyDownEvent = event;
+      final RawKeyEventDataAndroid rawKeyEventDataAndroid = rawKeyDownEvent.data;
       switch (rawKeyEventDataAndroid.keyCode) {
         case ENTER:
         case KEY_CENTER:

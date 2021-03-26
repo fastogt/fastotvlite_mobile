@@ -25,7 +25,7 @@ class LoadingPlaylistNotification extends Notification {
 abstract class BaseFilePickerDialog extends StatefulWidget {
   final PickStreamFrom source;
 
-  BaseFilePickerDialog(this.source);
+  const BaseFilePickerDialog(this.source);
 }
 
 abstract class BaseFilePickerDialogState extends State<BaseFilePickerDialog> {
@@ -36,7 +36,7 @@ abstract class BaseFilePickerDialogState extends State<BaseFilePickerDialog> {
   bool validator = true;
   bool hasTouch = true;
   String hintText = TR_INPUT_LINK;
-  TextEditingController controller = new TextEditingController();
+  TextEditingController controller = TextEditingController();
 
   Widget textField();
 
@@ -53,21 +53,21 @@ abstract class BaseFilePickerDialogState extends State<BaseFilePickerDialog> {
         title: Row(children: <Widget>[
           _backButton(),
           Text(translate(_inputLink ? TR_INPUT_LINK : TR_ADD_STREAMS)),
-          Spacer(),
+          const Spacer(),
           _exitButton()
         ]),
-        titlePadding:
-            EdgeInsets.symmetric(vertical: !hasTouch || _inputLink ? 12 : 24, horizontal: _inputLink ? 8 : 24),
-        contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: _inputLink ? 24 : 0),
+        titlePadding: EdgeInsets.symmetric(
+            vertical: !hasTouch || _inputLink ? 12 : 24, horizontal: _inputLink ? 8 : 24),
+        contentPadding: EdgeInsets.symmetric(horizontal: _inputLink ? 24 : 0),
         content: loading
             ? _loadingWidget()
             : SingleChildScrollView(
                 child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-                Divider(height: 0),
-                _inputLink ? textField() : _tiles(),
-                Divider(height: 0),
+                const Divider(height: 0),
+                if (_inputLink) textField() else _tiles(),
+                const Divider(height: 0),
                 _fileButtonsRow(),
-                Divider(height: 0)
+                const Divider(height: 0)
               ])));
   }
 
@@ -76,10 +76,11 @@ abstract class BaseFilePickerDialogState extends State<BaseFilePickerDialog> {
     return SizedBox(
         height: 64,
         width: 64,
-        child: Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(color))));
+        child: Center(
+            child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(color))));
   }
 
-  Widget _button(String text, void Function() onPressed, {Color color}) {
+  Widget _button(String text, void Function() onPressed) {
     final activeColor = hasTouch ? Theme.of(context).accentColor : null;
     final disabledColor = Theming.of(context).onBrightness().withOpacity(0.5);
     return FlatButton(
@@ -87,33 +88,37 @@ abstract class BaseFilePickerDialogState extends State<BaseFilePickerDialog> {
         disabledColor: disabledColor,
         child: Text(text,
             style: hasTouch
-                ? TextStyle(color: backgroundColorBrightness(!validator ? disabledColor : activeColor))
+                ? TextStyle(
+                    color: backgroundColorBrightness(!validator ? disabledColor : activeColor))
                 : null),
         onPressed: onPressed);
   }
 
   Widget _backButton() {
     if (!_inputLink) {
-      return SizedBox();
+      return const SizedBox();
     }
     return IconButton(
-        icon: Icon(Icons.arrow_back), onPressed: () => setState(() => _inputLink = false), padding: EdgeInsets.all(0));
+        icon: const Icon(Icons.arrow_back),
+        onPressed: () => setState(() => _inputLink = false),
+        padding: const EdgeInsets.all(0));
   }
 
   Widget _exitButton() {
     if (hasTouch) {
-      return SizedBox();
+      return const SizedBox();
     }
     return IconButton(
-      icon: Icon(Icons.close),
+      icon: const Icon(Icons.close),
       onPressed: () => Navigator.of(context).pop(),
-      padding: EdgeInsets.all(0),
+      padding: const EdgeInsets.all(0),
     );
   }
 
   Widget _tiles() {
     return Column(
-        mainAxisSize: MainAxisSize.min, children: <Widget>[_typeTile(StreamType.Live), _typeTile(StreamType.Vod)]);
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[_typeTile(StreamType.Live), _typeTile(StreamType.Vod)]);
   }
 
   Widget _typeTile(StreamType value) {
@@ -129,7 +134,7 @@ abstract class BaseFilePickerDialogState extends State<BaseFilePickerDialog> {
 
   Widget _fileButtonsRow() {
     if (widget.source == PickStreamFrom.SINGLE_STREAM || _streamType == null) {
-      return SizedBox(height: 0);
+      return const SizedBox(height: 0);
     }
 
     return Padding(
@@ -139,7 +144,8 @@ abstract class BaseFilePickerDialogState extends State<BaseFilePickerDialog> {
             : Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
                 _button(translate(TR_ADD_FILE), _streamType == null ? null : () => _onFile()),
                 Padding(padding: const EdgeInsets.all(8.0), child: Text(translate(TR_ADD_OR))),
-                _button(translate(TR_ADD_LINK), _streamType == null ? null : () => setState(() => _inputLink = true))
+                _button(translate(TR_ADD_LINK),
+                    _streamType == null ? null : () => setState(() => _inputLink = true))
               ]));
   }
 
@@ -153,14 +159,15 @@ abstract class BaseFilePickerDialogState extends State<BaseFilePickerDialog> {
 
   void _setLoading(bool value) async {
     setState(() => loading = value);
-    LoadingPlaylistNotification(value)..dispatch(context);
+    LoadingPlaylistNotification(value).dispatch(context);
     if (!value) {
       AddStreamResponse output;
       if (m3uText != null) {
         if (m3uText.isNotEmpty) {
           output = await Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) =>
-                  hasTouch ? ChannelsPreviewPage(m3uText, _streamType) : SelectStreamTV(m3uText, _streamType)));
+              builder: (context) => hasTouch
+                  ? ChannelsPreviewPage(m3uText, _streamType)
+                  : SelectStreamTV(m3uText, _streamType)));
         }
       }
       WidgetsBinding.instance.addPostFrameCallback((_) => Navigator.of(context).pop(output));
@@ -170,14 +177,16 @@ abstract class BaseFilePickerDialogState extends State<BaseFilePickerDialog> {
   void _addStream() async {
     AddStreamResponse _result;
     if (_streamType == StreamType.Live) {
-      LiveStream _response = await Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => hasTouch ? LiveAddPage(LiveStream.empty()) : LiveAddPageTV(LiveStream.empty())));
+      final LiveStream _response = await Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) =>
+              hasTouch ? LiveAddPage(LiveStream.empty()) : LiveAddPageTV(LiveStream.empty())));
       if (_response != null) {
         _result = AddStreamResponse(StreamType.Live, channels: [_response]);
       }
     } else {
-      VodStream _response = await Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => hasTouch ? VodAddPage(VodStream.empty()) : VodAddPageTV(VodStream.empty())));
+      final VodStream _response = await Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) =>
+              hasTouch ? VodAddPage(VodStream.empty()) : VodAddPageTV(VodStream.empty())));
       if (_response != null) {
         _result = AddStreamResponse(StreamType.Vod, vods: [_response]);
       }

@@ -7,6 +7,7 @@ import 'package:flutter_fastotv_common/base/controls/preview_icon.dart';
 class LiveStreamSearch extends IStreamSearchDelegate<LiveStream> {
   LiveStreamSearch(List<LiveStream> results, String hint) : super(results, hint);
 
+  @override
   Widget list(List<LiveStream> results) {
     return ListView.builder(
         itemCount: results.length,

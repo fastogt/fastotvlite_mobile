@@ -7,7 +7,7 @@ class VodFavoriteButton extends StatelessWidget {
   final double height;
   final double width;
 
-  VodFavoriteButton({@required this.child, this.height, this.width});
+  const VodFavoriteButton({@required this.child, this.height, this.width});
 
   static const HEIGHT = 36.0;
 
@@ -19,9 +19,9 @@ class VodFavoriteButton extends StatelessWidget {
         right: 5,
         top: 5,
         child: Container(
-            decoration: new BoxDecoration(
+            decoration: BoxDecoration(
                 color: Theme.of(context).primaryColor,
-                borderRadius: new BorderRadius.all(Radius.circular(min(_width, _height) / 2))),
+                borderRadius: BorderRadius.all(Radius.circular(min(_width, _height) / 2))),
             height: _height,
             width: _width,
             child: child));

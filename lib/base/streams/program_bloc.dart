@@ -16,9 +16,9 @@ class ProgramsBloc {
 
   ProgramsBloc(this.channel) {
     if (channel.programs().isNotEmpty) {
-      _setPrograms(this.channel.programs());
+      _setPrograms(channel.programs());
     } else {
-      _programsStream = _getProgram(this.channel).asStream();
+      _programsStream = _getProgram(channel).asStream();
       _programsStream.listen(_setPrograms);
     }
     isClosed = false;
@@ -29,7 +29,7 @@ class ProgramsBloc {
     if (channel.programs().isEmpty) {
       await channel.requestProgrammes();
     }
-    var programs = channel.programs();
+    final programs = channel.programs();
     if (programs.isNotEmpty) {
       return programs;
     }
@@ -49,7 +49,7 @@ class ProgramsBloc {
 
   void _updatePrograms(data) {
     if (!isClosed) {
-      ProgrammeInfo _currentProgram = _findCurrent();
+      final ProgrammeInfo _currentProgram = _findCurrent();
       _addProgram.add(_currentProgram);
       _setTimer(_currentProgram);
     }
@@ -64,7 +64,7 @@ class ProgramsBloc {
   }
 
   ProgrammeInfo _findCurrent() {
-    var curUtc = DateTime.now().millisecondsSinceEpoch;
+    final curUtc = DateTime.now().millisecondsSinceEpoch;
     final program = channel.findProgrammeByTime(curUtc);
     final index = getCurrent(channel.programs());
 

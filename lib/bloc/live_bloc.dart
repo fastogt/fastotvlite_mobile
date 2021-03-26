@@ -1,4 +1,3 @@
-import 'package:fastotvlite/base/add_streams/m3u_to_channels.dart';
 import 'package:fastotvlite/base/stream_parser.dart';
 import 'package:fastotvlite/bloc/base_bloc.dart';
 import 'package:fastotvlite/channels/live_stream.dart';

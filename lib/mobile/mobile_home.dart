@@ -23,10 +23,10 @@ class HomeMobile extends HomePage {
 }
 
 class _HomeMobileState extends VideoAppState {
-  GlobalKey _liveKey = GlobalKey();
-  GlobalKey _vodKey = GlobalKey();
+  final GlobalKey _liveKey = GlobalKey();
+  final GlobalKey _vodKey = GlobalKey();
 
-  GlobalKey<ScaffoldMessengerState> _drawerKey = GlobalKey();
+  final GlobalKey<ScaffoldMessengerState> _drawerKey = GlobalKey();
 
   @override
   void initState() {
@@ -77,7 +77,7 @@ class _HomeMobileState extends VideoAppState {
         actionsIconTheme: IconThemeData(color: iconColor),
         title: Text(translate(context, selectedType), style: TextStyle(color: iconColor)),
         actions: <Widget>[
-          if (selectedType != TR_EMPTY) IconButton(icon: Icon(Icons.search), onPressed: _onSearch)
+          if (selectedType != TR_EMPTY) IconButton(icon: const Icon(Icons.search), onPressed: _onSearch)
         ]);
   }
 
@@ -87,7 +87,7 @@ class _HomeMobileState extends VideoAppState {
         backgroundColor: _theme.primaryColor.withOpacity(0.4),
         parentButtonBackground: _theme.accentColor,
         orientation: UnicornOrientation.VERTICAL,
-        parentButton: Icon(Icons.add),
+        parentButton: const Icon(Icons.add),
         childButtons: [
           _dialAction(TR_SINGLE_STREAM, "single", PickStreamFrom.SINGLE_STREAM, Icons.add_to_queue),
           _dialAction(TR_PLAYLIST, "playlist", PickStreamFrom.PLAYLIST, Icons.playlist_add)
@@ -110,7 +110,7 @@ class _HomeMobileState extends VideoAppState {
   }
 
   void _onAdd(PickStreamFrom source) async {
-    AddStreamResponse response = await showDialog(
+    final AddStreamResponse response = await showDialog(
         context: context, builder: (BuildContext context) => FilePickerDialog(source));
     if (response == null) {
       _drawerKey.currentState.showSnackBar(SnackBar(
@@ -186,7 +186,7 @@ class _SettingsTile extends StatelessWidget {
         title: Text(translate(context, TR_SETTINGS)),
         onTap: () {
           Navigator.of(context).pop();
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => SettingsPage()));
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => const SettingsPage()));
         });
   }
 }

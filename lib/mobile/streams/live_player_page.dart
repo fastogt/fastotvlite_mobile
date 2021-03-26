@@ -22,7 +22,7 @@ class ChannelPage extends StatefulWidget {
   final int position;
   final void Function(LiveStream stream) addRecent;
 
-  ChannelPage({this.channels, this.position, this.addRecent});
+  const ChannelPage({this.channels, this.position, this.addRecent});
 
   @override
   _ChannelPageState createState() => _ChannelPageState();

@@ -22,7 +22,7 @@ class LiveFutureTile extends StatefulWidget {
   final int index;
   final ILiveFutureTileObserver observer;
 
-  LiveFutureTile({this.channels, this.index, this.observer});
+  const LiveFutureTile({this.channels, this.index, this.observer});
 
   @override
   _LiveFutureTileState createState() => _LiveFutureTileState();
@@ -56,7 +56,7 @@ class _LiveFutureTileState extends State<LiveFutureTile> {
           onTap: onTap,
           onLongPress: onLongPressed,
           trailing: FavoriteStarButton(_stream.favorite(), onFavoriteChanged: handleFavorite)),
-      Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[timeLine()])
+      Row(children: <Widget>[timeLine()])
     ]);
   }
 
@@ -103,7 +103,7 @@ class _LiveFutureTileState extends State<LiveFutureTile> {
         stream: programsBloc.currentProgram,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Text('Loading...', softWrap: true, maxLines: 3);
+            return const Text('Loading...', softWrap: true, maxLines: 3);
           }
           return Text(title(snapshot.data), maxLines: 1, overflow: TextOverflow.ellipsis);
         });
@@ -115,7 +115,7 @@ class _LiveFutureTileState extends State<LiveFutureTile> {
         stream: programsBloc.currentProgram,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return SizedBox();
+            return const SizedBox();
           }
           return LiveTimeLine(programmeInfo: snapshot.data, width: width, height: 2);
         });

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:fastotv_dart/commands_info/channel_info.dart';
 import 'package:fastotv_dart/commands_info/epg_info.dart';
@@ -23,34 +24,42 @@ class LiveStream extends IStream {
       : _channelInfo = channel,
         _epgUrl = epg;
 
+  @override
   String id() {
     return _channelInfo.id;
   }
 
+  @override
   void setId(String value) {
     _channelInfo.id = value;
   }
 
+  @override
   String primaryUrl() {
     return _channelInfo.primaryLink();
   }
 
+  @override
   void setPrimaryUrl(String value) {
     _channelInfo.epg.urls[0] = value;
   }
 
+  @override
   String displayName() {
     return _channelInfo.displayName();
   }
 
+  @override
   void setDisplayName(String value) {
     _channelInfo.epg.display_name = value;
   }
 
+  @override
   List<String> groups() {
     return _channelInfo.groups;
   }
 
+  @override
   void setGroups(List<String> value) {
     _channelInfo.groups = value;
   }
@@ -63,34 +72,42 @@ class LiveStream extends IStream {
     _epgUrl = value;
   }
 
+  @override
   String icon() {
     return _channelInfo.epg.icon;
   }
 
+  @override
   void setIcon(String value) {
     _channelInfo.epg.icon = value;
   }
 
+  @override
   int iarc() {
     return _channelInfo.iarc;
   }
 
+  @override
   void setIarc(int value) {
     _channelInfo.iarc = value;
   }
 
+  @override
   bool favorite() {
     return _channelInfo.favorite;
   }
 
+  @override
   void setFavorite(bool value) {
     _channelInfo.favorite = value;
   }
 
+  @override
   int recentTime() {
     return _channelInfo.recent;
   }
 
+  @override
   void setRecentTime(int value) {
     _channelInfo.recent = value;
   }
@@ -140,7 +157,7 @@ class LiveStream extends IStream {
       _channelInfo.epg.programs = parseXmlContent(response.body);
       if (_channelInfo.epg.programs.length > MAX_PROGRAMS_COUNT) {
         final _timeManager = locator<TimeManager>();
-        int curUtc = await _timeManager.realTime();
+        final int curUtc = await _timeManager.realTime();
         final last = _sliceLastByTime(_channelInfo.epg.programs, curUtc);
         if (last.length > MAX_PROGRAMS_COUNT) {
           last.length = MAX_PROGRAMS_COUNT;
@@ -148,8 +165,8 @@ class LiveStream extends IStream {
         _channelInfo.epg.programs = last;
       }
       return initializingCompleter.future;
-    } on ArgumentError catch (e) {
-      print('Programs request error: ' + '$e');
+    } catch (e) {
+      log('Programs request error: ' + '$e');
       return initializingCompleter.future;
     }
   }
@@ -162,14 +179,14 @@ class LiveStream extends IStream {
       }
     }
 
-    return List<ProgrammeInfo>();
+    return <ProgrammeInfo>[];
   }
 
   static const EPG_URL_FIELD = 'epg_url';
   static const REQUESTED_FEILD = 'requested';
 
   LiveStream.empty()
-      : _channelInfo = ChannelInfo(Uuid().v1(), <String>[], 0, false, 0, 0, false,
+      : _channelInfo = ChannelInfo(const Uuid().v1(), <String>[], 0, false, 0, 0, false,
             EpgInfo('', [''], '', '', []), true, true, null, 0, <MetaUrl>[]),
         _epgUrl = EPG_URL,
         _requested = false;

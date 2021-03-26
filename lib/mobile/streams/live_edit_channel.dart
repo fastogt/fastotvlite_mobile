@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_common/flutter_common.dart';
 
 abstract class _AbstractLiveEditPage extends EditStreamPage<LiveStream> {
-  _AbstractLiveEditPage(LiveStream stream) : super(stream);
+  const _AbstractLiveEditPage(LiveStream stream) : super(stream);
 }
 
 abstract class _AbstractLiveEditPageState extends EditStreamPageState<LiveStream> {
@@ -33,7 +33,7 @@ abstract class _AbstractLiveEditPageState extends EditStreamPageState<LiveStream
 }
 
 class LiveAddPage extends _AbstractLiveEditPage {
-  LiveAddPage(stream) : super(stream);
+  const LiveAddPage(stream) : super(stream);
 
   @override
   _LiveAddPageState createState() => _LiveAddPageState();
@@ -44,11 +44,11 @@ class _LiveAddPageState extends _AbstractLiveEditPageState {
   String get appBarTitle => TR_ADD_CHANNEL;
 
   @override
-  Widget deleteButton() => SizedBox();
+  Widget deleteButton() => const SizedBox();
 }
 
 class LiveEditPage extends _AbstractLiveEditPage {
-  LiveEditPage(stream) : super(stream);
+  const LiveEditPage(stream) : super(stream);
 
   @override
   _LiveEditPageState createState() => _LiveEditPageState();

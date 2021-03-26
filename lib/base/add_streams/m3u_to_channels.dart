@@ -51,7 +51,7 @@ class M3UParser {
   // private
   LiveStream _createLiveStream(Map<String, dynamic> m3u) {
     final settings = locator<LocalStorageService>();
-    String _epgLink = settings.epgLink();
+    final String _epgLink = settings.epgLink();
     final _epg = EpgInfo(m3u[ID_FIELD], [m3u[PRIMARY_URL_FIELD]], m3u[NAME_FIELD], m3u[ICON_FIELD], []);
     final _channelInfo =
         ChannelInfo(m3u[ID_FIELD], m3u[GROUP_FIELD], 21, false, 0, 0, false, _epg, true, true, null, 0, <MetaUrl>[]);
@@ -69,7 +69,7 @@ class M3UParser {
   }
 
   _TagsM3U _splitTag(String _tags) {
-    _TagsM3U tags = _TagsM3U();
+    final _TagsM3U tags = _TagsM3U();
 
     void _addTag(String tag, String info) {
       if (tag.contains(ID_TAG)) {
@@ -83,7 +83,7 @@ class M3UParser {
       }
     }
 
-    final _temp = _tags.split('\"');
+    final _temp = _tags.split('"');
     for (int i = 0; i < _temp.length; i++) {
       if (i + 1 >= _temp.length) {
         break;
@@ -95,10 +95,10 @@ class M3UParser {
   }
 
   Map<String, dynamic> _splitM3U(String channel) {
-    List<String> _infoAndLink = channel.split('\n');
-    String _info = _infoAndLink[0];
-    List<String> _tagAndName = _info.split(',');
-    _TagsM3U _tagList = _splitTag(_info.substring(0, _info.length - _tagAndName.last.length));
+    final List<String> _infoAndLink = channel.split('\n');
+    final String _info = _infoAndLink[0];
+    final List<String> _tagAndName = _info.split(',');
+    final _TagsM3U _tagList = _splitTag(_info.substring(0, _info.length - _tagAndName.last.length));
 
     return {
       ID_FIELD: _tagList.id,
@@ -110,8 +110,8 @@ class M3UParser {
   }
 
   List<dynamic> _splitChannelInfo(String streamsString) {
-    List<LiveStream> channels = [];
-    List<VodStream> vods = [];
+    final List<LiveStream> channels = [];
+    final List<VodStream> vods = [];
 
     List<String> result = [];
 

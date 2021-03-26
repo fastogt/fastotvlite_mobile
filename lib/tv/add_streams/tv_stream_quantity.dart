@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_common/localization.dart';
 
 class StreamTypePickerTV extends StatefulWidget {
-  StreamTypePickerTV();
+  const StreamTypePickerTV();
 
   @override
   _StreamTypePickerTVState createState() => _StreamTypePickerTVState();
@@ -14,11 +14,12 @@ class StreamTypePickerTV extends StatefulWidget {
 class _StreamTypePickerTVState extends State<StreamTypePickerTV> {
   PickStreamFrom _source;
 
-  Widget build(context) {
+  @override
+  Widget build(BuildContext context) {
     return AlertDialog(
-        title: Text('Select stream type'),
-        titlePadding: EdgeInsets.symmetric(vertical: 24, horizontal: 24),
-        contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+        title: const Text('Select stream type'),
+        titlePadding: const EdgeInsets.symmetric(vertical: 24, horizontal: 24),
+        contentPadding: const EdgeInsets.all(0),
         actions: <Widget>[
           _button('CANCEL', () => _exit(), 1.0),
           _button('OK', () => _onProceed(), _source == null ? 0.5 : 1.0)

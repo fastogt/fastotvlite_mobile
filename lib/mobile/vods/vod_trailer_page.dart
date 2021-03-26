@@ -135,7 +135,7 @@ class VodTrailerPageMobileState extends State<VodTrailer> {
         if (!_castConnected)
           PlayerButtons.seekForward(onPressed: _controller.seekForward, color: Colors.white)
       ]);
-    }, placeholder: const SizedBox());
+    });
   }
 
   Widget createPlayPauseButton() {

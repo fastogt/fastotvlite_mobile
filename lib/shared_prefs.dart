@@ -67,27 +67,27 @@ class LocalStorageService {
   }
 
   List<LiveStream> liveChannels() {
-    List<LiveStream> _channels = [];
+    final List<LiveStream> _channels = [];
     final _jsonList = _preferences.getStringList(_channelsKey) ?? [];
     _jsonList.forEach((element) => _channels.add(LiveStream.fromJson(json.decode(element))));
     return _channels;
   }
 
   void saveLiveChannels(List<LiveStream> list) {
-    List<String> _jsonList = [];
+    final List<String> _jsonList = [];
     list.forEach((element) => _jsonList.add(json.encode(element)));
     _preferences.setStringList(_channelsKey, _jsonList);
   }
 
   List<VodStream> vods() {
-    List<VodStream> _channels = [];
+    final List<VodStream> _channels = [];
     final _jsonList = _preferences.getStringList(_vodsKey) ?? [];
     _jsonList.forEach((element) => _channels.add(VodStream.fromJson(json.decode(element))));
     return _channels;
   }
 
   void saveVods(List<VodStream> list) {
-    List<String> _jsonList = [];
+    final List<String> _jsonList = [];
     list.forEach((element) => _jsonList.add(json.encode(element)));
     _preferences.setStringList(_vodsKey, _jsonList);
   }

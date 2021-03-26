@@ -6,21 +6,24 @@ import 'package:flutter_fastotv_common/base/controls/preview_icon.dart';
 abstract class AbstractVodEditPage extends StatefulWidget {
   final VodStream stream;
 
-  AbstractVodEditPage(this.stream);
+  const AbstractVodEditPage(this.stream);
 }
 
 abstract class AbstractVodEditPageState extends EditStreamPageTV<AbstractVodEditPage> {
+  @override
   String appBarTitle() => 'Edit stream';
 
+  @override
   VodStream stream() => widget.stream;
 
+  @override
   Widget editingPage() {
     final size = MediaQuery.of(context).size;
     return Center(
         child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: <Widget>[
       PreviewIcon.vod(iconController.text),
-      SizedBox(width: 16),
-      Container(
+      const SizedBox(width: 16),
+      SizedBox(
           width: size.width / 2,
           child: SingleChildScrollView(
               child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
@@ -34,7 +37,7 @@ abstract class AbstractVodEditPageState extends EditStreamPageTV<AbstractVodEdit
 }
 
 class VodAddPageTV extends AbstractVodEditPage {
-  VodAddPageTV(stream) : super(stream);
+  const VodAddPageTV(stream) : super(stream);
 
   @override
   _VodAddPageTVState createState() => _VodAddPageTVState();
@@ -42,14 +45,11 @@ class VodAddPageTV extends AbstractVodEditPage {
 
 class _VodAddPageTVState extends AbstractVodEditPageState {
   @override
-  Widget deleteButton() => SizedBox();
-
-  @override
-  void exitAndResetChanges() => Navigator.of(context).pop();
+  Widget deleteButton() => const SizedBox();
 }
 
 class VodEditPageTV extends AbstractVodEditPage {
-  VodEditPageTV(stream) : super(stream);
+  const VodEditPageTV(stream) : super(stream);
 
   @override
   _VodEditPageTVState createState() => _VodEditPageTVState();

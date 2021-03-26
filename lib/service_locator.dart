@@ -10,24 +10,24 @@ import 'package:get_it/get_it.dart';
 GetIt locator = GetIt.instance;
 
 Future setupLocator() async {
-  var device = await RuntimeDevice.getInstance();
+  final device = await RuntimeDevice.getInstance();
   locator.registerSingleton<RuntimeDevice>(device);
 
-  var clientEvents = await StreamListEvent.getInstance();
+  final clientEvents = await StreamListEvent.getInstance();
   locator.registerSingleton<StreamListEvent>(clientEvents);
 
-  var tvTabEvents = await TvTabsEvents.getInstance();
+  final tvTabEvents = await TvTabsEvents.getInstance();
   locator.registerSingleton<TvTabsEvents>(tvTabEvents);
 
-  var storage = await LocalStorageService.getInstance();
+  final storage = await LocalStorageService.getInstance();
   locator.registerSingleton<LocalStorageService>(storage);
 
-  var package = await PackageManager.getInstance();
+  final package = await PackageManager.getInstance();
   locator.registerSingleton<PackageManager>(package);
 
-  var time = await TimeManager.getInstance();
+  final time = await TimeManager.getInstance();
   locator.registerSingleton<TimeManager>(time);
 
-  var searchEvents = await SearchEvents.getInstance();
+  final searchEvents = await SearchEvents.getInstance();
   locator.registerSingleton<SearchEvents>(searchEvents);
 }

@@ -21,7 +21,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  Locale savedLocale = Locale('en', 'US');
+  Locale savedLocale = const Locale('en', 'US');
   List<LiveStream> channels = [];
   List<VodStream> vods = [];
 
@@ -39,9 +39,9 @@ class _MyAppState extends State<MyApp> {
         child: AppLocalizations(
             init: savedLocale,
             locales: {
-              Locale('en', 'US'): 'English',
-              Locale('ru', 'RU'): 'Русский',
-              Locale('fr', 'CA'): 'Français'
+              const Locale('en', 'US'): 'English',
+              const Locale('ru', 'RU'): 'Русский',
+              const Locale('fr', 'CA'): 'Français'
             },
             child: Builder(builder: (context) {
               return MaterialApp(
@@ -56,7 +56,7 @@ class _MyAppState extends State<MyApp> {
                   ],
                   locale: AppLocalizations.of(context).currentLocale,
                   localeResolutionCallback: (locale, supportedLocales) {
-                    for (var supportedLocale in supportedLocales) {
+                    for (final supportedLocale in supportedLocales) {
                       if (supportedLocale != null && locale != null) {
                         if (supportedLocale.languageCode == locale.languageCode &&
                             supportedLocale.countryCode == locale.countryCode) {

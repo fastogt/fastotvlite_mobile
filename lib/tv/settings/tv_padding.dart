@@ -1,8 +1,5 @@
-import 'dart:async';
-
 import 'package:fastotvlite/service_locator.dart';
 import 'package:fastotvlite/shared_prefs.dart';
-import 'package:fastotvlite/tv/settings/tv_settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_common/utils.dart';

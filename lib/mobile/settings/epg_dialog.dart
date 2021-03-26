@@ -9,7 +9,7 @@ import 'package:flutter_common/flutter_common.dart';
 
 class EpgSettingsTile extends StatefulWidget {
   const EpgSettingsTile();
-  
+
   @override
   _EpgSettingsTileState createState() => _EpgSettingsTileState();
 }
@@ -27,7 +27,7 @@ class _EpgSettingsTileState extends State<EpgSettingsTile> {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-        leading: SettingsIcon(Icons.add_to_queue),
+        leading: const SettingsIcon(Icons.add_to_queue),
         title: Text(AppLocalizations.of(context).translate(TR_EPG_PROVIDER)),
         subtitle: Text(_epgUrl),
         onTap: () => _onTap());
@@ -59,7 +59,7 @@ class EpgDialog extends StatefulWidget {
 class _EpgDialogState extends State<EpgDialog> {
   String _epgLink = EPG_URL;
   String password = '';
-  TextEditingController _textEditingController = TextEditingController();
+  final TextEditingController _textEditingController = TextEditingController();
   final reg = RegExp('^http([s]{0,1})://([!-~]+)/');
   bool validator = true;
   int groupValue = 0;
@@ -85,7 +85,7 @@ class _EpgDialogState extends State<EpgDialog> {
       return null;
     }
 
-    String _text = _textEditingController.text;
+    final String _text = _textEditingController.text;
     if (_text.isEmpty) {
       return _translate(TR_ERROR_FORM);
     } else if (!reg.hasMatch(_text) || _text.substring(_text.length - 1) != '/') {
@@ -95,7 +95,7 @@ class _EpgDialogState extends State<EpgDialog> {
   }
 
   void _validate() {
-    String _text = _textEditingController.text;
+    final String _text = _textEditingController.text;
     setState(() {
       validator =
           _text.isNotEmpty && reg.hasMatch(_text) && _text.substring(_text.length - 1) == '/';
@@ -160,17 +160,17 @@ class _EpgDialogState extends State<EpgDialog> {
     return AlertDialog(
         title: Text(_translate(TR_EPG_PROVIDER)),
         content: _content(),
-        contentPadding: EdgeInsets.fromLTRB(0, 20.0, 0, 0.0),
+        contentPadding: const EdgeInsets.fromLTRB(0, 20.0, 0, 0.0),
         actions: <Widget>[
           Opacity(
               opacity: BUTTON_OPACITY,
               child: FlatButton(
                   textColor: Theming.of(context).onBrightness(),
-                  child: Text(_translate(TR_CANCEL), style: TextStyle(fontSize: 14)),
+                  child: Text(_translate(TR_CANCEL), style: const TextStyle(fontSize: 14)),
                   onPressed: () => Navigator.of(context).pop())),
           FlatButton(
               textColor: Theme.of(context).accentColor,
-              child: Text(_translate(TR_SUBMIT), style: TextStyle(fontSize: 14)),
+              child: Text(_translate(TR_SUBMIT), style: const TextStyle(fontSize: 14)),
               onPressed: () {
                 _validate();
                 if (validator) {

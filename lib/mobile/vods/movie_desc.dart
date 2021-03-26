@@ -9,7 +9,7 @@ import 'package:flutter_fastotv_common/base/vods/vod_description.dart';
 class VodDescription extends StatefulWidget {
   final VodStream vod;
 
-  VodDescription({Key key, this.vod});
+  const VodDescription({this.vod});
 
   VodStream currentVod() {
     return vod;
@@ -29,27 +29,27 @@ class _VodDescriptionState extends State<VodDescription> {
 
     Widget portrait() {
       return Column(children: <Widget>[
-        Container(
+        SizedBox(
             height: 216,
             child: Row(children: <Widget>[
               Padding(
                 padding: const EdgeInsets.fromLTRB(8, 8, 0, 0),
-                child: Container(width: 180, child: PreviewIcon.vod(currentVod.previewIcon())),
+                child: SizedBox(width: 180, child: PreviewIcon.vod(currentVod.previewIcon()))
               ),
-              VerticalDivider(),
+              const VerticalDivider(),
               Expanded(
                   child: Padding(
                       padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
                       child: Column(children: <Widget>[
                         userScore(currentVod),
-                        Spacer(),
+                        const Spacer(),
                         trailerButton(currentVod),
                         playButton(currentVod)
                       ])))
             ])),
-        Divider(),
+        const Divider(),
         sideInfo(currentVod),
-        Divider(),
+        const Divider(),
         description(currentVod)
       ]);
     }
@@ -57,9 +57,8 @@ class _VodDescriptionState extends State<VodDescription> {
     Widget landscape() {
       return Row(
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisSize: MainAxisSize.max,
           children: <Widget>[
-            Container(
+            SizedBox(
                 width: 196,
                 child: Column(children: <Widget>[
                   Expanded(
@@ -70,17 +69,17 @@ class _VodDescriptionState extends State<VodDescription> {
                   trailerButton(currentVod, padding: 8),
                   playButton(currentVod, padding: 8)
                 ])),
-            VerticalDivider(),
+            const VerticalDivider(),
             Expanded(
                 child: Column(children: <Widget>[
               Padding(
-                  padding: EdgeInsets.fromLTRB(16.0, 8.0, 8, 0),
+                  padding: const EdgeInsets.fromLTRB(16.0, 8.0, 8, 0),
                   child: Row(children: <Widget>[
                     userScore(currentVod),
-                    VerticalDivider(),
+                    const VerticalDivider(),
                     sideInfo(currentVod)
                   ])),
-              Divider(),
+              const Divider(),
               description(currentVod)
             ]))
           ]);
@@ -104,7 +103,7 @@ class _VodDescriptionState extends State<VodDescription> {
 
   Widget trailerButton(VodStream currentVod, {double padding}) {
     return currentVod.trailerUrl() == INVALID_TRAILER_URL
-        ? Spacer(flex: 1)
+        ? const Spacer()
         : Padding(
             padding: EdgeInsets.symmetric(horizontal: padding ?? 8),
             child: VodTrailerButton(currentVod));

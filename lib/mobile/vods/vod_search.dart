@@ -7,12 +7,13 @@ import 'package:flutter_fastotv_common/base/vods/vod_card.dart';
 class VodStreamSearch extends IStreamSearchDelegate<VodStream> {
   VodStreamSearch(List<VodStream> streams, String hint) : super(streams, hint);
 
+  @override
   Widget list(List<VodStream> results) {
     return Center(
         child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: GridView.builder(
-                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                     maxCrossAxisExtent: CARD_WIDTH + 2 * EDGE_INSETS,
                     crossAxisSpacing: EDGE_INSETS,
                     mainAxisSpacing: EDGE_INSETS,

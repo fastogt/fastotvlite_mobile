@@ -1,6 +1,5 @@
 import 'package:fastotvlite/base/login/textfields.dart';
 import 'package:fastotvlite/channels/istream.dart';
-import 'package:fastotvlite/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_common/flutter_common.dart';
 
@@ -65,15 +64,15 @@ abstract class EditStreamPageTV<T extends StatefulWidget> extends State<T> {
   }
 
   Widget backButton() {
-    return IconButton(icon: Icon(Icons.arrow_back), onPressed: exit);
+    return IconButton(icon: const Icon(Icons.arrow_back), onPressed: exit);
   }
 
   Widget saveButton() {
-    return IconButton(icon: Icon(Icons.save), onPressed: onSave);
+    return IconButton(icon: const Icon(Icons.save), onPressed: onSave);
   }
 
   Widget deleteButton() {
-    return IconButton(icon: Icon(Icons.delete), onPressed: exitAndDelete);
+    return IconButton(icon: const Icon(Icons.delete), onPressed: exitAndDelete);
   }
 
   void exit() {

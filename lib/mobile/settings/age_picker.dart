@@ -7,6 +7,8 @@ import 'package:flutter_common/flutter_common.dart';
 import 'package:numberpicker/numberpicker.dart';
 
 class AgeSettingsTile extends StatefulWidget {
+  const AgeSettingsTile();
+  
   @override
   _AgeSettingsTileState createState() => _AgeSettingsTileState();
 }
@@ -24,13 +26,13 @@ class _AgeSettingsTileState extends State<AgeSettingsTile> {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-        leading: SettingsIcon(Icons.child_care),
+        leading: const SettingsIcon(Icons.child_care),
         title: Text(AppLocalizations.of(context).translate(TR_PARENTAL_CONTROL)),
         subtitle: Text(AppLocalizations.of(context).translate(TR_AGE_RESTRICTION)),
         onTap: () => _onTap(),
         trailing: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text('$ageRating', style: TextStyle(fontSize: 16))));
+            child: Text('$ageRating', style: const TextStyle(fontSize: 16))));
   }
 
   void _onTap() async {
