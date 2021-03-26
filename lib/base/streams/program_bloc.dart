@@ -68,12 +68,12 @@ class ProgramsBloc {
     final program = channel.findProgrammeByTime(curUtc);
     final index = getCurrent(channel.programs());
 
-    if (program.isEmpty) {
+    if (program != null) {
       _current = null;
       return null;
     } else {
       _current = index;
-      return program.value;
+      return program;
     }
   }
 

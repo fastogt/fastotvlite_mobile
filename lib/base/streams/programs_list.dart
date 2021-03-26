@@ -3,10 +3,7 @@ import 'package:fastotvlite/base/streams/no_programs.dart';
 import 'package:fastotvlite/base/streams/program_bloc.dart';
 import 'package:fastotvlite/service_locator.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_common/localization/app_localizations.dart';
-import 'package:flutter_common/runtime_device.dart';
-import 'package:flutter_common/screen_orientation.dart' as orientation;
-import 'package:flutter_common/scroll_controller_manager.dart';
+import 'package:flutter_common/flutter_common.dart';
 
 String formatProgram(ProgrammeInfo program) {
   final timeZoneOffset = DateTime.now().timeZoneOffset;
@@ -111,7 +108,7 @@ class _ProgramsListState extends State<_ProgramsList> {
   }
 
   Color _textColor() {
-    if ((_hasTouch && orientation.isPortrait(context)) || !_hasTouch) {
+    if ((_hasTouch && isPortrait(context)) || !_hasTouch) {
       return null;
     } else {
       return Colors.white;
