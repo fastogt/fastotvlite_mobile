@@ -3,16 +3,20 @@ import 'package:fastotvlite/channels/istream.dart';
 import 'package:fastotvlite/channels/live_stream.dart';
 import 'package:fastotvlite/channels/vod_stream.dart';
 import 'package:fastotvlite/service_locator.dart';
-import 'package:flutter_common/time_manager.dart';
+import 'package:flutter_common/flutter_common.dart';
 import 'package:player/controller.dart';
 
 const VOD_BOTTOM_CONTROL_HEIGHT = 4 + BUTTONS_LINE_HEIGHT + TIMELINE_HEIGHT;
 
 class BasePlayerController<T extends IStream> extends PlayerController {
   T stream;
+
   final void Function() onPlay;
 
   BasePlayerController(this.stream, [this.onPlay]) : super(initLink: stream.primaryUrl());
+
+  @override
+  String get currentLink => stream.primaryUrl();
 
   @override
   void onPlaying() {
@@ -24,15 +28,9 @@ class BasePlayerController<T extends IStream> extends PlayerController {
     setVideoLink(currentLink);
   }
 
-  @override
-  void dispose() {
-    sendRecent(stream);
-    super.dispose();
-  }
-
-  void sendRecent(T stream) {
+  void sendRecent(T stream) async {
     final _timeManager = locator<TimeManager>();
-    final msec = _timeManager.realTime();
+    final msec = await _timeManager.realTime();
     stream.setRecentTime(msec);
   }
 }
