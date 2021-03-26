@@ -2,27 +2,26 @@ import 'package:fastotvlite/channels/istream.dart';
 import 'package:fastotvlite/localization/translations.dart';
 
 class StreamsParser<T extends IStream> {
-  StreamsParser(this.channels);
+  StreamsParser(this._channels);
 
-  List<T> channels = [];
-
-  Map<String, List<T>> _channelsMap = {};
+  final List<T> _channels;
+  final Map<String, List<T>> _channelsMap = {};
 
   Map<String, List<T>> parseChannels() {
     _channelsMap[TR_FAVORITE] = [];
     _channelsMap[TR_RECENT] = [];
-    _channelsMap[TR_ALL] = [];
-    channels.forEach((element) {
+    _channels.forEach((element) {
       _savePushFavorite(element);
       _savePushRecent(element);
       _savePushChannel(TR_ALL, element);
-      List<String> temp = element.groups();
+      final List<String> temp = element.groups();
       temp.toSet().forEach((singleGroup) => _savePushChannel(singleGroup, element));
     });
     _channelsMap[TR_RECENT].sort((b, a) => a.recentTime().compareTo(b.recentTime()));
     return _channelsMap;
   }
 
+  // private:
   void _savePushChannel(String category, T element) {
     if (category.isEmpty) {
       return;

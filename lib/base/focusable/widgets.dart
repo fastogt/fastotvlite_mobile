@@ -18,18 +18,13 @@ class FocusRaisedButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final activeColor = Theme.of(context).accentColor;
     return Padding(
         padding: const EdgeInsets.symmetric(horizontal: TEXTFIELD_PADDING),
-        child: RaisedButton(
+        child: ElevatedButton(
             autofocus: autoFocus ?? false,
             focusNode: focusNode,
-            focusColor: active ? activeColor : Colors.grey,
-            focusElevation: FOCUSED_ELEVATION,
             onPressed: onPressed,
-            color: active ? activeColor : Colors.grey,
-            disabledColor: Colors.grey,
-            child: Text(text, style: const TextStyle(color: Colors.white))));
+            child: Text(text)));
   }
 }
 
