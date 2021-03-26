@@ -2,7 +2,7 @@ import 'package:fastotvlite/base/add_streams/add_stream_dialog.dart';
 import 'package:fastotvlite/localization/translations.dart';
 import 'package:fastotvlite/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_common/localization/app_localizations.dart';
+import 'package:flutter_common/localization.dart';
 
 class StreamTypePickerTV extends StatefulWidget {
   StreamTypePickerTV();

@@ -2,9 +2,7 @@ import 'package:fastotvlite/base/login/textfields.dart';
 import 'package:fastotvlite/channels/istream.dart';
 import 'package:fastotvlite/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_common/localization/app_localizations.dart';
-import 'package:flutter_common/tv/key_code.dart';
+import 'package:flutter_common/flutter_common.dart';
 
 abstract class EditStreamPageTV<T extends StatefulWidget> extends State<T> {
   static const int DEFAULT_IARC = 18;
@@ -40,7 +38,7 @@ abstract class EditStreamPageTV<T extends StatefulWidget> extends State<T> {
   @override
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).primaryColor;
-    final appBarTextColor = Theming.of(context).onCustomColor(primaryColor);
+    final appBarTextColor = backgroundColorBrightness(primaryColor);
     return Scaffold(
         appBar: AppBar(
             elevation: 0,
@@ -58,12 +56,10 @@ abstract class EditStreamPageTV<T extends StatefulWidget> extends State<T> {
     return LoginTextField(
         mainFocus: node.main,
         textFocus: node.text,
-        textEditingController: controller,
+        controller: controller,
         hintText: hintText,
         obscureText: false,
-        validate: controller.text.isNotEmpty,
-        onFieldChanged: () {},
-        onFieldSubmit: () {
+        onFieldSubmit: (_) {
           setState(() {});
         });
   }

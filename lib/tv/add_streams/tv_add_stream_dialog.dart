@@ -2,7 +2,7 @@ import 'package:fastotvlite/base/add_streams/add_stream_dialog.dart';
 import 'package:fastotvlite/base/login/textfields.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_common/tv/key_code.dart';
+import 'package:flutter_common/utils.dart';
 
 class FilePickerDialogTV extends BaseFilePickerDialog {
   final PickStreamFrom source;
@@ -27,13 +27,11 @@ class _FilePickerDialogTVState extends BaseFilePickerDialogState {
     return LoginTextField(
         mainFocus: _textFieldNode.main,
         textFocus: _textFieldNode.text,
-        textEditingController: controller,
+        controller: controller,
         hintText: hintText,
         obscureText: false,
         onKey: _nodeAction,
-        validate: controller.text.isNotEmpty,
-        onFieldChanged: () {},
-        onFieldSubmit: () => _onEnter(_textFieldNode.text));
+        onFieldSubmit: (_) => _onEnter(_textFieldNode.text));
   }
 
   bool _nodeAction(FocusNode node, RawKeyEvent event) {

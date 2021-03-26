@@ -3,10 +3,9 @@ import 'package:fastotvlite/base/add_streams/select_streams.dart';
 import 'package:fastotvlite/base/vods/constants.dart';
 import 'package:fastotvlite/service_locator.dart';
 import 'package:fastotvlite/shared_prefs.dart';
-import 'package:fastotvlite/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_common/tv/key_code.dart';
+import 'package:flutter_common/utils.dart';
 
 class SelectStreamTV extends StatefulWidget {
   final String m3uText;
@@ -68,7 +67,7 @@ class _SelectStreamTVState extends BaseSelectStreamPage<SelectStreamTV> {
                     actions: <Widget>[_saveButton()],
                     elevation: 0,
                     title: Text('Add',
-                        style: TextStyle(color: Theming.of(context).onCustomColor(primaryColor))),
+                        style: TextStyle(color: backgroundColorBrightness(primaryColor))),
                     centerTitle: true),
                 backgroundColor: primaryColor,
                 body: _body())));

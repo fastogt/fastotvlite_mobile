@@ -1,6 +1,5 @@
 import 'package:fastotvlite/base/add_streams/add_stream_dialog.dart';
 import 'package:fastotvlite/base/add_streams/m3u_to_channels.dart';
-import 'package:fastotvlite/base/icon.dart';
 import 'package:fastotvlite/base/tabbar.dart';
 import 'package:fastotvlite/channels/live_stream.dart';
 import 'package:fastotvlite/channels/vod_stream.dart';
@@ -20,8 +19,7 @@ import 'package:fastotvlite/tv/settings/tv_settings_page.dart';
 import 'package:fastotvlite/tv/streams/tv_live_tab.dart';
 import 'package:fastotvlite/tv/vods/tv_vod_tab.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_common/base/controls/logo.dart';
-import 'package:flutter_common/clock.dart';
+import 'package:flutter_common/widgets.dart';
 
 class HomeTV extends HomePage {
   const HomeTV(List<LiveStream> channels, List<VodStream> vods) : super(channels, vods);
@@ -103,14 +101,17 @@ class _HomeTVState extends VideoAppState with TickerProviderStateMixin {
                                 const SizedBox(width: 16),
                                 Expanded(
                                     child: SingleChildScrollView(
-                                        child: TabBarEx(_tabController, videoTypesList,
-                                            key: UniqueKey())))
+                                        child: TabBarEx(_tabController, videoTypesList)))
                               ]),
                               actions: <Widget>[
-                                if (selectedType != TR_EMPTY) CustomIcons(Icons.search, _onSearch),
-                                CustomIcons(Icons.add_circle, _onAdd),
-                                CustomIcons(Icons.settings, _toSettings),
-                                CustomIcons(Icons.power_settings_new, _showExitDialog),
+                                if (selectedType != TR_EMPTY)
+                                  IconButton(icon: const Icon(Icons.search), onPressed: _onSearch),
+                                IconButton(icon: const Icon(Icons.add_circle), onPressed: _onAdd),
+                                IconButton(
+                                    icon: const Icon(Icons.settings), onPressed: _toSettings),
+                                IconButton(
+                                    icon: const Icon(Icons.power_settings_new),
+                                    onPressed: _showExitDialog),
                                 _clock()
                               ]))),
                   Expanded(child: _getCurrentTabWidget())
