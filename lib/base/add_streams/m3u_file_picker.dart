@@ -40,7 +40,7 @@ class StreamFilePicker {
   }
 
   Future<String> link(String link) async {
-    var response = await get(link);
+    var response = await get(Uri.parse(link));
     return response.body;
   }
 }
