@@ -70,7 +70,7 @@ class _HomeTVState extends VideoAppState with TickerProviderStateMixin {
         child: NotificationListener<TvChannelNotification>(
             onNotification: (notification) {
               switch (notification.title) {
-                case NotificationType.FULLSCREEN:
+                case NotificationTypeTV.FULLSCREEN:
                   setState(() {
                     isVisible = notification.visibility;
                   });
@@ -177,15 +177,15 @@ class _HomeTVState extends VideoAppState with TickerProviderStateMixin {
   void _toSettings() async {
     final tvTabsEvents = locator<TvTabsEvents>();
     tvTabsEvents.publish(OpenedTvSettings(true));
-    final double padding =
-        await Navigator.push(context, MaterialPageRoute(builder: (context) => const SettingPageTV()));
+    final double padding = await Navigator.push(
+        context, MaterialPageRoute(builder: (context) => const SettingPageTV()));
     tvTabsEvents.publish(OpenedTvSettings(false));
     setState(() => _scale = padding);
   }
 
   void _onAdd() async {
-    final PickStreamFrom _source =
-        await showDialog(context: context, builder: (BuildContext context) => const StreamTypePickerTV());
+    final PickStreamFrom _source = await showDialog(
+        context: context, builder: (BuildContext context) => const StreamTypePickerTV());
     if (_source != null) {
       final AddStreamResponse response = await showDialog(
           context: context, builder: (BuildContext context) => FilePickerDialogTV(_source));
