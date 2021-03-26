@@ -3,8 +3,7 @@ import 'dart:core';
 import 'package:fastotvlite/localization/translations.dart';
 import 'package:fastotvlite/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_common/localization/app_localizations.dart';
-import 'package:flutter_common/theming.dart';
+import 'package:flutter_common/flutter_common.dart';
 
 class ColorPicker extends StatefulWidget {
   const ColorPicker.primary() : color = 0;
@@ -13,7 +12,10 @@ class ColorPicker extends StatefulWidget {
 
   final int color;
 
-  _ColorPickerState createState() => _ColorPickerState();
+  @override
+  _ColorPickerState createState() {
+    return _ColorPickerState();
+  }
 }
 
 class _ColorPickerState extends State<ColorPicker> {
@@ -24,7 +26,7 @@ class _ColorPickerState extends State<ColorPicker> {
     } else if (widget.color == 1) {
       return _accent();
     }
-    return SizedBox();
+    return const SizedBox();
   }
 
   Widget _primary() {
@@ -32,13 +34,15 @@ class _ColorPickerState extends State<ColorPicker> {
         leading: Icon(Icons.format_color_fill, color: Theming.of(context).onBrightness()),
         title: Text(translate(context, TR_PRIMARY_COLOR)),
         subtitle: Text(Theme.of(context).primaryColor.toString()),
-        onTap: () async {
+        onTap: () {
           final id = Theming.of(context).themeId;
           if (id == CUSTOM_LIGHT_THEME_ID || id == CUSTOM_DARK_THEME_ID) {
-            final _color = await _openColorPicker();
-            if (_color != null) {
-              Theming.of(context).setPrimaryColor(_color);
-            }
+            final future = _openColorPicker();
+            future.then((value) {
+              if (value != null) {
+                Theming.of(context).setPrimaryColor(value);
+              }
+            });
           }
         },
         trailing: _colorCircle(Theme.of(context).primaryColor));
@@ -49,13 +53,15 @@ class _ColorPickerState extends State<ColorPicker> {
         leading: Icon(Icons.colorize, color: Theming.of(context).onBrightness()),
         title: Text(translate(context, TR_ACCENT_COLOR)),
         subtitle: Text(Theme.of(context).accentColor.toString()),
-        onTap: () async {
+        onTap: () {
           final id = Theming.of(context).themeId;
           if (id == CUSTOM_LIGHT_THEME_ID || id == CUSTOM_DARK_THEME_ID) {
-            final _color = await _openColorPicker();
-            if (_color != null) {
-              Theming.of(context).setAccentColor(_color);
-            }
+            final future = _openColorPicker();
+            future.then((value) {
+              if (value != null) {
+                Theming.of(context).setAccentColor(value);
+              }
+            });
           }
         },
         trailing: _colorCircle(Theme.of(context).accentColor));
@@ -66,7 +72,9 @@ class _ColorPickerState extends State<ColorPicker> {
         width: 40,
         height: 40,
         decoration: BoxDecoration(
-            shape: BoxShape.circle, color: color, border: Border.all(color: Theming.of(context).onPrimary())));
+            shape: BoxShape.circle,
+            color: color,
+            border: Border.all(color: Theming.of(context).onPrimary())));
   }
 
   Future<Color> _openColorPicker() async {
@@ -74,7 +82,8 @@ class _ColorPickerState extends State<ColorPicker> {
         context: context,
         builder: (_) => ColorPickerDialog(
             title: translate(context, widget.color == 0 ? TR_PRIMARY_COLOR : TR_ACCENT_COLOR),
-            initColor: widget.color == 0 ? Theme.of(context).primaryColor : Theme.of(context).accentColor,
+            initColor:
+                widget.color == 0 ? Theme.of(context).primaryColor : Theme.of(context).accentColor,
             cancel: translate(context, TR_CANCEL),
             submit: translate(context, TR_SUBMIT)));
   }
