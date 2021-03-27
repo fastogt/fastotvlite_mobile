@@ -2,7 +2,7 @@ name: fastotvlite
 author: Alexandr Topilski <support@fastogt.com>
 description: FastoTV Lite IPTV player.
 homepage: https://fastotv.com
-version: 1.13.6+31
+version: 1.13.7+32
 
 publish_to: none
 
