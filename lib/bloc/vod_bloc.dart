@@ -7,7 +7,7 @@ import 'package:fastotvlite/service_locator.dart';
 import 'package:fastotvlite/shared_prefs.dart';
 import 'package:fastotvlite/tv/vods/tv_vod_description.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_common/runtime_device.dart';
+import 'package:flutter_common/flutter_common.dart';
 
 class VodStreamBloc extends BaseStreamBloc<VodStream> {
   VodStreamBloc(List<VodStream> streams, NavigatorState navigator) : super(streams, navigator);

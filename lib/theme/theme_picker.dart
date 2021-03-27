@@ -5,11 +5,12 @@ import 'package:fastotvlite/service_locator.dart';
 import 'package:fastotvlite/shared_prefs.dart';
 import 'package:fastotvlite/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_common/localization/app_localizations.dart';
+import 'package:flutter_common/utils.dart';
 
 class ThemePicker extends StatefulWidget {
   const ThemePicker();
 
+  @override
   _ThemePickerState createState() => _ThemePickerState();
 }
 
@@ -42,8 +43,8 @@ class _ThemePickerState extends State<ThemePicker> {
   }
 
   void showThemeDialog() async {
-    SimpleDialog dialog = SimpleDialog(
-        contentPadding: EdgeInsets.fromLTRB(0.0, 24.0, 0.0, 0.0),
+    final SimpleDialog dialog = SimpleDialog(
+        contentPadding: const EdgeInsets.fromLTRB(0.0, 24.0, 0.0, 0.0),
         title: Text(translate(context, TR_CHOOSE_THEME)),
         children: <Widget>[
           _dialogItem(LIGHT_THEME_ID),

@@ -2,32 +2,32 @@ import 'package:fastotvlite/channels/istream.dart';
 import 'package:fastotvlite/localization/translations.dart';
 import 'package:fastotvlite/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_common/base/controls/no_channels.dart';
-import 'package:flutter_common/localization/app_localizations.dart';
+import 'package:flutter_common/flutter_common.dart';
 
-abstract class CustomSearchDelegate<T> extends SearchDelegate {
+abstract class IStreamSearchDelegate<T extends IStream> extends SearchDelegate {
   final List<T> streams;
   final String hint;
 
-  CustomSearchDelegate(this.streams, this.hint) : super(searchFieldLabel: hint);
+  IStreamSearchDelegate(this.streams, this.hint) : super(searchFieldLabel: hint);
 
   @override
   ThemeData appBarTheme(BuildContext context) {
     final theme = Theming.of(context).theme;
     final color = Theming.of(context).onPrimary();
     return theme.copyWith(
-        inputDecorationTheme: theme.inputDecorationTheme.copyWith(hintStyle: TextStyle(color: color.withOpacity(0.7))),
+        inputDecorationTheme: theme.inputDecorationTheme
+            .copyWith(hintStyle: TextStyle(color: color.withOpacity(0.7))),
         textTheme: theme.textTheme.copyWith(headline6: TextStyle(color: color)));
   }
 
   @override
   List<Widget> buildActions(BuildContext context) {
-    return [IconButton(icon: Icon(Icons.clear), onPressed: () => query = '')];
+    return [IconButton(icon: const Icon(Icons.clear), onPressed: () => query = '')];
   }
 
   @override
   Widget buildLeading(BuildContext context) {
-    return IconButton(icon: Icon(Icons.arrow_back), onPressed: () => close(context, null));
+    return IconButton(icon: const Icon(Icons.arrow_back), onPressed: () => close(context, null));
   }
 
   @override
@@ -50,29 +50,18 @@ abstract class CustomSearchDelegate<T> extends SearchDelegate {
     return list(results.toList());
   }
 
-  bool resultsCriteria(T element);
+  bool resultsCriteria(T s) => s.displayName().toLowerCase().contains(query);
 
-  bool suggestionsCriteria(T element);
+  bool suggestionsCriteria(T s) => s.displayName().toLowerCase().contains(query);
 
   Widget list(List<T> results);
-}
-
-abstract class IStreamSearchDelegate<U extends IStream> extends CustomSearchDelegate<U> {
-  final List<U> streams;
-  final String hint;
-
-  IStreamSearchDelegate(this.streams, this.hint) : super(streams, hint);
-
-  bool resultsCriteria(s) => s.displayName().toLowerCase().contains(query);
-
-  bool suggestionsCriteria(s) => s.displayName().toLowerCase().contains(query);
 }
 
 class _NothingFound extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-        child:
-            NonAvailableBuffer(icon: Icons.search, message: AppLocalizations.of(context).translate(TR_SEARCH_EMPTY)));
+        child: NonAvailableBuffer(
+            icon: Icons.search, message: AppLocalizations.of(context).translate(TR_SEARCH_EMPTY)));
   }
 }

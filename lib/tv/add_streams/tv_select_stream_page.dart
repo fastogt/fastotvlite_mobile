@@ -3,29 +3,30 @@ import 'package:fastotvlite/base/add_streams/select_streams.dart';
 import 'package:fastotvlite/base/vods/constants.dart';
 import 'package:fastotvlite/service_locator.dart';
 import 'package:fastotvlite/shared_prefs.dart';
-import 'package:fastotvlite/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_common/tv/key_code.dart';
+import 'package:flutter_common/utils.dart';
 
 class SelectStreamTV extends StatefulWidget {
   final String m3uText;
   final StreamType type;
 
-  SelectStreamTV(this.m3uText, this.type);
+  const SelectStreamTV(this.m3uText, this.type);
 
   @override
   _SelectStreamTVState createState() => _SelectStreamTVState();
 }
 
 class _SelectStreamTVState extends BaseSelectStreamPage<SelectStreamTV> {
-  FocusNode _backButtonNode = FocusNode();
-  FocusNode _saveButtonNode = FocusNode();
-  FocusScopeNode _channelsScope = FocusScopeNode();
+  final FocusNode _backButtonNode = FocusNode();
+  final FocusNode _saveButtonNode = FocusNode();
+  final FocusScopeNode _channelsScope = FocusScopeNode();
   double scale;
 
+  @override
   String m3uText() => widget.m3uText;
 
+  @override
   StreamType type() => widget.type;
 
   @override
@@ -35,6 +36,7 @@ class _SelectStreamTVState extends BaseSelectStreamPage<SelectStreamTV> {
     scale = settings.screenScale();
   }
 
+  @override
   Widget layout() {
     final settings = locator<LocalStorageService>();
     scale = settings.screenScale();
@@ -43,7 +45,7 @@ class _SelectStreamTVState extends BaseSelectStreamPage<SelectStreamTV> {
 
     Widget _body() {
       if (current.isEmpty) {
-        return CircularProgressIndicator();
+        return const CircularProgressIndicator();
       }
 
       switch (widget.type) {
@@ -52,7 +54,7 @@ class _SelectStreamTVState extends BaseSelectStreamPage<SelectStreamTV> {
         case StreamType.Vod:
           return _cardList();
         default:
-          return CircularProgressIndicator();
+          return const CircularProgressIndicator();
       }
     }
 
@@ -68,7 +70,7 @@ class _SelectStreamTVState extends BaseSelectStreamPage<SelectStreamTV> {
                     actions: <Widget>[_saveButton()],
                     elevation: 0,
                     title: Text('Add',
-                        style: TextStyle(color: Theming.of(context).onCustomColor(primaryColor))),
+                        style: TextStyle(color: backgroundColorBrightness(primaryColor))),
                     centerTitle: true),
                 backgroundColor: primaryColor,
                 body: _body())));
@@ -84,7 +86,7 @@ class _SelectStreamTVState extends BaseSelectStreamPage<SelectStreamTV> {
         focusNode: _backButtonNode,
         onKey: _onAppBar,
         child: IconButton(
-            icon: Icon(Icons.arrow_back),
+            icon: const Icon(Icons.arrow_back),
             iconSize: 32,
             color: _buttonColor(_backButtonNode),
             onPressed: () => onBack()));
@@ -95,7 +97,7 @@ class _SelectStreamTVState extends BaseSelectStreamPage<SelectStreamTV> {
         focusNode: _saveButtonNode,
         onKey: _onAppBar,
         child: IconButton(
-            icon: Icon(Icons.save),
+            icon: const Icon(Icons.save),
             iconSize: 32,
             color: _buttonColor(_saveButtonNode),
             onPressed: () => onSave()));
@@ -103,8 +105,8 @@ class _SelectStreamTVState extends BaseSelectStreamPage<SelectStreamTV> {
 
   bool _onAppBar(FocusNode node, RawKeyEvent event) {
     if (event is RawKeyDownEvent && event.data is RawKeyEventDataAndroid) {
-      RawKeyDownEvent rawKeyDownEvent = event;
-      RawKeyEventDataAndroid rawKeyEventDataAndroid = rawKeyDownEvent.data;
+      final RawKeyDownEvent rawKeyDownEvent = event;
+      final RawKeyEventDataAndroid rawKeyEventDataAndroid = rawKeyDownEvent.data;
       switch (rawKeyEventDataAndroid.keyCode) {
         case ENTER:
         case KEY_CENTER:
@@ -155,8 +157,8 @@ class _SelectStreamTVState extends BaseSelectStreamPage<SelectStreamTV> {
 
   bool _onTile(FocusNode node, RawKeyEvent event) {
     if (event is RawKeyDownEvent && event.data is RawKeyEventDataAndroid) {
-      RawKeyDownEvent rawKeyDownEvent = event;
-      RawKeyEventDataAndroid rawKeyEventDataAndroid = rawKeyDownEvent.data;
+      final RawKeyDownEvent rawKeyDownEvent = event;
+      final RawKeyEventDataAndroid rawKeyEventDataAndroid = rawKeyDownEvent.data;
       switch (rawKeyEventDataAndroid.keyCode) {
         case ENTER:
         case KEY_CENTER:
@@ -187,7 +189,6 @@ class _SelectStreamTVState extends BaseSelectStreamPage<SelectStreamTV> {
 
   Widget _cardList() {
     return Wrap(
-        runAlignment: WrapAlignment.start,
         runSpacing: EDGE_INSETS,
         spacing: EDGE_INSETS,
         children: List<Widget>.generate(vods.length, (int index) {
@@ -209,8 +210,8 @@ class _SelectStreamTVState extends BaseSelectStreamPage<SelectStreamTV> {
 
   bool _onCard(FocusNode node, RawKeyEvent event) {
     if (event is RawKeyDownEvent && event.data is RawKeyEventDataAndroid) {
-      RawKeyDownEvent rawKeyDownEvent = event;
-      RawKeyEventDataAndroid rawKeyEventDataAndroid = rawKeyDownEvent.data;
+      final RawKeyDownEvent rawKeyDownEvent = event;
+      final RawKeyEventDataAndroid rawKeyEventDataAndroid = rawKeyDownEvent.data;
       switch (rawKeyEventDataAndroid.keyCode) {
         case ENTER:
         case KEY_CENTER:

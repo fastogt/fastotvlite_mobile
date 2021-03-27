@@ -1,6 +1,6 @@
 import 'package:fastotvlite/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_common/localization/app_localizations.dart';
+import 'package:flutter_common/localization.dart';
 
 class PlayerSnackbarTV extends SnackBar {
   PlayerSnackbarTV(BuildContext context, String title, bool isPlaying)

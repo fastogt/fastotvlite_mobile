@@ -1,32 +1,35 @@
 import 'package:fastotvlite/base/add_streams/m3u_to_channels.dart';
 import 'package:fastotvlite/base/add_streams/select_streams.dart';
 import 'package:fastotvlite/base/vods/constants.dart';
-import 'package:fastotvlite/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_common/utils.dart';
 
 class ChannelsPreviewPage extends StatefulWidget {
   final String m3uText;
   final StreamType type;
 
-  ChannelsPreviewPage(this.m3uText, this.type);
+  const ChannelsPreviewPage(this.m3uText, this.type);
 
   @override
   _ChannelsPreviewPageState createState() => _ChannelsPreviewPageState();
 }
 
 class _ChannelsPreviewPageState extends BaseSelectStreamPage<ChannelsPreviewPage> {
+  @override
   StreamType type() => widget.type;
 
+  @override
   String m3uText() => widget.m3uText;
 
+  @override
   Widget layout() {
     final primaryColor = Theme.of(context).primaryColor;
-    final appBarTextColor = Theming.of(context).onCustomColor(primaryColor);
+    final appBarTextColor = backgroundColorBrightness(primaryColor);
     final current = selectedList();
 
     Widget _body() {
       if (current.isEmpty) {
-        return CircularProgressIndicator();
+        return const CircularProgressIndicator();
       }
 
       switch (widget.type) {
@@ -35,7 +38,7 @@ class _ChannelsPreviewPageState extends BaseSelectStreamPage<ChannelsPreviewPage
         case StreamType.Vod:
           return _cardList();
         default:
-          return CircularProgressIndicator();
+          return const CircularProgressIndicator();
       }
     }
 
@@ -51,10 +54,10 @@ class _ChannelsPreviewPageState extends BaseSelectStreamPage<ChannelsPreviewPage
 
   Widget _floatingButton() {
     final accentColor = Theme.of(context).accentColor;
-    final textColor = Theming.of(context).onCustomColor(accentColor);
+    final textColor = backgroundColorBrightness(accentColor);
     return RaisedButton(
         onPressed: () => onSave(),
-        child: Container(
+        child: const SizedBox(
             height: 48, child: Center(child: Text('Add selected', style: TextStyle(fontSize: 16)))),
         color: accentColor,
         textColor: textColor);
@@ -70,7 +73,6 @@ class _ChannelsPreviewPageState extends BaseSelectStreamPage<ChannelsPreviewPage
 
   Widget _cardList() {
     return Wrap(
-        runAlignment: WrapAlignment.start,
         runSpacing: EDGE_INSETS,
         spacing: EDGE_INSETS,
         children: List<Widget>.generate(vods.length, (int index) {

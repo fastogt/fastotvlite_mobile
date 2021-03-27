@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:core';
+import 'package:dart_chromecast/widgets/connection_icon.dart';
 import 'package:fastotvlite/player/mobile_player.dart';
 import 'package:fastotvlite/service_locator.dart';
 import 'package:fastotvlite/shared_prefs.dart';
@@ -9,13 +10,11 @@ import 'package:fastotvlite/base/streams/programs_list.dart';
 import 'package:fastotvlite/channels/live_stream.dart';
 import 'package:fastotvlite/player/controller.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_common/base/controls/player_buttons.dart';
-import 'package:flutter_common/localization/app_localizations.dart';
-import 'package:flutter_common/screen_orientation.dart' as orientation;
+import 'package:flutter_common/flutter_common.dart';
 import 'package:flutter_fastotv_common/appbar_player.dart';
 import 'package:flutter_fastotv_common/base/controls/custom_appbar.dart';
 import 'package:flutter_fastotv_common/base/controls/fullscreen_button.dart';
-import 'package:flutter_fastotv_common/chromecast/chromecast_info.dart';
+import 'package:dart_chromecast/chromecast.dart';
 import 'package:player/common/states.dart';
 
 class ChannelPage extends StatefulWidget {
@@ -23,7 +22,7 @@ class ChannelPage extends StatefulWidget {
   final int position;
   final void Function(LiveStream stream) addRecent;
 
-  ChannelPage({this.channels, this.position, this.addRecent});
+  const ChannelPage({this.channels, this.position, this.addRecent});
 
   @override
   _ChannelPageState createState() => _ChannelPageState();
@@ -31,6 +30,9 @@ class ChannelPage extends StatefulWidget {
 
 class _ChannelPageState extends PlayerPageMobileState<ChannelPage> {
   LivePlayerController _controller;
+
+  @override
+  LiveStream get stream => _currentChannel;
 
   @override
   LivePlayerController get controller => _controller;
@@ -64,9 +66,9 @@ class _ChannelPageState extends PlayerPageMobileState<ChannelPage> {
         },
         child: AppBarPlayer.sideList(
             appbar: appBar,
-            child: (_) => playerArea(_currentChannel.icon()),
+            child: playerArea(_currentChannel.icon()),
             bottomControls: bottomControls,
-            sideList: (_, textColor) => sideListContent(textColor),
+            sideList: sideListContent,
             bottomControlsHeight: bottomControlsHeight(),
             onDoubleTap: () {
               if (isPlaying()) {
@@ -87,28 +89,25 @@ class _ChannelPageState extends PlayerPageMobileState<ChannelPage> {
     }
   }
 
-  Widget appBar(BuildContext context, Color back, Color text) {
+  Widget appBar(Color back, Color text) {
     return ChannelPageAppBar(
         backgroundColor: back,
         textColor: text,
-        link: _currentChannel.primaryUrl(),
         title: AppLocalizations.toUtf8(_currentChannel.displayName()),
         onExit: () {
           _sendRecent();
-          Navigator.of(context).pop(currentPos);
-        },
-        onChromeCast: () {
-          chromeCastCallback(_currentChannel.primaryUrl(), _currentChannel.displayName());
+          Navigator.of(context).pop();
         },
         actions: <Widget>[
-          if (orientation.isPortrait(context))
+          if (isPortrait(context))
             const FullscreenButton.open()
           else
-            const FullscreenButton.close()
+            const FullscreenButton.close(),
+          const ChromeCastIcon()
         ]);
   }
 
-  Widget bottomControls(BuildContext context, Color back, Color text, Widget sideListButton) {
+  Widget bottomControls(Color back, Color text, Widget sideListButton) {
     return Container(
         color: back ?? Theme.of(context).primaryColor,
         width: MediaQuery.of(context).size.width,

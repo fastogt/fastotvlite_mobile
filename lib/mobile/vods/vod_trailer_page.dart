@@ -1,13 +1,13 @@
+import 'package:dart_chromecast/widgets/connection_icon.dart';
 import 'package:fastotvlite/player/controller.dart';
 import 'package:fastotvlite/service_locator.dart';
 import 'package:fastotvlite/shared_prefs.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_common/base/controls/player_buttons.dart';
-import 'package:flutter_common/localization/app_localizations.dart';
+import 'package:flutter_common/flutter_common.dart';
 import 'package:flutter_fastotv_common/appbar_player.dart';
 import 'package:flutter_fastotv_common/base/controls/custom_appbar.dart';
-import 'package:flutter_fastotv_common/chromecast/chromecast_filler.dart';
-import 'package:flutter_fastotv_common/chromecast/chromecast_info.dart';
+import 'package:dart_chromecast/chromecast.dart';
+import 'package:flutter_fastotv_common/chromecast_filler.dart';
 import 'package:player/common/states.dart';
 import 'package:player/controller.dart';
 import 'package:player/widgets/player.dart';
@@ -47,9 +47,9 @@ class VodTrailerPageMobileState extends State<VodTrailer> {
   Widget build(BuildContext context) {
     final settings = locator<LocalStorageService>();
     return AppBarPlayer(
-        appbar: (_, background, text) => appBar(),
-        child: (_) => playerArea(),
-        bottomControls: (_, background, text, __) => bottomControls(),
+        appbar: (background, text) => appBar(),
+        child: playerArea(),
+        bottomControls: (background, text, __) => bottomControls(),
         bottomControlsHeight: VOD_BOTTOM_CONTROL_HEIGHT,
         onDoubleTap: () {
           if (isPlaying()) {
@@ -101,11 +101,10 @@ class VodTrailerPageMobileState extends State<VodTrailer> {
 
   Widget appBar() {
     return ChannelPageAppBar(
-        link: widget.link,
         title: widget.title,
         backgroundColor: Colors.black,
         textColor: Colors.white,
-        onChromeCast: _chromeCastCallback);
+        actions: [ChromeCastIcon(onChromeCast: _chromeCastCallback)]);
   }
 
   Widget bottomControls() {
@@ -136,7 +135,7 @@ class VodTrailerPageMobileState extends State<VodTrailer> {
         if (!_castConnected)
           PlayerButtons.seekForward(onPressed: _controller.seekForward, color: Colors.white)
       ]);
-    }, placeholder: const SizedBox());
+    });
   }
 
   Widget createPlayPauseButton() {
@@ -156,8 +155,8 @@ class VodTrailerPageMobileState extends State<VodTrailer> {
         size: Size.square(MediaQuery.of(context).size.height));
   }
 
-  void _chromeCastCallback() {
-    if (_castConnected) {
+  void _chromeCastCallback(bool connected) {
+    if (connected) {
       _controller.dispose();
       ChromeCastInfo().initVideo(widget.link, AppLocalizations.toUtf8(widget.title));
     } else {

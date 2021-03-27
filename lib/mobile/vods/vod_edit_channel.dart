@@ -4,13 +4,13 @@ import 'package:fastotvlite/mobile/add_streams/edit_channel_page.dart';
 import 'package:flutter/material.dart';
 
 abstract class _AbstractVodEditPage extends EditStreamPage<VodStream> {
-  _AbstractVodEditPage(VodStream stream) : super(stream);
+  const _AbstractVodEditPage(VodStream stream) : super(stream);
 }
 
 abstract class _AbstractVodEditPageState extends EditStreamPageState<VodStream> {}
 
 class VodAddPage extends _AbstractVodEditPage {
-  VodAddPage(stream) : super(stream);
+  const VodAddPage(stream) : super(stream);
 
   @override
   _VodAddPageState createState() => _VodAddPageState();
@@ -21,11 +21,11 @@ class _VodAddPageState extends _AbstractVodEditPageState {
   String get appBarTitle => TR_ADD_VOD;
 
   @override
-  Widget deleteButton() => SizedBox();
+  Widget deleteButton() => const SizedBox();
 }
 
 class VodEditPage extends _AbstractVodEditPage {
-  VodEditPage(stream) : super(stream);
+  const VodEditPage(stream) : super(stream);
 
   @override
   _VodEditPageState createState() => _VodEditPageState();

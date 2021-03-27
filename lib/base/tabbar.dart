@@ -2,8 +2,7 @@ import 'package:fastotvlite/localization/translations.dart';
 import 'package:fastotvlite/service_locator.dart';
 import 'package:fastotvlite/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_common/localization/app_localizations.dart';
-import 'package:flutter_common/runtime_device.dart';
+import 'package:flutter_common/flutter_common.dart';
 
 class TabBarEx extends StatefulWidget {
   static const TABBAR_FONT_SIZE_TV = 20.0;
@@ -11,7 +10,7 @@ class TabBarEx extends StatefulWidget {
   final TabController controller;
   final List<String> items;
 
-  const TabBarEx(this.controller, this.items, {Key key}) : super(key: key);
+  const TabBarEx(this.controller, this.items);
 
   @override
   _TabBarExState createState() {

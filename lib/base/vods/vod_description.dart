@@ -1,12 +1,9 @@
 import 'package:fastotvlite/channels/vod_stream.dart';
+import 'package:fastotvlite/localization/translations.dart';
 import 'package:fastotvlite/mobile/vods/vod_player_page.dart';
 import 'package:fastotvlite/mobile/vods/vod_trailer_page.dart';
-import 'package:fastotvlite/service_locator.dart';
-import 'package:fastotvlite/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_common/base/controls/no_channels.dart';
-import 'package:flutter_common/localization/app_localizations.dart';
-import 'package:flutter_common/runtime_device.dart';
+import 'package:flutter_common/flutter_common.dart';
 import 'package:flutter_fastotv_common/base/vods/vod_description.dart';
 
 class SideInfo extends StatelessWidget {
@@ -16,38 +13,35 @@ class SideInfo extends StatelessWidget {
   final double fontSize;
   final ScrollController scrollController;
 
-  SideInfo({this.country, this.duration, this.primeDate, this.fontSize, this.scrollController});
+  const SideInfo(
+      {this.country,
+      this.duration,
+      this.primeDate,
+      this.fontSize,
+      this.scrollController});
 
-  String getDuration(int msec) {
-    String twoDigits(int n) {
-      if (n >= 10) {
-        return "$n";
-      }
-      return "0$n";
-    }
-
-    String twoDigitMinutes = twoDigits(Duration(milliseconds: msec).inMinutes.remainder(60));
-    return '${twoDigits(Duration(milliseconds: msec).inHours)}:$twoDigitMinutes';
-  }
-
-  Widget sideDescription(String title, {String data}) =>
-      SideInfoItem(title: AppLocalizations.toUtf8(title), data: data);
-
-  Widget infoBuilder() {
-    List<Widget> info = [
-      sideDescription('Country', data: country),
-      sideDescription('Runtime', data: getDuration(duration)),
-      sideDescription('Year', data: DateTime.fromMillisecondsSinceEpoch(primeDate).year.toString())
+  @override
+  Widget build(BuildContext context) {
+    final pd = DateTime.fromMillisecondsSinceEpoch(primeDate);
+    final List<Widget> info = [
+      _sideDescription(translate(context, TR_COUNTRY), data: country),
+      _sideDescription(translate(context, TR_DURATION), data: _getDuration(duration)),
+      _sideDescription(translate(context, TR_YEAR), data: pd.year.toString())
     ];
     return SingleChildScrollView(
         controller: scrollController ?? ScrollController(),
         scrollDirection: Axis.horizontal,
-        child: Row(mainAxisAlignment: MainAxisAlignment.start, children: info));
+        child: Row(children: info));
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return infoBuilder();
+  // private:
+  String _getDuration(int msec) {
+    final now = DateTime.now();
+    return TimeParser.hm(msec - now.timeZoneOffset.inMilliseconds);
+  }
+
+  Widget _sideDescription(String title, {String data}) {
+    return SideInfoItem(title: AppLocalizations.toUtf8(title ?? ''), data: data);
   }
 }
 
@@ -59,33 +53,24 @@ class VodTrailerButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color buttonColor;
-    final device = locator<RuntimeDevice>();
-    if (device.hasTouch) {
-      buttonColor = Theme.of(context).accentColor;
-    } else {
-      buttonColor = Theming.of(context).onBrightness();
-    }
-    return RaisedButton(
-      focusNode: focus,
-      focusColor: Theme.of(context).accentColor,
-      elevation: 0,
-      onPressed: () {
-        return _onTrailer(context);
-      },
-      color: Colors.transparent,
-      shape: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(24),
-          borderSide: BorderSide(color: buttonColor, width: 2)),
-      child: Center(child: Text('Trailer')),
-    );
+    return OutlinedButton(
+        focusNode: focus,
+        style: OutlinedButton.styleFrom(
+            shape: StadiumBorder(side: BorderSide(width: 2, color: Theme.of(context).accentColor))),
+        child: Center(
+            child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[Text(translate(context, TR_TRAILER))])),
+        onPressed: () {
+          return _onTrailer(context);
+        });
   }
 
   // private:
   void _onTrailer(BuildContext context) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-      return VodTrailer(
-          "Trailer: ${channel.displayName()}", channel.trailerUrl(), channel.previewIcon());
+      return VodTrailer(translate(context, TR_TRAILER) + ": " + channel.displayName(),
+          channel.trailerUrl(), channel.previewIcon());
     }));
   }
 }
@@ -99,26 +84,14 @@ class VodPlayButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color buttonColor;
-    final device = locator<RuntimeDevice>();
-    if (device.hasTouch) {
-      buttonColor = Theme.of(context).accentColor;
-    } else {
-      buttonColor = Theming.of(context).onBrightness();
-    }
-    final textColor = Theming.of(context).onCustomColor(buttonColor);
-    return RaisedButton(
+    return ElevatedButton(
         focusNode: focus,
-        focusColor: Theme.of(context).accentColor,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+        style: ElevatedButton.styleFrom(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24))),
+        child: Center(child: Text(translate(context, TR_PLAY))),
         onPressed: () {
           _onTapped(context, channel);
-        },
-        color: buttonColor,
-        child: Center(
-            child: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
-          Text('Play', style: TextStyle(fontSize: 14, color: textColor))
-        ])));
+        });
   }
 
   void _onTapped(BuildContext context, VodStream channel) async {
@@ -145,7 +118,7 @@ class DescriptionText extends StatelessWidget {
     return text?.isEmpty ?? false
         ? Center(
             child: NonAvailableBuffer(
-            message: 'No description',
+            message: translate(context, TR_NO_DESCRIPTION),
             color: textColor,
             icon: Icons.description,
           ))

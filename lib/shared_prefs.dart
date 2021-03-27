@@ -11,16 +11,12 @@ const MAX_IARC_AGE = IARC_DEFAULT_AGE;
 
 class LocalStorageService {
   static LocalStorageService _instance;
-  static SharedPreferences _preferences;
+  SharedPreferences _preferences;
 
   static Future<LocalStorageService> getInstance() async {
-    if (_instance == null) {
-      _instance = LocalStorageService();
-    }
+    _instance ??= LocalStorageService();
 
-    if (_preferences == null) {
-      _preferences = await SharedPreferences.getInstance();
-    }
+    _instance._preferences ??= await SharedPreferences.getInstance();
 
     return _instance;
   }
@@ -71,27 +67,27 @@ class LocalStorageService {
   }
 
   List<LiveStream> liveChannels() {
-    List<LiveStream> _channels = [];
+    final List<LiveStream> _channels = [];
     final _jsonList = _preferences.getStringList(_channelsKey) ?? [];
     _jsonList.forEach((element) => _channels.add(LiveStream.fromJson(json.decode(element))));
     return _channels;
   }
 
   void saveLiveChannels(List<LiveStream> list) {
-    List<String> _jsonList = [];
+    final List<String> _jsonList = [];
     list.forEach((element) => _jsonList.add(json.encode(element)));
     _preferences.setStringList(_channelsKey, _jsonList);
   }
 
   List<VodStream> vods() {
-    List<VodStream> _channels = [];
+    final List<VodStream> _channels = [];
     final _jsonList = _preferences.getStringList(_vodsKey) ?? [];
     _jsonList.forEach((element) => _channels.add(VodStream.fromJson(json.decode(element))));
     return _channels;
   }
 
   void saveVods(List<VodStream> list) {
-    List<String> _jsonList = [];
+    final List<String> _jsonList = [];
     list.forEach((element) => _jsonList.add(json.encode(element)));
     _preferences.setStringList(_vodsKey, _jsonList);
   }
@@ -100,7 +96,7 @@ class LocalStorageService {
     return _preferences.getDouble(_screenScaleKey) ?? 1.0;
   }
 
-  void setscreenScale(double padding) {
+  void setScreenScale(double padding) {
     _preferences.setDouble(_screenScaleKey, padding);
   }
 

@@ -1,7 +1,7 @@
 import 'package:fastotvlite/service_locator.dart';
 import 'package:fastotvlite/shared_prefs.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_common/runtime_device.dart';
+import 'package:flutter_common/flutter_common.dart';
 
 const LIGHT_THEME_ID = 'light_theme'; // mob, tv
 const DARK_THEME_ID = 'dark_theme'; // mob, tv
@@ -21,6 +21,14 @@ class Theming extends StatefulWidget {
   static _ThemingState of(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<_InheritedThemeProvider>().data;
   }
+
+  static Color onCustomColor(Color background, {Color dark, Color light}) {
+    if (ThemeData.estimateBrightnessForColor(background) == Brightness.dark) {
+      return dark ?? Colors.white;
+    } else {
+      return light ?? Colors.black;
+    }
+  }
 }
 
 class _ThemingState extends State<Theming> {
@@ -32,8 +40,10 @@ class _ThemingState extends State<Theming> {
   ThemeData darkTheme = ThemeData.dark().copyWith(primaryColor: Colors.grey[900]);
   ThemeData customLightTheme = ThemeData.light();
   ThemeData customDarkTheme = ThemeData.dark();
-  ThemeData blackTheme = ThemeData.dark()
-      .copyWith(primaryColor: Colors.black, backgroundColor: Colors.black, scaffoldBackgroundColor: Colors.black);
+  ThemeData blackTheme = ThemeData.dark().copyWith(
+      primaryColor: Colors.black,
+      backgroundColor: Colors.black,
+      scaffoldBackgroundColor: Colors.black);
 
   @override
   void initState() {
@@ -82,14 +92,6 @@ class _ThemingState extends State<Theming> {
     }
   }
 
-  Color onCustomColor(Color background, {Color dark, Color light}) {
-    if (ThemeData.estimateBrightnessForColor(background) == Brightness.dark) {
-      return dark ?? Colors.white;
-    } else {
-      return light ?? Colors.black;
-    }
-  }
-
   void setTheme(String newId) {
     _changeTheme(newId);
     _update();
@@ -108,7 +110,7 @@ class _ThemingState extends State<Theming> {
   // private:
   void _init() async {
     final device = locator<RuntimeDevice>();
-    bool _hasTouch = await device.futureTouch;
+    final bool _hasTouch = await device.futureTouch;
 
     final settings = locator<LocalStorageService>();
     _id = settings.themeID();
@@ -120,7 +122,7 @@ class _ThemingState extends State<Theming> {
       }
     }
 
-    Color _primary = settings.getPrimaryColor();
+    final Color _primary = settings.getPrimaryColor();
     if (_primary != null) {
       _changePrimaryColor(_primary);
     }
@@ -155,11 +157,11 @@ class _ThemingState extends State<Theming> {
   void _changeAccentColor(Color color) {
     final settings = locator<LocalStorageService>();
     settings.saveAccentColor(color);
-    lightTheme = lightTheme.copyWith(accentColor: color);
-    darkTheme = darkTheme.copyWith(accentColor: color);
-    customLightTheme = customLightTheme.copyWith(accentColor: color);
-    customDarkTheme = customDarkTheme.copyWith(accentColor: color);
-    blackTheme = blackTheme.copyWith(accentColor: color);
+    lightTheme = lightTheme.setAccent(color);
+    darkTheme = darkTheme.setAccent(color);
+    customLightTheme = customLightTheme.setAccent(color);
+    customDarkTheme = customDarkTheme.setAccent(color);
+    blackTheme = blackTheme.setAccent(color);
   }
 
   ThemeData _getTheme(String id) {
@@ -180,10 +182,25 @@ class _ThemingState extends State<Theming> {
   }
 }
 
+extension SetColors on ThemeData {
+  ThemeData setAccent(Color color) {
+    return copyWith(
+        accentColor: color,
+        elevatedButtonTheme: ElevatedButtonThemeData(
+            style:
+                ElevatedButton.styleFrom(primary: color, onPrimary: Theming.onCustomColor(color))),
+        outlinedButtonTheme:
+            OutlinedButtonThemeData(style: OutlinedButton.styleFrom(primary: color)),
+        textButtonTheme: TextButtonThemeData(
+            style: TextButton.styleFrom(
+                primary: brightness == Brightness.dark ? Colors.white : Colors.black)));
+  }
+}
+
 class _InheritedThemeProvider extends InheritedWidget {
   final _ThemingState data;
 
-  _InheritedThemeProvider({
+  const _InheritedThemeProvider({
     this.data,
     Key key,
     @required Widget child,

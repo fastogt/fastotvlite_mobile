@@ -1,27 +1,49 @@
+import 'dart:async';
+
+import 'package:fastotvlite/channels/istream.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_common/base/controls/player_buttons.dart';
-import 'package:flutter_common/localization/app_localizations.dart';
-import 'package:flutter_fastotv_common/chromecast/chromecast_filler.dart';
-import 'package:flutter_fastotv_common/chromecast/chromecast_info.dart';
+import 'package:flutter_common/flutter_common.dart';
+import 'package:flutter_fastotv_common/chromecast_filler.dart';
+import 'package:dart_chromecast/chromecast.dart';
 import 'package:player/controller.dart';
 import 'package:player/widgets/player.dart';
 import 'package:player/widgets/timeline.dart';
 
 abstract class PlayerPageMobileState<T extends StatefulWidget> extends State<T> {
   final GlobalKey _playerKey = GlobalKey();
+
   PlayerController get controller;
 
+  IStream get stream;
+
   bool get castConnected => ChromeCastInfo().castConnected;
+  StreamSubscription<bool> _ccConnection;
+  bool _ccConnected;
 
   @override
   void initState() {
     super.initState();
-    initPlayer();
+    _ccConnection = ChromeCastInfo().castConnectedStream.listen((event) {
+      if (event) {
+        _initChromeCast(stream.primaryUrl(), stream.displayName());
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          controller.dispose();
+        });
+      } else {
+        initPlayer();
+      }
+      if (mounted && _ccConnected != event) {
+        setState(() {
+          _ccConnected = event;
+        });
+      }
+    });
   }
 
   @override
   void dispose() {
     super.dispose();
+    _ccConnection.cancel();
     controller?.dispose();
   }
 
@@ -63,8 +85,12 @@ abstract class PlayerPageMobileState<T extends StatefulWidget> extends State<T> 
   }
 
   Widget playerArea(String icon) {
-    return ChromeCastInfo().castConnected
-        ? _chromeCastFiller(icon)
+    if (_ccConnected == null) {
+      return const AspectRatio(
+          aspectRatio: 16 / 9, child: Center(child: CircularProgressIndicator()));
+    }
+    return _ccConnected
+        ? AspectRatio(aspectRatio: 16 / 9, child: _chromeCastFiller(icon))
         : LitePlayer(key: _playerKey, controller: controller);
   }
 
@@ -82,16 +108,6 @@ abstract class PlayerPageMobileState<T extends StatefulWidget> extends State<T> 
 
   Widget _chromeCastFiller(String icon) {
     return ChromeCastFiller.live(icon, size: Size.square(MediaQuery.of(context).size.height));
-  }
-
-  void chromeCastCallback(String link, String name) {
-    if (castConnected) {
-      controller.dispose();
-      _initChromeCast(link, name);
-    } else {
-      initPlayer();
-    }
-    setState(() {});
   }
 
   void initPlayer();

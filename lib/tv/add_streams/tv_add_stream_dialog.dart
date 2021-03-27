@@ -2,12 +2,10 @@ import 'package:fastotvlite/base/add_streams/add_stream_dialog.dart';
 import 'package:fastotvlite/base/login/textfields.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_common/tv/key_code.dart';
+import 'package:flutter_common/utils.dart';
 
 class FilePickerDialogTV extends BaseFilePickerDialog {
-  final PickStreamFrom source;
-
-  FilePickerDialogTV(this.source) : super(source);
+  const FilePickerDialogTV(PickStreamFrom source) : super(source);
 
   @override
   _FilePickerDialogTVState createState() => _FilePickerDialogTVState();
@@ -27,19 +25,17 @@ class _FilePickerDialogTVState extends BaseFilePickerDialogState {
     return LoginTextField(
         mainFocus: _textFieldNode.main,
         textFocus: _textFieldNode.text,
-        textEditingController: controller,
+        controller: controller,
         hintText: hintText,
         obscureText: false,
         onKey: _nodeAction,
-        validate: controller.text.isNotEmpty,
-        onFieldChanged: () {},
-        onFieldSubmit: () => _onEnter(_textFieldNode.text));
+        onFieldSubmit: (_) => _onEnter(_textFieldNode.text));
   }
 
   bool _nodeAction(FocusNode node, RawKeyEvent event) {
     if (event is RawKeyDownEvent && event.data is RawKeyEventDataAndroid) {
-      RawKeyDownEvent rawKeyDownEvent = event;
-      RawKeyEventDataAndroid rawKeyEventDataAndroid = rawKeyDownEvent.data;
+      final RawKeyDownEvent rawKeyDownEvent = event;
+      final RawKeyEventDataAndroid rawKeyEventDataAndroid = rawKeyDownEvent.data;
       switch (rawKeyEventDataAndroid.keyCode) {
         case ENTER:
         case KEY_CENTER:

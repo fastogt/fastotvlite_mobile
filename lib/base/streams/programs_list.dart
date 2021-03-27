@@ -3,10 +3,7 @@ import 'package:fastotvlite/base/streams/no_programs.dart';
 import 'package:fastotvlite/base/streams/program_bloc.dart';
 import 'package:fastotvlite/service_locator.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_common/localization/app_localizations.dart';
-import 'package:flutter_common/runtime_device.dart';
-import 'package:flutter_common/screen_orientation.dart' as orientation;
-import 'package:flutter_common/scroll_controller_manager.dart';
+import 'package:flutter_common/flutter_common.dart';
 
 String formatProgram(ProgrammeInfo program) {
   final timeZoneOffset = DateTime.now().timeZoneOffset;
@@ -18,7 +15,7 @@ class ProgramsListView extends StatefulWidget {
   final double itemHeight;
   final Color textColor;
 
-  ProgramsListView({this.programsBloc, this.itemHeight, this.textColor});
+  const ProgramsListView({this.programsBloc, this.itemHeight, this.textColor});
 
   @override
   _ProgramsListViewState createState() => _ProgramsListViewState();
@@ -32,7 +29,7 @@ class _ProgramsListViewState extends State<ProgramsListView> {
             stream: widget.programsBloc.programsList,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
+                return const Center(child: CircularProgressIndicator());
               }
               if (snapshot.data == null) {
                 return NoPrograms(widget.textColor);
@@ -53,7 +50,7 @@ class _ProgramsList extends StatefulWidget {
   final int index;
   final double itemHeight;
 
-  _ProgramsList({this.programs, this.bloc, this.index, this.itemHeight});
+  const _ProgramsList({this.programs, this.bloc, this.index, this.itemHeight});
 
   @override
   _ProgramsListState createState() => _ProgramsListState();
@@ -89,7 +86,7 @@ class _ProgramsListState extends State<_ProgramsList> {
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
-        separatorBuilder: (BuildContext context, int index) => SizedBox(),
+        separatorBuilder: (BuildContext context, int index) => const SizedBox(),
         itemCount: widget.programs.length,
         controller: _scrollController.controller,
         itemBuilder: (BuildContext context, int index) {
@@ -111,7 +108,7 @@ class _ProgramsListState extends State<_ProgramsList> {
   }
 
   Color _textColor() {
-    if ((_hasTouch && orientation.isPortrait(context)) || !_hasTouch) {
+    if ((_hasTouch && isPortrait(context)) || !_hasTouch) {
       return null;
     } else {
       return Colors.white;
@@ -135,11 +132,10 @@ class _ProgramsListState extends State<_ProgramsList> {
 }
 
 class _ProgramListTile extends StatefulWidget {
-  final Key key;
   final ProgrammeInfo program;
   final Color textColor;
 
-  _ProgramListTile({this.key, this.program, this.textColor});
+  const _ProgramListTile({this.program, this.textColor});
 
   @override
   _ProgramListTileState createState() => _ProgramListTileState();

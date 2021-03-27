@@ -1,3 +1,4 @@
+import 'package:dart_chromecast/chromecast.dart';
 import 'package:fastotvlite/pages/home_page.dart';
 import 'package:fastotvlite/base/add_streams/add_stream_dialog.dart';
 import 'package:fastotvlite/base/add_streams/m3u_to_channels.dart';
@@ -11,9 +12,7 @@ import 'package:fastotvlite/mobile/streams/live_tab.dart';
 import 'package:fastotvlite/mobile/vods/vod_tab.dart';
 import 'package:fastotvlite/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_common/base/controls/logo.dart';
-import 'package:flutter_common/localization/app_localizations.dart';
-import 'package:flutter_fastotv_common/chromecast/chromecast_info.dart';
+import 'package:flutter_common/flutter_common.dart';
 import 'package:unicorndial/unicorndial.dart';
 
 class HomeMobile extends HomePage {
@@ -24,10 +23,10 @@ class HomeMobile extends HomePage {
 }
 
 class _HomeMobileState extends VideoAppState {
-  GlobalKey _liveKey = GlobalKey();
-  GlobalKey _vodKey = GlobalKey();
+  final GlobalKey _liveKey = GlobalKey();
+  final GlobalKey _vodKey = GlobalKey();
 
-  GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
+  final GlobalKey<ScaffoldMessengerState> _drawerKey = GlobalKey();
 
   @override
   void initState() {
@@ -39,12 +38,13 @@ class _HomeMobileState extends VideoAppState {
   Widget build(BuildContext context) {
     return WillPopScope(
         onWillPop: () async => false,
-        child: Scaffold(
+        child: ScaffoldMessenger(
             key: _drawerKey,
-            appBar: _appBar(),
-            body: _getCurrentTabWidget(),
-            drawer: _Drawer(videoTypesList, _setType),
-            floatingActionButton: _floatingButton()));
+            child: Scaffold(
+                appBar: _appBar(),
+                body: _getCurrentTabWidget(),
+                drawer: _Drawer(videoTypesList, _setType),
+                floatingActionButton: _floatingButton())));
   }
 
   Widget _getCurrentTabWidget() {
@@ -70,15 +70,14 @@ class _HomeMobileState extends VideoAppState {
       return 0;
     }
 
-    final Color iconColor = Theming.of(context).onCustomColor(Theme.of(context).primaryColor);
+    final Color iconColor = backgroundColorBrightness(Theme.of(context).primaryColor);
     return AppBar(
         elevation: _elevation(),
         iconTheme: IconThemeData(color: iconColor),
         actionsIconTheme: IconThemeData(color: iconColor),
         title: Text(translate(context, selectedType), style: TextStyle(color: iconColor)),
         actions: <Widget>[
-          if (selectedType != TR_EMPTY)
-            IconButton(icon: Icon(Icons.search), onPressed: _onSearch)
+          if (selectedType != TR_EMPTY) IconButton(icon: const Icon(Icons.search), onPressed: _onSearch)
         ]);
   }
 
@@ -88,7 +87,7 @@ class _HomeMobileState extends VideoAppState {
         backgroundColor: _theme.primaryColor.withOpacity(0.4),
         parentButtonBackground: _theme.accentColor,
         orientation: UnicornOrientation.VERTICAL,
-        parentButton: Icon(Icons.add),
+        parentButton: const Icon(Icons.add),
         childButtons: [
           _dialAction(TR_SINGLE_STREAM, "single", PickStreamFrom.SINGLE_STREAM, Icons.add_to_queue),
           _dialAction(TR_PLAYLIST, "playlist", PickStreamFrom.PLAYLIST, Icons.playlist_add)
@@ -111,7 +110,7 @@ class _HomeMobileState extends VideoAppState {
   }
 
   void _onAdd(PickStreamFrom source) async {
-    AddStreamResponse response = await showDialog(
+    final AddStreamResponse response = await showDialog(
         context: context, builder: (BuildContext context) => FilePickerDialog(source));
     if (response == null) {
       _drawerKey.currentState.showSnackBar(SnackBar(
@@ -187,7 +186,7 @@ class _SettingsTile extends StatelessWidget {
         title: Text(translate(context, TR_SETTINGS)),
         onTap: () {
           Navigator.of(context).pop();
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => SettingsPage()));
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => const SettingsPage()));
         });
   }
 }

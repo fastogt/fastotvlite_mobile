@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 enum BuildType { DEV, PROD }
 
 class AppConfig extends InheritedWidget {
-  AppConfig({this.buildType, Widget child}) : super(child: child);
+  const AppConfig({this.buildType, Widget child}) : super(child: child);
 
   final BuildType buildType;
 

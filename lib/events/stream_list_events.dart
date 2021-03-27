@@ -2,9 +2,7 @@ import 'package:event_bus/event_bus.dart';
 
 class StreamListEvent {
   static Future<StreamListEvent> getInstance() async {
-    if (_instance == null) {
-      _instance = StreamListEvent();
-    }
+      _instance ??= StreamListEvent();
     return _instance;
   }
 

@@ -1,20 +1,24 @@
 import 'dart:async';
 
 import 'package:fastotv_dart/commands_info/programme_info.dart';
+import 'package:fastotvlite/service_locator.dart';
 import 'package:fastotvlite/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_common/flutter_common.dart';
 
 class LiveTime extends StatefulWidget {
   final ProgrammeInfo programmeInfo;
   final bool isLive;
   final Color color;
 
-  LiveTime.current({@required this.programmeInfo, this.color}) : isLive = true;
+  const LiveTime.current({@required this.programmeInfo, this.color}) : isLive = true;
 
-  LiveTime.end({@required this.programmeInfo, this.color}) : isLive = false;
+  const LiveTime.end({@required this.programmeInfo, this.color}) : isLive = false;
 
   @override
-  createState() => LiveTimeState();
+  LiveTimeState createState() {
+    return LiveTimeState();
+  }
 }
 
 class LiveTimeState<T extends LiveTime> extends State<T> {
@@ -48,7 +52,7 @@ class LiveTimeState<T extends LiveTime> extends State<T> {
 
   @override
   Widget build(BuildContext context) {
-    final color = widget.color ?? Theming.of(context).onCustomColor(Theme.of(context).primaryColor);
+    final color = widget.color ?? Theming.onCustomColor(Theme.of(context).primaryColor);
     return Text(_timeString, style: TextStyle(color: color));
   }
 
@@ -61,7 +65,8 @@ class LiveTimeState<T extends LiveTime> extends State<T> {
     stop = programmeInfo.stop;
     _update(programmeInfo);
     if (widget.isLive) {
-      _timer = Timer.periodic(Duration(seconds: REFRESH_TIMELINE_SEC), (Timer t) => _update(programmeInfo));
+      _timer = Timer.periodic(
+          const Duration(seconds: REFRESH_TIMELINE_SEC), (Timer t) => _update(programmeInfo));
     }
   }
 
@@ -73,13 +78,14 @@ class LiveTimeState<T extends LiveTime> extends State<T> {
     }
   }
 
-  void _syncControls(ProgrammeInfo programmeInfo) {
+  void _syncControls(ProgrammeInfo programmeInfo) async {
     if (programmeInfo == null) {
       return;
     }
 
     if (widget.isLive) {
-      final curUtc = DateTime.now().millisecondsSinceEpoch;
+      final _timeManager = locator<TimeManager>();
+      final curUtc = await _timeManager.realTime();
       final passed = curUtc - start;
 
       if (curUtc > stop) {
@@ -92,25 +98,5 @@ class LiveTimeState<T extends LiveTime> extends State<T> {
     }
   }
 
-  String _parse(int time) {
-    String _twoDigits(int n) {
-      if (n >= 10) {
-        return "$n";
-      }
-      return "0$n";
-    }
-
-    String output = '';
-
-    final startTime = Duration(milliseconds: time);
-    final diff = startTime - Duration(days: startTime.inDays);
-    final hours = diff.inHours;
-    final minutes = (diff - Duration(hours: diff.inHours)).inMinutes;
-    final seconds = (diff - Duration(hours: diff.inHours) - Duration(minutes: minutes)).inSeconds;
-    if (hours > 0) {
-      output += '$hours' + ':';
-    }
-    output += _twoDigits(minutes) + ':' + _twoDigits(seconds);
-    return output;
-  }
+  String _parse(int time) => TimeParser.hms(time - DateTime.now().timeZoneOffset.inMilliseconds);
 }

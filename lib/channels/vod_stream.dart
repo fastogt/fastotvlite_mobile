@@ -7,26 +7,32 @@ import 'package:fastotvlite/channels/istream.dart';
 class VodStream extends IStream {
   VodStream(VodInfo channel) : _channelInfo = channel;
 
+  @override
   String id() {
     return _channelInfo.id;
   }
 
+  @override
   void setId(String value) {
     _channelInfo.id = value;
   }
 
+  @override
   String primaryUrl() {
     return _channelInfo.primaryLink();
   }
 
+  @override
   void setPrimaryUrl(String value) {
     _channelInfo.vod.urls[0] = value;
   }
 
+  @override
   String displayName() {
     return _channelInfo.displayName();
   }
 
+  @override
   void setDisplayName(String value) {
     _channelInfo.vod.display_name = value;
   }
@@ -51,10 +57,12 @@ class VodStream extends IStream {
     return _channelInfo.getCountry();
   }
 
+  @override
   List<String> groups() {
     return _channelInfo.groups;
   }
 
+  @override
   void setGroups(List<String> value) {
     _channelInfo.groups = value;
   }
@@ -63,10 +71,12 @@ class VodStream extends IStream {
     return _channelInfo.vod.preview_icon;
   }
 
+  @override
   String icon() {
     return previewIcon();
   }
 
+  @override
   void setIcon(String value) {
     _channelInfo.vod.preview_icon = value;
   }
@@ -79,18 +89,22 @@ class VodStream extends IStream {
     _channelInfo.vod.description = value;
   }
 
+  @override
   int iarc() {
     return _channelInfo.iarc;
   }
 
+  @override
   void setIarc(int value) {
     _channelInfo.iarc = value;
   }
 
+  @override
   bool favorite() {
     return _channelInfo.favorite;
   }
 
+  @override
   void setFavorite(bool value) {
     _channelInfo.favorite = value;
   }
@@ -103,10 +117,12 @@ class VodStream extends IStream {
     _channelInfo.interrupt_time = value;
   }
 
+  @override
   int recentTime() {
     return _channelInfo.recent;
   }
 
+  @override
   void setRecentTime(int value) {
     _channelInfo.recent = value;
   }

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 /// EXAMPLE
 /// ControlsNotification(title: "Next")..dispatch(context);
 
-enum NotificationType {
+enum NotificationTypeTV {
   ///TV page tab controller
   TO_CATEGORY,
   TO_CHANNELS,
@@ -21,14 +21,14 @@ enum NotificationType {
 }
 
 class TvChannelNotification extends Notification {
-  final NotificationType title;
+  final NotificationTypeTV title;
   final bool visibility;
 
   const TvChannelNotification({this.title, this.visibility});
 }
 
 class PlayerNotification extends Notification {
-  final NotificationType title;
+  final NotificationTypeTV title;
 
   const PlayerNotification({this.title});
 }

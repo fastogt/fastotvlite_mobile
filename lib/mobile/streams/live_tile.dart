@@ -4,8 +4,7 @@ import 'package:fastotvlite/base/streams/program_bloc.dart';
 import 'package:fastotvlite/channels/live_stream.dart';
 import 'package:fastotvlite/mobile/streams/live_edit_channel.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_common/base/controls/favorite_button.dart';
-import 'package:flutter_common/localization/app_localizations.dart';
+import 'package:flutter_common/flutter_common.dart';
 import 'package:flutter_fastotv_common/base/controls/preview_icon.dart';
 
 abstract class ILiveFutureTileObserver {
@@ -23,7 +22,7 @@ class LiveFutureTile extends StatefulWidget {
   final int index;
   final ILiveFutureTileObserver observer;
 
-  LiveFutureTile({this.channels, this.index, this.observer});
+  const LiveFutureTile({this.channels, this.index, this.observer});
 
   @override
   _LiveFutureTileState createState() => _LiveFutureTileState();
@@ -57,7 +56,7 @@ class _LiveFutureTileState extends State<LiveFutureTile> {
           onTap: onTap,
           onLongPress: onLongPressed,
           trailing: FavoriteStarButton(_stream.favorite(), onFavoriteChanged: handleFavorite)),
-      Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[timeLine()])
+      Row(children: <Widget>[timeLine()])
     ]);
   }
 
@@ -104,7 +103,7 @@ class _LiveFutureTileState extends State<LiveFutureTile> {
         stream: programsBloc.currentProgram,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Text('Loading...', softWrap: true, maxLines: 3);
+            return const Text('Loading...', softWrap: true, maxLines: 3);
           }
           return Text(title(snapshot.data), maxLines: 1, overflow: TextOverflow.ellipsis);
         });
@@ -116,7 +115,7 @@ class _LiveFutureTileState extends State<LiveFutureTile> {
         stream: programsBloc.currentProgram,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return SizedBox();
+            return const SizedBox();
           }
           return LiveTimeLine(programmeInfo: snapshot.data, width: width, height: 2);
         });

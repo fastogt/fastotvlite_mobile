@@ -1,5 +1,4 @@
-import 'package:fastotv_dart/commands_info/programme_info.dart';
-import 'package:fastotvlite/base/focusable/actions.dart';
+import 'package:fastotv_dart/commands_info.dart';
 import 'package:fastotvlite/base/streams/live_timeline.dart';
 import 'package:fastotvlite/base/streams/program_bloc.dart';
 import 'package:fastotvlite/base/streams/program_time.dart';
@@ -22,10 +21,7 @@ import 'package:fastotvlite/tv/streams/tv_live_channels.dart';
 import 'package:fastotvlite/tv/streams/tv_live_edit_channel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_common/base/controls/favorite_button.dart';
-import 'package:flutter_common/localization/app_localizations.dart';
-import 'package:flutter_common/scroll_controller_manager.dart';
-import 'package:flutter_common/tv/key_code.dart';
+import 'package:flutter_common/flutter_common.dart';
 import 'package:player/widgets/player.dart';
 
 class ChannelsTabHomeTV extends StatefulWidget {
@@ -424,7 +420,7 @@ class _ChannelsTabHomeTVState extends State<ChannelsTabHomeTV> {
 
   void setFullscreenOff(bool visibility) {
     notFullScreen = visibility;
-    TvChannelNotification(title: NotificationType.FULLSCREEN, visibility: notFullScreen)
+    TvChannelNotification(title: NotificationTypeTV.FULLSCREEN, visibility: notFullScreen)
         .dispatch(context);
     final settings = locator<LocalStorageService>();
     if (notFullScreen) {

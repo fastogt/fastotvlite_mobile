@@ -1,18 +1,13 @@
-import 'package:fastotvlite/base/focusable/actions.dart';
 import 'package:fastotvlite/base/focusable/border.dart';
 import 'package:fastotvlite/base/vods/vod_description.dart';
 import 'package:fastotvlite/channels/vod_stream.dart';
 import 'package:fastotvlite/service_locator.dart';
 import 'package:fastotvlite/shared_prefs.dart';
 import 'package:fastotvlite/theme/theme.dart';
-import 'package:fastotvlite/tv/vods/tv_vod_edit_channel.dart';
 import 'package:fastotvlite/tv/vods/tv_vod_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_common/base/controls/favorite_button.dart';
-import 'package:flutter_common/localization/app_localizations.dart';
-import 'package:flutter_common/scroll_controller_manager.dart';
-import 'package:flutter_common/tv/key_code.dart';
+import 'package:flutter_common/flutter_common.dart';
 import 'package:flutter_fastotv_common/base/vods/vod_card.dart';
 import 'package:flutter_fastotv_common/base/vods/vod_description.dart';
 

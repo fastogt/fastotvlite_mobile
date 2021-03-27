@@ -1,14 +1,14 @@
+import 'package:dart_chromecast/widgets/connection_icon.dart';
 import 'package:fastotvlite/channels/vod_stream.dart';
 import 'package:fastotvlite/player/controller.dart';
 import 'package:fastotvlite/player/mobile_player.dart';
 import 'package:fastotvlite/service_locator.dart';
 import 'package:fastotvlite/shared_prefs.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_common/base/controls/player_buttons.dart';
-import 'package:flutter_common/localization/app_localizations.dart';
+import 'package:flutter_common/flutter_common.dart';
 import 'package:flutter_fastotv_common/base/controls/custom_appbar.dart';
 import 'package:flutter_fastotv_common/appbar_player.dart';
-import 'package:flutter_fastotv_common/chromecast/chromecast_info.dart';
+import 'package:dart_chromecast/chromecast.dart';
 import 'package:player/common/states.dart';
 
 class VodPlayer extends StatefulWidget {
@@ -26,6 +26,9 @@ class VodPlayerPageMobileState extends PlayerPageMobileState<VodPlayer> {
   VodPlayerController _controller;
 
   @override
+  VodStream get stream => widget.channel;
+
+  @override
   VodPlayerController get controller => _controller;
 
   @override
@@ -33,17 +36,11 @@ class VodPlayerPageMobileState extends PlayerPageMobileState<VodPlayer> {
     final settings = locator<LocalStorageService>();
     final player = playerArea(widget.channel.icon());
     return AppBarPlayer(
-        appbar: (_, background, text) => appBar(),
-        child: (_) => player,
-        bottomControls: (_, background, text, __) => bottomControls(),
+        appbar: (background, text) => appBar(),
+        child: player,
+        bottomControls: (background, text, __) => bottomControls(),
         bottomControlsHeight: VOD_BOTTOM_CONTROL_HEIGHT,
-        onDoubleTap: () {
-          if (isPlaying()) {
-            pause();
-          } else {
-            play();
-          }
-        },
+        onDoubleTap: isPlaying() ? pause : play,
         onLongTapLeft: onLongTapLeft,
         onLongTapRight: onLongTapRight,
         absoulteBrightness: settings.brightnessChange(),
@@ -52,7 +49,6 @@ class VodPlayerPageMobileState extends PlayerPageMobileState<VodPlayer> {
 
   Widget appBar() {
     return ChannelPageAppBar(
-        link: widget.channel.primaryUrl(),
         title: AppLocalizations.toUtf8(widget.channel.displayName()),
         backgroundColor: Colors.black,
         textColor: Colors.white,
@@ -61,9 +57,7 @@ class VodPlayerPageMobileState extends PlayerPageMobileState<VodPlayer> {
           controller.setInterruptTime(position());
           Navigator.of(context).pop();
         },
-        onChromeCast: () {
-          chromeCastCallback(widget.channel.primaryUrl(), widget.channel.displayName());
-        });
+        actions: const [ChromeCastIcon()]);
   }
 
   Widget bottomControls() {
@@ -88,7 +82,7 @@ class VodPlayerPageMobileState extends PlayerPageMobileState<VodPlayer> {
         if (!castConnected)
           PlayerButtons.seekForward(onPressed: controller.seekForward, color: color)
       ]);
-    }, placeholder: const SizedBox());
+    });
   }
 
   int position() {

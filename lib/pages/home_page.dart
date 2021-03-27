@@ -13,8 +13,7 @@ import 'package:fastotvlite/mobile/vods/vod_search.dart';
 import 'package:fastotvlite/service_locator.dart';
 import 'package:fastotvlite/shared_prefs.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_common/localization/app_localizations.dart';
-import 'package:flutter_common/runtime_device.dart';
+import 'package:flutter_common/flutter_common.dart';
 
 abstract class HomePage extends StatefulWidget {
   final List<LiveStream> channels;

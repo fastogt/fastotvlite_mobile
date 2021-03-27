@@ -1,12 +1,12 @@
 import 'package:fastotvlite/localization/translations.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_common/base/controls/no_channels.dart';
-import 'package:flutter_common/localization/app_localizations.dart';
+import 'package:flutter_common/localization.dart';
+import 'package:flutter_common/widgets.dart';
 
 class NoPrograms extends StatelessWidget {
   final Color color;
 
-  NoPrograms(this.color);
+  const NoPrograms(this.color);
 
   @override
   Widget build(BuildContext context) {

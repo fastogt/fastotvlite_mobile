@@ -1,19 +1,16 @@
 import 'package:fastotvlite/channels/istream.dart';
-import 'package:fastotvlite/theme/theme.dart';
+import 'package:fastotvlite/localization/translations.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_common/localization/app_localizations.dart';
+import 'package:flutter_common/flutter_common.dart';
 import 'package:flutter_fastotv_common/base/controls/preview_icon.dart';
 import 'package:flutter_tags/flutter_tags.dart';
-
-import '../../channels/istream.dart';
-import '../../localization/translations.dart';
 
 enum EditResult { ADD, EDIT, DELETE }
 
 abstract class EditStreamPage<T extends IStream> extends StatefulWidget {
   final T stream;
 
-  EditStreamPage(this.stream);
+  const EditStreamPage(this.stream);
 }
 
 abstract class EditStreamPageState<T extends IStream> extends State<EditStreamPage<T>> {
@@ -47,13 +44,13 @@ abstract class EditStreamPageState<T extends IStream> extends State<EditStreamPa
   @override
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).primaryColor;
-    final appBarTextColor = Theming.of(context).onCustomColor(primaryColor);
+    final appBarTextColor = backgroundColorBrightness(primaryColor);
     return Scaffold(
         appBar: AppBar(
             iconTheme: IconThemeData(color: appBarTextColor),
             actionsIconTheme: IconThemeData(color: appBarTextColor),
             title: Text(translate(context, appBarTitle), style: TextStyle(color: appBarTextColor)),
-            leading: BackButton(),
+            leading: const BackButton(),
             actions: <Widget>[deleteButton()]),
         floatingActionButton: _saveButton(),
         body: SingleChildScrollView(
@@ -83,16 +80,15 @@ abstract class EditStreamPageState<T extends IStream> extends State<EditStreamPa
         : FloatingActionButton(
             onPressed: onSave,
             backgroundColor: accentColor,
-            child: Icon(Icons.save, color: Theming.of(context).onCustomColor(accentColor)));
+            child: Icon(Icons.save, color: backgroundColorBrightness(accentColor)));
   }
 
   Widget textField(String hintText, TextEditingController controller,
       {void Function() onSubmitted}) {
-    return new TextFormField(
+    return TextFormField(
         controller: controller,
         decoration: InputDecoration(labelText: translate(context, hintText) ?? hintText),
         keyboardType: TextInputType.text,
-        textCapitalization: TextCapitalization.none,
         onFieldSubmitted: (String text) {
           onSubmitted?.call();
         });
@@ -100,7 +96,7 @@ abstract class EditStreamPageState<T extends IStream> extends State<EditStreamPa
 
   Widget deleteButton() {
     return IconButton(
-        icon: Icon(Icons.delete),
+        icon: const Icon(Icons.delete),
         onPressed: () {
           widget.stream.setId(null);
           Navigator.of(context).pop(widget.stream);

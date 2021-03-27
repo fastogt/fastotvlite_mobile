@@ -5,6 +5,6 @@ import 'package:flutter/material.dart';
 
 void main() async {
   await mainCommon();
-  var configuredApp = AppConfig(buildType: BuildType.PROD, child: Theming(child: MyApp()));
+  final configuredApp = AppConfig(buildType: BuildType.PROD, child: Theming(child: MyApp()));
   runApp(configuredApp);
 }

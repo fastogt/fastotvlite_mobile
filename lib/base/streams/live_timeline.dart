@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:fastotv_dart/commands_info/programme_info.dart';
+import 'package:fastotvlite/service_locator.dart';
 import 'package:fastotvlite/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_common/flutter_common.dart';
 
 class LiveTimeLine extends StatefulWidget {
   final ProgrammeInfo programmeInfo;
@@ -10,10 +12,10 @@ class LiveTimeLine extends StatefulWidget {
   final double height;
   final Color color;
 
-  LiveTimeLine({@required this.programmeInfo, @required this.width, this.height, this.color});
+  const LiveTimeLine({@required this.programmeInfo, @required this.width, this.height, this.color});
 
   @override
-  createState() => LiveTimeLineState();
+  LiveTimeLineState createState() => LiveTimeLineState();
 }
 
 class LiveTimeLineState<T extends LiveTimeLine> extends State<T> {
@@ -49,8 +51,12 @@ class LiveTimeLineState<T extends LiveTimeLine> extends State<T> {
   Widget build(BuildContext context) {
     final height = widget.height ?? 5;
     return Stack(children: <Widget>[
-      Container(color: widget.color ?? Theme.of(context).accentColor, height: height, width: _width),
-      Container(color: Theming.of(context).onBrightness().withOpacity(0.1), height: height, width: widget.width)
+      Container(
+          color: widget.color ?? Theme.of(context).accentColor, height: height, width: _width),
+      Container(
+          color: Theming.of(context).onBrightness().withOpacity(0.1),
+          height: height,
+          width: widget.width)
     ]);
   }
 
@@ -62,7 +68,7 @@ class LiveTimeLineState<T extends LiveTimeLine> extends State<T> {
     start = programmeInfo.start;
     stop = programmeInfo.stop;
     _update(programmeInfo);
-    _timer = Timer.periodic(Duration(seconds: REFRESH_TIMELINE_SEC), (Timer t) {
+    _timer = Timer.periodic(const Duration(seconds: REFRESH_TIMELINE_SEC), (Timer t) {
       _update(programmeInfo);
     });
   }
@@ -75,12 +81,13 @@ class LiveTimeLineState<T extends LiveTimeLine> extends State<T> {
     }
   }
 
-  void _syncControls(ProgrammeInfo programmeInfo) {
+  void _syncControls(ProgrammeInfo programmeInfo) async {
     if (programmeInfo == null) {
       return;
     }
 
-    final curUtc = DateTime.now().millisecondsSinceEpoch;
+    final time = locator<TimeManager>();
+    final curUtc = await time.realTime();
     final totalTime = stop - start;
     final passed = curUtc - start;
     double inPercent = 0;

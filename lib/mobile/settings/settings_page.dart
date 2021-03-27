@@ -8,34 +8,32 @@ import 'package:fastotvlite/theme/color_picker.dart';
 import 'package:fastotvlite/theme/theme.dart';
 import 'package:fastotvlite/theme/theme_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_common/localization/app_localizations.dart';
-import 'package:flutter_common/localization/lang_picker.dart';
-import 'package:flutter_common/screen_orientation.dart' as orientation;
-import 'package:flutter_common/theming.dart';
+import 'package:flutter_common/flutter_common.dart';
 
 class SettingsPage extends StatefulWidget {
+  const SettingsPage();
+
   @override
   _SettingsPageState createState() => _SettingsPageState();
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  TextStyle mainTextStyle = TextStyle(fontSize: 16);
+  TextStyle mainTextStyle = const TextStyle(fontSize: 16);
 
   @override
   void initState() {
     super.initState();
-    orientation.onlyPortrait();
+    onlyPortrait();
   }
 
   @override
   void dispose() {
     super.dispose();
-    orientation.allowAll();
+    allowAll();
   }
 
   @override
   Widget build(BuildContext context) {
-    final divider = Divider(height: 0.0);
     final color = Theming.of(context).onPrimary();
     return Scaffold(
         appBar: AppBar(
@@ -44,28 +42,28 @@ class _SettingsPageState extends State<SettingsPage> {
         body: SingleChildScrollView(
             child: Column(children: <Widget>[
           ListHeader(text: _translate(TR_PLAYER)),
-          _LastViewed(),
-          _Controls.sound(),
-          _Controls.brightness(),
-          divider,
+          const _LastViewed(),
+          const _Controls.sound(),
+          const _Controls.brightness(),
+          const Divider(height: 0.0),
           ListHeader(text: _translate(TR_CONTENT_SETTINGS)),
-          AgeSettingsTile(),
-          EpgSettingsTile(),
-          divider,
+          const AgeSettingsTile(),
+          const EpgSettingsTile(),
+          const Divider(height: 0.0),
           ListHeader(text: _translate(TR_THEME)),
-          ThemePicker(),
-          ColorPicker.primary(),
-          ColorPicker.accent(),
-          divider,
+          const ThemePicker(),
+          const ColorPicker.primary(),
+          const ColorPicker.accent(),
+          const Divider(height: 0.0),
           ListHeader(text: _translate(TR_LOCALIZATION)),
           LanguagePicker.settings((locale) {
             final settings = locator<LocalStorageService>();
             settings.setLangCode(locale.languageCode);
             settings.setCountryCode(locale.countryCode);
           }),
-          divider,
+          const Divider(height: 0.0),
           ListHeader(text: _translate(TR_ABOUT)),
-          VersionTile.settings()
+          const VersionTile.settings()
         ])));
   }
 
@@ -75,7 +73,7 @@ class _SettingsPageState extends State<SettingsPage> {
 class SettingsIcon extends StatelessWidget {
   final IconData icon;
 
-  SettingsIcon(this.icon);
+  const SettingsIcon(this.icon);
 
   @override
   Widget build(BuildContext context) {
@@ -84,6 +82,8 @@ class SettingsIcon extends StatelessWidget {
 }
 
 class _LastViewed extends StatefulWidget {
+  const _LastViewed();
+
   @override
   _LastViewedState createState() => _LastViewedState();
 }
@@ -100,7 +100,7 @@ class _LastViewedState extends State<_LastViewed> {
 
   @override
   Widget build(BuildContext context) {
-    return new ListTile(
+    return ListTile(
         leading: SettingsIcon(_saveLastViewed ? Icons.bookmark : Icons.bookmark_border),
         title: Text(_translate(TR_LAST_VIEWED)),
         subtitle: Text(_translate(TR_LAST_VIEWED_SUB)),
@@ -128,9 +128,9 @@ class _LastViewedState extends State<_LastViewed> {
 class _Controls extends StatefulWidget {
   final int type;
 
-  _Controls.sound() : type = 0;
+  const _Controls.sound() : type = 0;
 
-  _Controls.brightness() : type = 1;
+  const _Controls.brightness() : type = 1;
 
   @override
   _ControlsState createState() => _ControlsState();

@@ -2,9 +2,7 @@ import 'package:event_bus/event_bus.dart';
 
 class TvTabsEvents {
   static Future<TvTabsEvents> getInstance() async {
-    if (_instance == null) {
-      _instance = TvTabsEvents();
-    }
+    _instance ??= TvTabsEvents();
     return _instance;
   }
 
