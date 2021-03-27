@@ -11,6 +11,7 @@ import 'package:flutter_fastotv_common/base/vods/vod_card.dart';
 
 class VodTab extends StatefulWidget {
   final VodStreamBloc bloc;
+
   const VodTab(Key key, this.bloc) : super(key: key);
 
   @override

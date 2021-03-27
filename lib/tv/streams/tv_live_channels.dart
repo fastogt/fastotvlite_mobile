@@ -61,18 +61,26 @@ class ChannelsListTVState extends State<ChannelsListTV> {
             width: _size.width,
             height: _size.height,
             child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
-              Icon(Icons.keyboard_arrow_left, color: _color ?? Theme.of(context).disabledColor),
+              Icon(Icons.keyboard_arrow_left, color: _color ?? Theme
+                  .of(context)
+                  .disabledColor),
               Text(_title(_currentCategory)),
-              Icon(Icons.keyboard_arrow_right, color: _color ?? Theme.of(context).disabledColor)
+              Icon(Icons.keyboard_arrow_right, color: _color ?? Theme
+                  .of(context)
+                  .disabledColor)
             ])));
   }
 
   void _onFocusChange() {
     setState(() {
       if (widget.focus.hasFocus) {
-        _color = Theme.of(context).accentColor;
+        _color = Theme
+            .of(context)
+            .accentColor;
       } else {
-        _color = Theme.of(context).disabledColor;
+        _color = Theme
+            .of(context)
+            .disabledColor;
       }
     });
   }
@@ -162,12 +170,11 @@ class _ChannelsList extends StatelessWidget {
   final double itemHeight;
   final bool Function(FocusNode node, RawKeyEvent event, int index) onKey;
 
-  const _ChannelsList(
-      {@required this.channels,
-      this.scrollController,
-      @required this.onKey,
-      this.itemHeight,
-      @required this.size});
+  const _ChannelsList({@required this.channels,
+    this.scrollController,
+    @required this.onKey,
+    this.itemHeight,
+    @required this.size});
 
   @override
   Widget build(BuildContext context) {
@@ -249,7 +256,9 @@ class _ChannelTileState extends State<_ChannelTile> {
       return Colors.transparent;
     }
 
-    return Theme.of(context).focusColor;
+    return Theme
+        .of(context)
+        .focusColor;
   }
 
   void _onFocusChange() {

@@ -52,18 +52,19 @@ class M3UParser {
   LiveStream _createLiveStream(Map<String, dynamic> m3u) {
     final settings = locator<LocalStorageService>();
     final String _epgLink = settings.epgLink();
-    final _epg = EpgInfo(m3u[ID_FIELD], [m3u[PRIMARY_URL_FIELD]], m3u[NAME_FIELD], m3u[ICON_FIELD], []);
-    final _channelInfo =
-        ChannelInfo(m3u[ID_FIELD], m3u[GROUP_FIELD], 21, false, 0, 0, false, _epg, true, true, null, 0, <MetaUrl>[]);
+    final _epg =
+        EpgInfo(m3u[ID_FIELD], [m3u[PRIMARY_URL_FIELD]], m3u[NAME_FIELD], m3u[ICON_FIELD], []);
+    final _channelInfo = ChannelInfo(m3u[ID_FIELD], m3u[GROUP_FIELD], 21, false, 0, 0, false, _epg,
+        true, true, null, 0, <MetaUrl>[]);
 
     return LiveStream(_channelInfo, _epgLink);
   }
 
   VodStream _createVodStream(Map<String, dynamic> m3u) {
-    final _movieInfo =
-        MovieInfo([m3u[PRIMARY_URL_FIELD]], '', m3u[NAME_FIELD], m3u[ICON_FIELD], '', 0.0, 0, '', 0, MovieType.VODS);
-    final vodInfo =
-        VodInfo(m3u[ID_FIELD], m3u[GROUP_FIELD], 21, false, 0, 0, false, _movieInfo, true, true, null, 0, <MetaUrl>[]);
+    final _movieInfo = MovieInfo([m3u[PRIMARY_URL_FIELD]], '', m3u[NAME_FIELD], m3u[ICON_FIELD], '',
+        0.0, 0, '', 0, MovieType.VODS);
+    final vodInfo = VodInfo(m3u[ID_FIELD], m3u[GROUP_FIELD], 21, false, 0, 0, false, _movieInfo,
+        true, true, null, 0, <MetaUrl>[]);
 
     return VodStream(vodInfo);
   }

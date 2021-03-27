@@ -1,5 +1,4 @@
 import 'package:dart_chromecast/chromecast.dart';
-import 'package:fastotvlite/pages/home_page.dart';
 import 'package:fastotvlite/base/add_streams/add_stream_dialog.dart';
 import 'package:fastotvlite/base/add_streams/m3u_to_channels.dart';
 import 'package:fastotvlite/channels/live_stream.dart';
@@ -10,6 +9,7 @@ import 'package:fastotvlite/mobile/add_streams/add_stream_dialog.dart';
 import 'package:fastotvlite/mobile/settings/settings_page.dart';
 import 'package:fastotvlite/mobile/streams/live_tab.dart';
 import 'package:fastotvlite/mobile/vods/vod_tab.dart';
+import 'package:fastotvlite/pages/home_page.dart';
 import 'package:fastotvlite/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_common/flutter_common.dart';
@@ -77,7 +77,8 @@ class _HomeMobileState extends VideoAppState {
         actionsIconTheme: IconThemeData(color: iconColor),
         title: Text(translate(context, selectedType), style: TextStyle(color: iconColor)),
         actions: <Widget>[
-          if (selectedType != TR_EMPTY) IconButton(icon: const Icon(Icons.search), onPressed: _onSearch)
+          if (selectedType != TR_EMPTY)
+            IconButton(icon: const Icon(Icons.search), onPressed: _onSearch)
         ]);
   }
 

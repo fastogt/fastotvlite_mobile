@@ -130,8 +130,20 @@ class VodStream extends IStream {
   final VodInfo _channelInfo;
 
   VodStream.empty()
-      : _channelInfo = VodInfo('', <String>[], 21, false, 0, 0, false,
-            MovieInfo([''], '', '', '', '', 0, 0, '', 0, MovieType.VODS), true, true, null, 0, <MetaUrl>[]);
+      : _channelInfo = VodInfo(
+            '',
+            <String>[],
+            21,
+            false,
+            0,
+            0,
+            false,
+            MovieInfo([''], '', '', '', '', 0, 0, '', 0, MovieType.VODS),
+            true,
+            true,
+            null,
+            0,
+            <MetaUrl>[]);
 
   VodStream.fromJson(Map<String, dynamic> json)
       : _channelInfo = VodInfo(

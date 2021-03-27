@@ -26,7 +26,7 @@ class _TvVodDescriptionState extends State<TvVodDescription> {
 
   FocusNode descriptionNode = FocusNode();
   CustomScrollController descriptionController =
-      CustomScrollController(itemHeight: DESCRIPTION_FONT_SIZE);
+  CustomScrollController(itemHeight: DESCRIPTION_FONT_SIZE);
   FocusNode infoNode = FocusNode();
   CustomScrollController infoController = CustomScrollController(itemHeight: DESCRIPTION_FONT_SIZE);
   FocusNode backButtonNode = FocusNode();
@@ -36,7 +36,11 @@ class _TvVodDescriptionState extends State<TvVodDescription> {
   FocusNode favoriteNode = FocusNode();
   int index = 0;
 
-  Color get activeColor => Theming.of(context).theme.accentColor;
+  Color get activeColor =>
+      Theming
+          .of(context)
+          .theme
+          .accentColor;
 
   double _scaleFactor = 1;
 
@@ -83,7 +87,9 @@ class _TvVodDescriptionState extends State<TvVodDescription> {
         focusNode: backButtonNode,
         icon: const Icon(Icons.arrow_back),
         color: Theming.of(context).onBrightness(),
-        onPressed: Navigator.of(context).pop);
+        onPressed: Navigator
+            .of(context)
+            .pop);
   }
 
   Widget _playButton() {
@@ -146,7 +152,10 @@ class _TvVodDescriptionState extends State<TvVodDescription> {
         child: FocusBorder(
             focus: descriptionNode,
             child: SizedBox(
-                width: MediaQuery.of(context).size.width / 2,
+                width: MediaQuery
+                    .of(context)
+                    .size
+                    .width / 2,
                 height: 196 * 3 / 2 * _scaleFactor,
                 child: DescriptionText(
                   AppLocalizations.toUtf8(widget.channel.description()),
@@ -189,18 +198,24 @@ class _TvVodDescriptionState extends State<TvVodDescription> {
     return onKey(event, (keyCode) {
       switch (keyCode) {
         case KEY_LEFT:
-          if (widget.channel.description().isNotEmpty) {
+          if (widget.channel
+              .description()
+              .isNotEmpty) {
             descriptionController.moveToTop();
           }
           FocusScope.of(context).focusInDirection(TraversalDirection.left);
           return true;
         case KEY_DOWN:
-          if (widget.channel.description().isNotEmpty) {
+          if (widget.channel
+              .description()
+              .isNotEmpty) {
             descriptionController.moveDown();
           }
           return true;
         case KEY_UP:
-          if (widget.channel.description().isEmpty) {
+          if (widget.channel
+              .description()
+              .isEmpty) {
             FocusScope.of(context).focusInDirection(TraversalDirection.up);
             return true;
           }

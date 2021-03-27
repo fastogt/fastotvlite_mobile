@@ -94,7 +94,9 @@ class _TVVodPageState extends State<TVVodPage> with TickerProviderStateMixin {
     final Widget tabs = TabBar(
         labelStyle: const TextStyle(fontSize: 16.0),
         indicatorSize: TabBarIndicatorSize.tab,
-        indicatorColor: Theme.of(context).accentColor,
+        indicatorColor: Theme
+            .of(context)
+            .accentColor,
         controller: _tabController,
         isScrollable: true,
         tabs: tabsGenerator());
@@ -170,24 +172,46 @@ class _TVVodPageState extends State<TVVodPage> with TickerProviderStateMixin {
           break;
 
         case KEY_LEFT:
-          if (FocusScope.of(context).focusedChild.offset.dx > CARD_WIDTH_TV) {
+          if (FocusScope
+              .of(context)
+              .focusedChild
+              .offset
+              .dx > CARD_WIDTH_TV) {
             FocusScope.of(context).focusInDirection(TraversalDirection.left);
           } else {
             FocusScope.of(context).focusInDirection(TraversalDirection.up);
             while (
-                MediaQuery.of(context).size.width - FocusScope.of(context).focusedChild.offset.dx >
-                    CARD_WIDTH_TV * 2) {
+            MediaQuery
+                .of(context)
+                .size
+                .width - FocusScope
+                .of(context)
+                .focusedChild
+                .offset
+                .dx >
+                CARD_WIDTH_TV * 2) {
               FocusScope.of(context).focusInDirection(TraversalDirection.right);
             }
           }
           break;
 
         case KEY_RIGHT:
-          if (MediaQuery.of(context).size.width - FocusScope.of(context).focusedChild.offset.dx >
+          if (MediaQuery
+              .of(context)
+              .size
+              .width - FocusScope
+              .of(context)
+              .focusedChild
+              .offset
+              .dx >
               CARD_WIDTH_TV * 2) {
             FocusScope.of(context).focusInDirection(TraversalDirection.right);
           } else {
-            while (FocusScope.of(context).focusedChild.offset.dx > CARD_WIDTH_TV) {
+            while (FocusScope
+                .of(context)
+                .focusedChild
+                .offset
+                .dx > CARD_WIDTH_TV) {
               FocusScope.of(context).focusInDirection(TraversalDirection.left);
             }
             FocusScope.of(context).focusInDirection(TraversalDirection.down);
@@ -312,7 +336,10 @@ class _CardWrapState extends State<_CardWrap> {
               VodFavoriteButton(
                   child: Icon(widget.channel.favorite() ? Icons.star : Icons.star_border,
                       color: widget.channel.favorite()
-                          ? Theming.of(context).theme.accentColor
+                          ? Theming
+                          .of(context)
+                          .theme
+                          .accentColor
                           : Theming.of(context).onPrimary()))
             ])));
   }

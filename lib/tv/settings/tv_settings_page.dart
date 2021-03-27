@@ -38,7 +38,9 @@ class _SettingPageTVState extends State<SettingPageTV> {
       case 0:
         return const AgePickerTV();
       case 1:
-        return ThemePickerTV(Theming.of(context).themeId);
+        return ThemePickerTV(Theming
+            .of(context)
+            .themeId);
       case 2:
         return PaddingSettings(_setPadding);
       case 3:
@@ -59,7 +61,10 @@ class _SettingPageTVState extends State<SettingPageTV> {
 
   @override
   Widget build(BuildContext context) {
-    final availableWidth = MediaQuery.of(context).size.width * _scale;
+    final availableWidth = MediaQuery
+        .of(context)
+        .size
+        .width * _scale;
     final categoriesWidth = availableWidth / 4;
     final sideFieldsWidth = (availableWidth - categoriesWidth) / 2;
     final listHeight = TV_LIST_ITEM_SIZE * ITEM_LIST.length;
@@ -70,7 +75,9 @@ class _SettingPageTVState extends State<SettingPageTV> {
         child: Stack(children: <Widget>[
           Scaffold(
               appBar: AppBar(
-                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                  backgroundColor: Theme
+                      .of(context)
+                      .scaffoldBackgroundColor,
                   leading: _backButton(),
                   elevation: 0,
                   title: Text(AppLocalizations.of(context).translate(TR_SETTINGS),
@@ -196,7 +203,9 @@ class _SettingsTileState extends State<_SettingsTile> {
       return Colors.transparent;
     }
 
-    return Theme.of(context).focusColor;
+    return Theme
+        .of(context)
+        .focusColor;
   }
 
   void _onFocusChange() {

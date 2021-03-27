@@ -23,21 +23,23 @@ abstract class AbstractLiveEditPageState extends EditStreamPageTV<AbstractLiveEd
 
   @override
   Widget editingPage() {
-    final size = MediaQuery.of(context).size;
+    final size = MediaQuery
+        .of(context)
+        .size;
     return Center(
         child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: <Widget>[
-      PreviewIcon.live(iconController.text),
-      const SizedBox(width: 16),
-      SizedBox(
-          width: size.width / 2,
-          child: SingleChildScrollView(
-              child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-            textField('Title', nameFieldNode, nameController),
-            textField('Video link', urlFieldNode, videoLinkController),
-            textField('Icon', iconFieldNode, iconController),
-            textField('IARC', iarcFieldNode, iarcController)
-          ])))
-    ]));
+          PreviewIcon.live(iconController.text),
+          const SizedBox(width: 16),
+          SizedBox(
+              width: size.width / 2,
+              child: SingleChildScrollView(
+                  child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+                    textField('Title', nameFieldNode, nameController),
+                    textField('Video link', urlFieldNode, videoLinkController),
+                    textField('Icon', iconFieldNode, iconController),
+                    textField('IARC', iarcFieldNode, iarcController)
+                  ])))
+        ]));
   }
 }
 

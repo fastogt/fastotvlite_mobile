@@ -41,11 +41,15 @@ class _ThemePickerTVState extends State<ThemePickerTV> {
 
   Widget _dialogItem(String text, String themeId) {
     return RadioListTile<String>(
-        activeColor: Theme.of(context).accentColor,
+        activeColor: Theme
+            .of(context)
+            .accentColor,
         title: Text(AppLocalizations.of(context).translate(text),
             style: const TextStyle(fontSize: 20)),
         value: themeId,
         groupValue: themeGroupValue,
-        onChanged: Theming.of(context).setTheme);
+        onChanged: Theming
+            .of(context)
+            .setTheme);
   }
 }

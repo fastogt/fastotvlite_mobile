@@ -87,35 +87,37 @@ class _HomeTVState extends VideoAppState with TickerProviderStateMixin {
                 heightFactor: _scale,
                 child: Scaffold(
                     body: Column(children: <Widget>[
-                  Visibility(
-                      visible: isVisible,
-                      child: IconTheme(
-                          data: IconThemeData(color: Theming.of(context).onBrightness()),
-                          child: AppBar(
-                              leading: const Padding(
-                                  padding: EdgeInsets.fromLTRB(16, 8, 0, 8),
-                                  child: CustomAssetLogo(LOGO_PATH)),
-                              backgroundColor: Colors.transparent,
-                              elevation: 0,
-                              title: Row(children: <Widget>[
-                                const SizedBox(width: 16),
-                                Expanded(
-                                    child: SingleChildScrollView(
-                                        child: TabBarEx(_tabController, videoTypesList)))
-                              ]),
-                              actions: <Widget>[
-                                if (selectedType != TR_EMPTY)
-                                  IconButton(icon: const Icon(Icons.search), onPressed: _onSearch),
-                                IconButton(icon: const Icon(Icons.add_circle), onPressed: _onAdd),
-                                IconButton(
-                                    icon: const Icon(Icons.settings), onPressed: _toSettings),
-                                IconButton(
-                                    icon: const Icon(Icons.power_settings_new),
-                                    onPressed: _showExitDialog),
-                                _clock()
-                              ]))),
-                  Expanded(child: _getCurrentTabWidget())
-                ])))));
+                      Visibility(
+                          visible: isVisible,
+                          child: IconTheme(
+                              data: IconThemeData(color: Theming.of(context).onBrightness()),
+                              child: AppBar(
+                                  leading: const Padding(
+                                      padding: EdgeInsets.fromLTRB(16, 8, 0, 8),
+                                      child: CustomAssetLogo(LOGO_PATH)),
+                                  backgroundColor: Colors.transparent,
+                                  elevation: 0,
+                                  title: Row(children: <Widget>[
+                                    const SizedBox(width: 16),
+                                    Expanded(
+                                        child: SingleChildScrollView(
+                                            child: TabBarEx(_tabController, videoTypesList)))
+                                  ]),
+                                  actions: <Widget>[
+                                    if (selectedType != TR_EMPTY)
+                                      IconButton(icon: const Icon(Icons.search),
+                                          onPressed: _onSearch),
+                                    IconButton(icon: const Icon(Icons.add_circle),
+                                        onPressed: _onAdd),
+                                    IconButton(
+                                        icon: const Icon(Icons.settings), onPressed: _toSettings),
+                                    IconButton(
+                                        icon: const Icon(Icons.power_settings_new),
+                                        onPressed: _showExitDialog),
+                                    _clock()
+                                  ]))),
+                      Expanded(child: _getCurrentTabWidget())
+                    ])))));
   }
 
   Widget _getCurrentTabWidget() {

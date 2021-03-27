@@ -1,10 +1,10 @@
 import 'dart:async';
 
+import 'package:dart_chromecast/chromecast.dart';
 import 'package:fastotvlite/channels/istream.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_common/flutter_common.dart';
 import 'package:flutter_fastotv_common/chromecast_filler.dart';
-import 'package:dart_chromecast/chromecast.dart';
 import 'package:player/controller.dart';
 import 'package:player/widgets/player.dart';
 import 'package:player/widgets/timeline.dart';

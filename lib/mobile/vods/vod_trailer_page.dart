@@ -1,3 +1,4 @@
+import 'package:dart_chromecast/chromecast.dart';
 import 'package:dart_chromecast/widgets/connection_icon.dart';
 import 'package:fastotvlite/player/controller.dart';
 import 'package:fastotvlite/service_locator.dart';
@@ -6,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_common/flutter_common.dart';
 import 'package:flutter_fastotv_common/appbar_player.dart';
 import 'package:flutter_fastotv_common/base/controls/custom_appbar.dart';
-import 'package:dart_chromecast/chromecast.dart';
 import 'package:flutter_fastotv_common/chromecast_filler.dart';
 import 'package:player/common/states.dart';
 import 'package:player/controller.dart';

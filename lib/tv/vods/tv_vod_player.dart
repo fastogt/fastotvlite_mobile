@@ -54,7 +54,9 @@ class _TvVodPlayerPageState extends PlayerPageTVState<TvVodPlayerPage> {
         case BACK:
         case BACKSPACE:
           _controller.sendRecent(widget.channel);
-          _controller.setInterruptTime(_controller.position().inMilliseconds);
+          _controller.setInterruptTime(_controller
+              .position()
+              .inMilliseconds);
           Navigator.of(context).pop();
           return true;
         case MENU:

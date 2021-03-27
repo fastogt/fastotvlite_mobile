@@ -78,7 +78,9 @@ class _AgePickerTVState extends State<AgePickerTV> {
 
   @override
   Widget build(BuildContext context) {
-    final color = _pickerNode.hasPrimaryFocus ? Theme.of(context).accentColor : null;
+    final color = _pickerNode.hasPrimaryFocus ? Theme
+        .of(context)
+        .accentColor : null;
     return Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
       ageWidget(),
       Focus(
@@ -101,7 +103,7 @@ class AgePickerPassword extends StatefulWidget {
 
 class _AgePickerPasswordState extends State<AgePickerPassword> {
   final TextFieldNode passwordNode =
-      TextFieldNode(main: FocusNode(), text: FocusNode(skipTraversal: true));
+  TextFieldNode(main: FocusNode(), text: FocusNode(skipTraversal: true));
   final passwordController = TextEditingController();
   String password;
 
@@ -163,12 +165,16 @@ class _AgePickerPasswordState extends State<AgePickerPassword> {
     final categoriesWidth = query.size.width / 4;
     final sideFieldsWidth = (query.size.width - categoriesWidth) / 2;
     return Scaffold(
-        backgroundColor: Theme.of(context).primaryColor,
+        backgroundColor: Theme
+            .of(context)
+            .primaryColor,
         appBar: AppBar(
             leading: backButton(),
             elevation: 0,
             title: Text(_translate(TR_PARENTAL_CONTROL),
-                style: TextStyle(color: Theming.onCustomColor(Theme.of(context).primaryColor))),
+                style: TextStyle(color: Theming.onCustomColor(Theme
+                    .of(context)
+                    .primaryColor))),
             centerTitle: true),
         body: Center(
             child: SizedBox(

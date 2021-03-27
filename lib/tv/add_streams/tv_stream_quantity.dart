@@ -26,7 +26,10 @@ class _StreamTypePickerTVState extends State<StreamTypePickerTV> {
         ],
         content: Column(
             mainAxisSize: MainAxisSize.min,
-            children: <Widget>[_typeTile(PickStreamFrom.PLAYLIST), _typeTile(PickStreamFrom.SINGLE_STREAM)]));
+            children: <Widget>[
+              _typeTile(PickStreamFrom.PLAYLIST),
+              _typeTile(PickStreamFrom.SINGLE_STREAM)
+            ]));
   }
 
   Widget _typeTile(PickStreamFrom value) {
@@ -42,7 +45,8 @@ class _StreamTypePickerTVState extends State<StreamTypePickerTV> {
 
   Widget _button(String text, void Function() onPressed, double opacity) {
     final buttonTextColor = Theming.of(context).onBrightness().withOpacity(opacity);
-    return FlatButton(child: Text(text, style: TextStyle(color: buttonTextColor)), onPressed: onPressed);
+    return FlatButton(
+        child: Text(text, style: TextStyle(color: buttonTextColor)), onPressed: onPressed);
   }
 
   void _exit({PickStreamFrom source}) => Navigator.of(context).pop(_source);

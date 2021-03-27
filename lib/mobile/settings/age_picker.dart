@@ -8,7 +8,7 @@ import 'package:numberpicker/numberpicker.dart';
 
 class AgeSettingsTile extends StatefulWidget {
   const AgeSettingsTile();
-  
+
   @override
   _AgeSettingsTileState createState() => _AgeSettingsTileState();
 }

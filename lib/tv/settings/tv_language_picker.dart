@@ -15,9 +15,15 @@ class LanguagePickerTV extends StatefulWidget {
 class _LanguagePickerTVState extends State<LanguagePickerTV> {
   int _currentSelection = 0;
 
-  List<String> get supportedLanguages => AppLocalizations.of(context).supportedLanguages;
+  List<String> get supportedLanguages =>
+      AppLocalizations
+          .of(context)
+          .supportedLanguages;
 
-  List<Locale> get supportedLocales => AppLocalizations.of(context).supportedLocales;
+  List<Locale> get supportedLocales =>
+      AppLocalizations
+          .of(context)
+          .supportedLocales;
 
   @override
   Widget build(BuildContext context) {
@@ -25,12 +31,14 @@ class _LanguagePickerTVState extends State<LanguagePickerTV> {
     return Column(
         mainAxisSize: MainAxisSize.min,
         children: List<Widget>.generate(supportedLanguages.length,
-            (int index) => _dialogItem(supportedLanguages[index], index)));
+                (int index) => _dialogItem(supportedLanguages[index], index)));
   }
 
   Widget _dialogItem(String text, int itemvalue) {
     return RadioListTile(
-        activeColor: Theme.of(context).accentColor,
+        activeColor: Theme
+            .of(context)
+            .accentColor,
         title: Text(text, style: const TextStyle(fontSize: 20)),
         value: itemvalue,
         groupValue: _currentSelection,
@@ -48,6 +56,8 @@ class _LanguagePickerTVState extends State<LanguagePickerTV> {
   }
 
   int currentLanguageIndex() {
-    return supportedLocales.indexOf(AppLocalizations.of(context).currentLocale) ?? 0;
+    return supportedLocales.indexOf(AppLocalizations
+        .of(context)
+        .currentLocale) ?? 0;
   }
 }

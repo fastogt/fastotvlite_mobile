@@ -36,7 +36,9 @@ abstract class EditStreamPageTV<T extends StatefulWidget> extends State<T> {
 
   @override
   Widget build(BuildContext context) {
-    final primaryColor = Theme.of(context).primaryColor;
+    final primaryColor = Theme
+        .of(context)
+        .primaryColor;
     final appBarTextColor = backgroundColorBrightness(primaryColor);
     return Scaffold(
         appBar: AppBar(

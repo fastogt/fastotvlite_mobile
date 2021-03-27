@@ -40,7 +40,9 @@ class _SelectStreamTVState extends BaseSelectStreamPage<SelectStreamTV> {
   Widget layout() {
     final settings = locator<LocalStorageService>();
     scale = settings.screenScale();
-    final primaryColor = Theme.of(context).primaryColor;
+    final primaryColor = Theme
+        .of(context)
+        .primaryColor;
     final current = selectedList();
 
     Widget _body() {
@@ -77,7 +79,9 @@ class _SelectStreamTVState extends BaseSelectStreamPage<SelectStreamTV> {
   }
 
   Color _buttonColor(FocusNode node) {
-    return node.hasPrimaryFocus ? Theme.of(context).accentColor : null;
+    return node.hasPrimaryFocus ? Theme
+        .of(context)
+        .accentColor : null;
   }
 
   Widget _backButton() {
@@ -218,13 +222,16 @@ class _SelectStreamTVState extends BaseSelectStreamPage<SelectStreamTV> {
           onCheckBox(nodes.indexOf(node));
           break;
 
-        /// Moves around cards
+      /// Moves around cards
         case KEY_LEFT:
           if (_channelsScope.focusedChild.offset.dx > CARD_WIDTH) {
             _channelsScope.focusInDirection(TraversalDirection.left);
           } else {
             _channelsScope.focusInDirection(TraversalDirection.up);
-            while (MediaQuery.of(context).size.width - _channelsScope.focusedChild.offset.dx >
+            while (MediaQuery
+                .of(context)
+                .size
+                .width - _channelsScope.focusedChild.offset.dx >
                 CARD_WIDTH * 2) {
               _channelsScope.focusInDirection(TraversalDirection.right);
             }
@@ -232,7 +239,10 @@ class _SelectStreamTVState extends BaseSelectStreamPage<SelectStreamTV> {
           break;
 
         case KEY_RIGHT:
-          if (MediaQuery.of(context).size.width - _channelsScope.focusedChild.offset.dx >
+          if (MediaQuery
+              .of(context)
+              .size
+              .width - _channelsScope.focusedChild.offset.dx >
               CARD_WIDTH * 2) {
             _channelsScope.focusInDirection(TraversalDirection.right);
           } else {

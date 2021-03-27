@@ -33,9 +33,8 @@ class _VodDescriptionState extends State<VodDescription> {
             height: 216,
             child: Row(children: <Widget>[
               Padding(
-                padding: const EdgeInsets.fromLTRB(8, 8, 0, 0),
-                child: SizedBox(width: 180, child: PreviewIcon.vod(currentVod.previewIcon()))
-              ),
+                  padding: const EdgeInsets.fromLTRB(8, 8, 0, 0),
+                  child: SizedBox(width: 180, child: PreviewIcon.vod(currentVod.previewIcon()))),
               const VerticalDivider(),
               Expanded(
                   child: Padding(
@@ -55,34 +54,32 @@ class _VodDescriptionState extends State<VodDescription> {
     }
 
     Widget landscape() {
-      return Row(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            SizedBox(
-                width: 196,
-                child: Column(children: <Widget>[
-                  Expanded(
-                      flex: 8,
-                      child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Center(child: PreviewIcon.vod(currentVod.previewIcon())))),
-                  trailerButton(currentVod, padding: 8),
-                  playButton(currentVod, padding: 8)
-                ])),
-            const VerticalDivider(),
-            Expanded(
-                child: Column(children: <Widget>[
-              Padding(
-                  padding: const EdgeInsets.fromLTRB(16.0, 8.0, 8, 0),
-                  child: Row(children: <Widget>[
-                    userScore(currentVod),
-                    const VerticalDivider(),
-                    sideInfo(currentVod)
-                  ])),
-              const Divider(),
-              description(currentVod)
-            ]))
-          ]);
+      return Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: <Widget>[
+        SizedBox(
+            width: 196,
+            child: Column(children: <Widget>[
+              Expanded(
+                  flex: 8,
+                  child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Center(child: PreviewIcon.vod(currentVod.previewIcon())))),
+              trailerButton(currentVod, padding: 8),
+              playButton(currentVod, padding: 8)
+            ])),
+        const VerticalDivider(),
+        Expanded(
+            child: Column(children: <Widget>[
+          Padding(
+              padding: const EdgeInsets.fromLTRB(16.0, 8.0, 8, 0),
+              child: Row(children: <Widget>[
+                userScore(currentVod),
+                const VerticalDivider(),
+                sideInfo(currentVod)
+              ])),
+          const Divider(),
+          description(currentVod)
+        ]))
+      ]);
     }
 
     return Scaffold(

@@ -1,20 +1,21 @@
 import 'dart:async';
 import 'dart:core';
+
+import 'package:dart_chromecast/chromecast.dart';
 import 'package:dart_chromecast/widgets/connection_icon.dart';
-import 'package:fastotvlite/player/mobile_player.dart';
-import 'package:fastotvlite/service_locator.dart';
-import 'package:fastotvlite/shared_prefs.dart';
 import 'package:fastotvlite/base/streams/live_bottom_controls.dart';
 import 'package:fastotvlite/base/streams/program_bloc.dart';
 import 'package:fastotvlite/base/streams/programs_list.dart';
 import 'package:fastotvlite/channels/live_stream.dart';
 import 'package:fastotvlite/player/controller.dart';
+import 'package:fastotvlite/player/mobile_player.dart';
+import 'package:fastotvlite/service_locator.dart';
+import 'package:fastotvlite/shared_prefs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_common/flutter_common.dart';
 import 'package:flutter_fastotv_common/appbar_player.dart';
 import 'package:flutter_fastotv_common/base/controls/custom_appbar.dart';
 import 'package:flutter_fastotv_common/base/controls/fullscreen_button.dart';
-import 'package:dart_chromecast/chromecast.dart';
 import 'package:player/common/states.dart';
 
 class ChannelPage extends StatefulWidget {

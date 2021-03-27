@@ -16,7 +16,10 @@ class ClockFormatPickerTV extends StatefulWidget {
 class _ClockFormatPickerTVState extends State<ClockFormatPickerTV> {
   int _currentSelection = 0;
 
-  List<Locale> get supportedLocales => AppLocalizations.of(context).supportedLocales;
+  List<Locale> get supportedLocales =>
+      AppLocalizations
+          .of(context)
+          .supportedLocales;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +32,9 @@ class _ClockFormatPickerTVState extends State<ClockFormatPickerTV> {
 
   Widget _dialogItem(String text, int itemvalue) {
     return RadioListTile(
-        activeColor: Theme.of(context).accentColor,
+        activeColor: Theme
+            .of(context)
+            .accentColor,
         title: Text(text, style: const TextStyle(fontSize: 20)),
         value: itemvalue,
         groupValue: _currentSelection,

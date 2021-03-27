@@ -14,11 +14,7 @@ class SideInfo extends StatelessWidget {
   final ScrollController scrollController;
 
   const SideInfo(
-      {this.country,
-      this.duration,
-      this.primeDate,
-      this.fontSize,
-      this.scrollController});
+      {this.country, this.duration, this.primeDate, this.fontSize, this.scrollController});
 
   @override
   Widget build(BuildContext context) {

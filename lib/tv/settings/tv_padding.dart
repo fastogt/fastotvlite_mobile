@@ -75,7 +75,9 @@ class _PaddingSettingsState extends State<PaddingSettings> {
 
   Color _iconsColor() {
     if (_node.hasPrimaryFocus) {
-      return Theme.of(context).accentColor;
+      return Theme
+          .of(context)
+          .accentColor;
     }
     return Colors.transparent;
   }

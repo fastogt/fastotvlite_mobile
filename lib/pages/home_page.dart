@@ -43,6 +43,7 @@ abstract class VideoAppState extends State<HomePage> {
   }
 
   bool get channelsEmpty => channels()?.isEmpty ?? true;
+
   bool get vodsEmpty => vods()?.isEmpty ?? true;
 
   bool get isStreamsEmpty => channelsEmpty && vodsEmpty;

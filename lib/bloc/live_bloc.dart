@@ -2,12 +2,11 @@ import 'package:fastotvlite/base/stream_parser.dart';
 import 'package:fastotvlite/bloc/base_bloc.dart';
 import 'package:fastotvlite/channels/live_stream.dart';
 import 'package:fastotvlite/localization/translations.dart';
+import 'package:fastotvlite/mobile/streams/live_player_page.dart';
 import 'package:fastotvlite/service_locator.dart';
 import 'package:fastotvlite/shared_prefs.dart';
 import 'package:fastotvlite/tv/streams/tv_live_player.dart';
 import 'package:flutter/material.dart';
-
-import 'package:fastotvlite/mobile/streams/live_player_page.dart';
 
 class LiveStreamBloc extends BaseStreamBloc<LiveStream> {
   LiveStreamBloc(List<LiveStream> streams, NavigatorState navigator) : super(streams, navigator);
