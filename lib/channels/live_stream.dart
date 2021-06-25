@@ -187,7 +187,7 @@ class LiveStream extends IStream {
 
   LiveStream.empty()
       : _channelInfo = ChannelInfo(const Uuid().v1(), <String>[], 0, false, 0, 0, false,
-            EpgInfo('', [''], '', '', []), true, true, null, 0, <MetaUrl>[]),
+            EpgInfo('', [''], '', '', []), true, true, null, 0, <MetaUrl>[], 0, true),
         _epgUrl = EPG_URL,
         _requested = false;
 
@@ -206,7 +206,10 @@ class LiveStream extends IStream {
             true,
             null,
             0,
-            <MetaUrl>[]),
+            <MetaUrl>[],
+            0,
+            true
+  ),
         _epgUrl = json[EPG_URL_FIELD] ?? EPG_URL,
         _requested = false;
 

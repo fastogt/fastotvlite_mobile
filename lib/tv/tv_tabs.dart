@@ -144,7 +144,7 @@ class _HomeTVState extends VideoAppState with TickerProviderStateMixin {
         initialData: ClockFormatChanged(_initFormat),
         stream: tvTabsEvents.subscribe<ClockFormatChanged>(),
         builder: (context, snapshot) =>
-            Clock.full(width: 108, textColor: color, hour24: snapshot.data.hour24));
+            Clock.full(textColor: color, hour24: snapshot.data.hour24));
   }
 
   void _initTabController() {
