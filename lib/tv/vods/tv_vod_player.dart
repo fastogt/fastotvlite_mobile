@@ -37,7 +37,7 @@ class _TvVodPlayerPageState extends PlayerPageTVState<TvVodPlayerPage> {
   }
 
   @override
-  bool onPlayer(RawKeyEvent event, BuildContext ctx) {
+  KeyEventResult onPlayer(RawKeyEvent event, BuildContext ctx) {
     return onKey(event, (keyCode) {
       switch (keyCode) {
         case ENTER:
@@ -49,7 +49,7 @@ class _TvVodPlayerPageState extends PlayerPageTVState<TvVodPlayerPage> {
             _controller.play();
           }
           toggleSnackBar(ctx);
-          return true;
+          return KeyEventResult.handled;
 
         case BACK:
         case BACKSPACE:
@@ -58,21 +58,21 @@ class _TvVodPlayerPageState extends PlayerPageTVState<TvVodPlayerPage> {
               .position()
               .inMilliseconds);
           Navigator.of(context).pop();
-          return true;
+          return KeyEventResult.handled;
         case MENU:
           toggleSnackBar(ctx);
-          return true;
+          return KeyEventResult.handled;
 
         case KEY_LEFT:
         case PREVIOUS:
           _controller.seekBackward();
-          return true;
+          return KeyEventResult.handled;
         case KEY_RIGHT:
         case NEXT:
           _controller.seekBackward();
-          return true;
+          return KeyEventResult.handled;
       }
-      return false;
+      return KeyEventResult.ignored;
     });
   }
 }

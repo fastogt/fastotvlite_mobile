@@ -172,29 +172,29 @@ class _TvVodDescriptionState extends State<TvVodDescription> {
     FocusScope.of(context).requestFocus(playNode);
   }
 
-  bool _onInfo(FocusNode node, RawKeyEvent event) {
+  KeyEventResult _onInfo(FocusNode node, RawKeyEvent event) {
     return onKey(event, (keyCode) {
       switch (keyCode) {
         case KEY_LEFT:
           infoController.moveUp();
-          return true;
+          return KeyEventResult.handled;
         case KEY_RIGHT:
           infoController.moveDown();
-          return true;
+          return KeyEventResult.handled;
         case KEY_DOWN:
           infoController.moveToTop();
           FocusScope.of(context).focusInDirection(TraversalDirection.down);
-          return true;
+          return KeyEventResult.handled;
         case KEY_UP:
           infoController.moveToTop();
           FocusScope.of(context).focusInDirection(TraversalDirection.up);
-          return true;
+          return KeyEventResult.handled;
       }
-      return false;
+      return KeyEventResult.ignored;
     });
   }
 
-  bool _onDescription(FocusNode node, RawKeyEvent event) {
+  KeyEventResult _onDescription(FocusNode node, RawKeyEvent event) {
     return onKey(event, (keyCode) {
       switch (keyCode) {
         case KEY_LEFT:
@@ -204,29 +204,29 @@ class _TvVodDescriptionState extends State<TvVodDescription> {
             descriptionController.moveToTop();
           }
           FocusScope.of(context).focusInDirection(TraversalDirection.left);
-          return true;
+          return KeyEventResult.handled;
         case KEY_DOWN:
           if (widget.channel
               .description()
               .isNotEmpty) {
             descriptionController.moveDown();
           }
-          return true;
+          return KeyEventResult.handled;
         case KEY_UP:
           if (widget.channel
               .description()
               .isEmpty) {
             FocusScope.of(context).focusInDirection(TraversalDirection.up);
-            return true;
+            return KeyEventResult.handled;
           }
           if (descriptionController.controller.offset == 0.0) {
             FocusScope.of(context).focusInDirection(TraversalDirection.up);
-            return true;
+            return KeyEventResult.handled;
           }
           descriptionController.moveUp();
-          return true;
+          return KeyEventResult.handled;
       }
-      return false;
+      return KeyEventResult.ignored;
     });
   }
 }

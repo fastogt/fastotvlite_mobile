@@ -313,14 +313,14 @@ class _ChannelsTabHomeTVState extends State<ChannelsTabHomeTV> {
   }
 
   // remote controls
-  bool _onChannel(FocusNode node, RawKeyEvent event, int index) {
+  KeyEventResult _onChannel(FocusNode node, RawKeyEvent event, int index) {
     return onKey(event, (keyCode) {
       switch (keyCode) {
         case BACK:
         case BACKSPACE:
         case KEY_LEFT:
           FocusScope.of(context).requestFocus(_categoriesNode);
-          return true;
+          return KeyEventResult.handled;
 
         case KEY_UP:
           if (_updateGuideOnScroll && currentChannelEPG != 0) {
@@ -328,7 +328,7 @@ class _ChannelsTabHomeTVState extends State<ChannelsTabHomeTV> {
             _setPrograms(currentChannelEPG);
           }
           FocusScope.of(context).focusInDirection(TraversalDirection.up);
-          return true;
+          return KeyEventResult.handled;
 
         case KEY_DOWN:
           if (_updateGuideOnScroll && currentChannelEPG != _currentChannels.length - 1) {
@@ -336,23 +336,23 @@ class _ChannelsTabHomeTVState extends State<ChannelsTabHomeTV> {
             _setPrograms(currentChannelEPG);
           }
           FocusScope.of(context).focusInDirection(TraversalDirection.down);
-          return true;
+          return KeyEventResult.handled;
 
         case ENTER:
         case KEY_CENTER:
           currentChannelEPG = index;
           _playChannel(index);
-          return true;
+          return KeyEventResult.handled;
 
         case KEY_RIGHT:
           FocusScope.of(context).focusInDirection(TraversalDirection.right);
-          return true;
+          return KeyEventResult.handled;
       }
-      return false;
+      return KeyEventResult.ignored;
     });
   }
 
-  bool _onPlayer(FocusNode node, RawKeyEvent event) {
+  KeyEventResult _onPlayer(FocusNode node, RawKeyEvent event) {
     return onKey(event, (keyCode) {
       switch (keyCode) {
         case ENTER:
@@ -371,7 +371,7 @@ class _ChannelsTabHomeTVState extends State<ChannelsTabHomeTV> {
             }
           }
           setState(() {});
-          return true;
+          return KeyEventResult.handled;
 
         case BACK:
         case BACKSPACE:
@@ -380,7 +380,7 @@ class _ChannelsTabHomeTVState extends State<ChannelsTabHomeTV> {
             _showSnackBar(false);
             setState(() {});
           }
-          return true;
+          return KeyEventResult.handled;
 
         case KEY_LEFT:
         case PREVIOUS:
@@ -390,7 +390,7 @@ class _ChannelsTabHomeTVState extends State<ChannelsTabHomeTV> {
           } else {
             FocusScope.of(context).focusInDirection(TraversalDirection.left);
           }
-          return true;
+          return KeyEventResult.handled;
 
         case KEY_RIGHT:
         case NEXT:
@@ -400,27 +400,27 @@ class _ChannelsTabHomeTVState extends State<ChannelsTabHomeTV> {
           } else {
             FocusScope.of(context).focusInDirection(TraversalDirection.right);
           }
-          return true;
+          return KeyEventResult.handled;
 
         case KEY_DOWN:
           if (notFullScreen) {
             FocusScope.of(context).focusInDirection(TraversalDirection.down);
           }
-          return true;
+          return KeyEventResult.handled;
 
         case KEY_UP:
           if (notFullScreen) {
             FocusScope.of(context).focusInDirection(TraversalDirection.up);
           }
-          return true;
+          return KeyEventResult.handled;
 
         case MENU:
           if (!notFullScreen) {
             _showSnackBar(!_isSnackbarActive);
           }
-          return true;
+          return KeyEventResult.handled;
       }
-      return false;
+      return KeyEventResult.ignored;
     });
   }
 

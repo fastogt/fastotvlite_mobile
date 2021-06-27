@@ -48,7 +48,7 @@ class _PaddingSettingsState extends State<PaddingSettings> {
         ]));
   }
 
-  bool _listControl(FocusNode node, RawKeyEvent event) {
+  KeyEventResult _listControl(FocusNode node, RawKeyEvent event) {
     return onKey(event, (keyCode) {
       switch (keyCode) {
         case KEY_UP:
@@ -56,20 +56,20 @@ class _PaddingSettingsState extends State<PaddingSettings> {
             percent += 0.001;
             widget.setPadding(percent);
           }
-          return true;
+          return KeyEventResult.handled;
         case KEY_DOWN:
           if (percent > 0.9) {
             percent -= 0.001;
             widget.setPadding(percent);
           }
-          return true;
+          return KeyEventResult.handled;
         case KEY_LEFT:
           final settings = locator<LocalStorageService>();
           settings.setScreenScale(percent);
           FocusScope.of(context).focusInDirection(TraversalDirection.left);
-          return true;
+          return KeyEventResult.handled;
       }
-      return false;
+      return KeyEventResult.ignored;
     });
   }
 

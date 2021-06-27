@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 class TvPlayerWrap extends StatefulWidget {
   final Widget child;
   final bool fullscreen;
-  final bool Function(FocusNode node, RawKeyEvent event) onKey;
+  final KeyEventResult Function(FocusNode node, RawKeyEvent event) onKey;
 
   const TvPlayerWrap(this.child, this.fullscreen, this.onKey);
 

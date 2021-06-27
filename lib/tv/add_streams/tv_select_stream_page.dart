@@ -40,9 +40,7 @@ class _SelectStreamTVState extends BaseSelectStreamPage<SelectStreamTV> {
   Widget layout() {
     final settings = locator<LocalStorageService>();
     scale = settings.screenScale();
-    final primaryColor = Theme
-        .of(context)
-        .primaryColor;
+    final primaryColor = Theme.of(context).primaryColor;
     final current = selectedList();
 
     Widget _body() {
@@ -79,9 +77,7 @@ class _SelectStreamTVState extends BaseSelectStreamPage<SelectStreamTV> {
   }
 
   Color _buttonColor(FocusNode node) {
-    return node.hasPrimaryFocus ? Theme
-        .of(context)
-        .accentColor : null;
+    return node.hasPrimaryFocus ? Theme.of(context).accentColor : null;
   }
 
   Widget _backButton() {
@@ -93,7 +89,7 @@ class _SelectStreamTVState extends BaseSelectStreamPage<SelectStreamTV> {
             icon: const Icon(Icons.arrow_back),
             iconSize: 32,
             color: _buttonColor(_backButtonNode),
-            onPressed: () => onBack()));
+            onPressed: onBack));
   }
 
   Widget _saveButton() {
@@ -104,10 +100,10 @@ class _SelectStreamTVState extends BaseSelectStreamPage<SelectStreamTV> {
             icon: const Icon(Icons.save),
             iconSize: 32,
             color: _buttonColor(_saveButtonNode),
-            onPressed: () => onSave()));
+            onPressed: onSave));
   }
 
-  bool _onAppBar(FocusNode node, RawKeyEvent event) {
+  KeyEventResult _onAppBar(FocusNode node, RawKeyEvent event) {
     if (event is RawKeyDownEvent && event.data is RawKeyEventDataAndroid) {
       final RawKeyDownEvent rawKeyDownEvent = event;
       final RawKeyEventDataAndroid rawKeyEventDataAndroid = rawKeyDownEvent.data;
@@ -119,28 +115,26 @@ class _SelectStreamTVState extends BaseSelectStreamPage<SelectStreamTV> {
           } else if (_saveButtonNode.hasPrimaryFocus) {
             onSave();
           }
-          break;
+          setState(() {});
+          return KeyEventResult.handled;
 
         case KEY_LEFT:
           _channelsScope.requestFocus(_backButtonNode);
-          break;
+          setState(() {});
+          return KeyEventResult.handled;
 
         case KEY_RIGHT:
           _channelsScope.requestFocus(_saveButtonNode);
-          break;
+          setState(() {});
+          return KeyEventResult.handled;
 
         case KEY_DOWN:
           _channelsScope.focusInDirection(TraversalDirection.down);
-          break;
-
-        default:
-          break;
+          setState(() {});
+          return KeyEventResult.handled;
       }
-      setState(() {});
-      return true;
-    } else {
-      return false;
     }
+    return KeyEventResult.ignored;
   }
 
   Widget _channelsList() {
@@ -159,7 +153,7 @@ class _SelectStreamTVState extends BaseSelectStreamPage<SelectStreamTV> {
                 })));
   }
 
-  bool _onTile(FocusNode node, RawKeyEvent event) {
+  KeyEventResult _onTile(FocusNode node, RawKeyEvent event) {
     if (event is RawKeyDownEvent && event.data is RawKeyEventDataAndroid) {
       final RawKeyDownEvent rawKeyDownEvent = event;
       final RawKeyEventDataAndroid rawKeyEventDataAndroid = rawKeyDownEvent.data;
@@ -167,7 +161,8 @@ class _SelectStreamTVState extends BaseSelectStreamPage<SelectStreamTV> {
         case ENTER:
         case KEY_CENTER:
           onCheckBox(nodes.indexOf(node));
-          break;
+          setState(() {});
+          return KeyEventResult.handled;
 
         case KEY_UP:
           if (nodes.indexOf(node) == 0) {
@@ -175,20 +170,16 @@ class _SelectStreamTVState extends BaseSelectStreamPage<SelectStreamTV> {
           } else {
             _channelsScope.focusInDirection(TraversalDirection.up);
           }
-          break;
+          setState(() {});
+          return KeyEventResult.handled;
 
         case KEY_DOWN:
           _channelsScope.focusInDirection(TraversalDirection.down);
-          break;
-
-        default:
-          break;
+          setState(() {});
+          return KeyEventResult.handled;
       }
-      setState(() {});
-      return true;
-    } else {
-      return false;
     }
+    return KeyEventResult.ignored;
   }
 
   Widget _cardList() {
@@ -212,7 +203,7 @@ class _SelectStreamTVState extends BaseSelectStreamPage<SelectStreamTV> {
         }));
   }
 
-  bool _onCard(FocusNode node, RawKeyEvent event) {
+  KeyEventResult _onCard(FocusNode node, RawKeyEvent event) {
     if (event is RawKeyDownEvent && event.data is RawKeyEventDataAndroid) {
       final RawKeyDownEvent rawKeyDownEvent = event;
       final RawKeyEventDataAndroid rawKeyEventDataAndroid = rawKeyDownEvent.data;
@@ -220,29 +211,25 @@ class _SelectStreamTVState extends BaseSelectStreamPage<SelectStreamTV> {
         case ENTER:
         case KEY_CENTER:
           onCheckBox(nodes.indexOf(node));
-          break;
+          setState(() {});
+          return KeyEventResult.handled;
 
-      /// Moves around cards
+        /// Moves around cards
         case KEY_LEFT:
           if (_channelsScope.focusedChild.offset.dx > CARD_WIDTH) {
             _channelsScope.focusInDirection(TraversalDirection.left);
           } else {
             _channelsScope.focusInDirection(TraversalDirection.up);
-            while (MediaQuery
-                .of(context)
-                .size
-                .width - _channelsScope.focusedChild.offset.dx >
+            while (MediaQuery.of(context).size.width - _channelsScope.focusedChild.offset.dx >
                 CARD_WIDTH * 2) {
               _channelsScope.focusInDirection(TraversalDirection.right);
             }
           }
-          break;
+          setState(() {});
+          return KeyEventResult.handled;
 
         case KEY_RIGHT:
-          if (MediaQuery
-              .of(context)
-              .size
-              .width - _channelsScope.focusedChild.offset.dx >
+          if (MediaQuery.of(context).size.width - _channelsScope.focusedChild.offset.dx >
               CARD_WIDTH * 2) {
             _channelsScope.focusInDirection(TraversalDirection.right);
           } else {
@@ -251,7 +238,8 @@ class _SelectStreamTVState extends BaseSelectStreamPage<SelectStreamTV> {
             }
             _channelsScope.focusInDirection(TraversalDirection.down);
           }
-          break;
+          setState(() {});
+          return KeyEventResult.handled;
 
         case KEY_UP:
           if (nodes.indexOf(node) < 6) {
@@ -259,19 +247,16 @@ class _SelectStreamTVState extends BaseSelectStreamPage<SelectStreamTV> {
           } else {
             _channelsScope.focusInDirection(TraversalDirection.up);
           }
-          break;
+          setState(() {});
+          return KeyEventResult.handled;
 
         case KEY_DOWN:
           _channelsScope.focusInDirection(TraversalDirection.down);
-          break;
-
-        default:
-          break;
+          setState(() {});
+          return KeyEventResult.handled;
       }
-      setState(() {});
-      return true;
-    } else {
-      return false;
     }
+
+    return KeyEventResult.ignored;
   }
 }
