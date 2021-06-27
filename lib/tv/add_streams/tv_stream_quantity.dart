@@ -45,7 +45,7 @@ class _StreamTypePickerTVState extends State<StreamTypePickerTV> {
 
   Widget _button(String text, void Function() onPressed, double opacity) {
     final buttonTextColor = Theming.of(context).onBrightness().withOpacity(opacity);
-    return FlatButton(
+    return TextButton(
         child: Text(text, style: TextStyle(color: buttonTextColor)), onPressed: onPressed);
   }
 

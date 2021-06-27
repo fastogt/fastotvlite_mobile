@@ -93,7 +93,7 @@ class _TVVodPageState extends State<TVVodPage> with TickerProviderStateMixin {
     final Widget tabs = TabBar(
         labelStyle: const TextStyle(fontSize: 16.0),
         indicatorSize: TabBarIndicatorSize.tab,
-        indicatorColor: Theme.of(context).accentColor,
+        indicatorColor: Theme.of(context).colorScheme.secondary,
         controller: _tabController,
         isScrollable: true,
         tabs: tabsGenerator());
@@ -311,7 +311,7 @@ class _CardWrapState extends State<_CardWrap> {
               VodFavoriteButton(
                   child: Icon(widget.channel.favorite() ? Icons.star : Icons.star_border,
                       color: widget.channel.favorite()
-                          ? Theming.of(context).theme.accentColor
+                          ? Theming.of(context).theme.colorScheme.secondary
                           : Theming.of(context).onPrimary()))
             ])));
   }

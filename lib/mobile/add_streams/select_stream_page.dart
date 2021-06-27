@@ -53,14 +53,14 @@ class _ChannelsPreviewPageState extends BaseSelectStreamPage<ChannelsPreviewPage
   }
 
   Widget _floatingButton() {
-    final accentColor = Theme.of(context).accentColor;
+    final accentColor = Theme.of(context).colorScheme.secondary;
     final textColor = backgroundColorBrightness(accentColor);
-    return RaisedButton(
-        onPressed: () => onSave(),
+    return ElevatedButton(
+        style: ElevatedButton.styleFrom(primary: accentColor, onPrimary: textColor),
+        onPressed: onSave,
         child: const SizedBox(
-            height: 48, child: Center(child: Text('Add selected', style: TextStyle(fontSize: 16)))),
-        color: accentColor,
-        textColor: textColor);
+            height: 48,
+            child: Center(child: Text('Add selected', style: TextStyle(fontSize: 16)))));
   }
 
   Widget _channelsList() {

@@ -77,7 +77,7 @@ class _SelectStreamTVState extends BaseSelectStreamPage<SelectStreamTV> {
   }
 
   Color _buttonColor(FocusNode node) {
-    return node.hasPrimaryFocus ? Theme.of(context).accentColor : null;
+    return node.hasPrimaryFocus ? Theme.of(context).colorScheme.secondary : null;
   }
 
   Widget _backButton() {

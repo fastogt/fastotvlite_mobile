@@ -78,7 +78,7 @@ class _AgePickerTVState extends State<AgePickerTV> {
 
   @override
   Widget build(BuildContext context) {
-    final color = _pickerNode.hasPrimaryFocus ? Theme.of(context).accentColor : null;
+    final color = _pickerNode.hasPrimaryFocus ? Theme.of(context).colorScheme.secondary : null;
     return Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
       ageWidget(),
       Focus(

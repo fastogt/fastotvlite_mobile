@@ -61,7 +61,7 @@ class _ChannelsTabHomeTVState extends State<ChannelsTabHomeTV> {
   LiveStream _playingEPG;
 
   final CustomScrollController _channelsController =
-  CustomScrollController(itemHeight: TV_LIST_ITEM_SIZE);
+      CustomScrollController(itemHeight: TV_LIST_ITEM_SIZE);
 
   ProgramsBloc programsBloc;
 
@@ -104,9 +104,7 @@ class _ChannelsTabHomeTVState extends State<ChannelsTabHomeTV> {
   Widget page() {
     final settings = locator<LocalStorageService>();
     final scale = settings.screenScale();
-    final availableSpace = MediaQuery
-        .of(context)
-        .size * scale;
+    final availableSpace = MediaQuery.of(context).size * scale;
 
     return Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: <Widget>[
       Visibility(visible: notFullScreen, child: channelsList(availableSpace)),
@@ -261,11 +259,7 @@ class _ChannelsTabHomeTVState extends State<ChannelsTabHomeTV> {
     if (show) {
       _isSnackbarActive = true;
       final snack = PlayerSnackbarTV(context, _playing.displayName(), _controller.isPlaying());
-      ScaffoldMessenger
-          .of(context)
-          .showSnackBar(snack)
-          .closed
-          .then((_) {
+      ScaffoldMessenger.of(context).showSnackBar(snack).closed.then((_) {
         _isSnackbarActive = false;
       });
     } else {
@@ -488,9 +482,7 @@ class _TimeLine extends StatelessWidget {
                     programmeInfo: snapshot.data,
                     width: size.width / 1.6,
                     height: 6,
-                    color: Theme
-                        .of(context)
-                        .accentColor),
+                    color: Theme.of(context).colorScheme.secondary),
                 LiveTime.end(
                     programmeInfo: snapshot.data, color: Theming.of(context).onBrightness())
               ]));

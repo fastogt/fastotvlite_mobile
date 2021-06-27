@@ -74,7 +74,7 @@ abstract class EditStreamPageState<T extends IStream> extends State<EditStreamPa
   }
 
   Widget _saveButton() {
-    final accentColor = Theme.of(context).accentColor;
+    final accentColor = Theme.of(context).colorScheme.secondary;
     return !validator
         ? null
         : FloatingActionButton(

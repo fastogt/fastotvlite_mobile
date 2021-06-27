@@ -52,7 +52,8 @@ class VodTrailerButton extends StatelessWidget {
     return OutlinedButton(
         focusNode: focus,
         style: OutlinedButton.styleFrom(
-            shape: StadiumBorder(side: BorderSide(width: 2, color: Theme.of(context).accentColor))),
+            shape: StadiumBorder(
+                side: BorderSide(width: 2, color: Theme.of(context).colorScheme.secondary))),
         child: Center(
             child: Row(
                 mainAxisSize: MainAxisSize.min,

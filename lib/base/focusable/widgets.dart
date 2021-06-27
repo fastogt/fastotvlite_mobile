@@ -43,7 +43,7 @@ class FocusCheckButton extends StatelessWidget {
         },
         child: CheckboxListTile(
             value: checkValue,
-            activeColor: Theme.of(context).accentColor,
+            activeColor: Theme.of(context).colorScheme.secondary,
             onChanged: onChanged,
             title: Text(title),
             controlAffinity: ListTileControlAffinity.trailing));

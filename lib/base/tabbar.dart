@@ -72,7 +72,7 @@ class _TabBarExState extends State<TabBarEx> {
     }
   }
 
-  Color get _indicatorColor => Theme.of(context).accentColor;
+  Color get _indicatorColor => Theme.of(context).colorScheme.secondary;
 
   String _title(String title) {
     if (title == TR_ALL ||

@@ -70,7 +70,7 @@ class ChannelsListTVState extends State<ChannelsListTV> {
   void _onFocusChange() {
     setState(() {
       if (widget.focus.hasFocus) {
-        _color = Theme.of(context).accentColor;
+        _color = Theme.of(context).colorScheme.secondary;
       } else {
         _color = Theme.of(context).disabledColor;
       }

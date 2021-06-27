@@ -93,7 +93,7 @@ class LiveSelectTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CheckboxListTile(
-        activeColor: Theme.of(context).accentColor,
+        activeColor: Theme.of(context).colorScheme.secondary,
         checkColor: Theming.of(context).onAccent(),
         secondary: PreviewIcon.live(channel.icon(), height: 40, width: 40),
         title: Text(AppLocalizations.toUtf8(channel.displayName())),
@@ -120,7 +120,7 @@ class VodSelectCard extends StatelessWidget {
           onPressed: () {}),
       VodFavoriteButton(
           child: Checkbox(
-              activeColor: Theme.of(context).accentColor,
+              activeColor: Theme.of(context).colorScheme.secondary,
               checkColor: Theming.of(context).onAccent(),
               value: value,
               onChanged: (value) => onCheckBox()))

@@ -72,7 +72,7 @@ abstract class BaseFilePickerDialogState extends State<BaseFilePickerDialog> {
   }
 
   Widget _loadingWidget() {
-    final color = Theme.of(context).accentColor;
+    final color = Theme.of(context).colorScheme.secondary;
     return SizedBox(
         height: 64,
         width: 64,
@@ -81,11 +81,10 @@ abstract class BaseFilePickerDialogState extends State<BaseFilePickerDialog> {
   }
 
   Widget _button(String text, void Function() onPressed) {
-    final activeColor = hasTouch ? Theme.of(context).accentColor : null;
+    final activeColor = hasTouch ? Theme.of(context).colorScheme.secondary : null;
     final disabledColor = Theming.of(context).onBrightness().withOpacity(0.5);
-    return FlatButton(
-        color: activeColor,
-        disabledColor: disabledColor,
+    return ElevatedButton(
+        style: ElevatedButton.styleFrom(primary: activeColor),
         child: Text(text,
             style: hasTouch
                 ? TextStyle(

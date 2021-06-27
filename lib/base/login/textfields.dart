@@ -149,7 +149,7 @@ class _LoginTextFieldState extends State<LoginTextField> {
   OutlineInputBorder _border() {
     if (widget.mainFocus?.hasPrimaryFocus ?? false) {
       return OutlineInputBorder(
-          borderSide: BorderSide(color: Theme.of(context).accentColor, width: 4));
+          borderSide: BorderSide(color: Theme.of(context).colorScheme.secondary, width: 4));
     }
     return OutlineInputBorder(borderSide: BorderSide(color: Theming.of(context).onBrightness()));
   }

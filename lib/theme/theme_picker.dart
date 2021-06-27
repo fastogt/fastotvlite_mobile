@@ -35,7 +35,7 @@ class _ThemePickerState extends State<ThemePicker> {
 
   Widget _dialogItem(String themeId) {
     return RadioListTile<String>(
-        activeColor: Theme.of(context).accentColor,
+        activeColor: Theme.of(context).colorScheme.secondary,
         value: themeId,
         groupValue: themeGroupValue,
         title: Text(translate(context, _themeName(themeId))),
