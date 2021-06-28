@@ -55,7 +55,7 @@ abstract class PlayerPageTVState<T extends StatefulWidget> extends State<T> {
     }
   }
 
-  bool onPlayer(RawKeyEvent event, BuildContext ctx);
+  KeyEventResult onPlayer(RawKeyEvent event, BuildContext ctx);
 
   void onEnter(BuildContext context) {
     if (controller.isPlaying()) {

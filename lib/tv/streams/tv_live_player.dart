@@ -29,7 +29,7 @@ class _TvLivePlayerPageState extends PlayerPageTVState<TvLivePlayerPage> {
   }
 
   @override
-  bool onPlayer(RawKeyEvent event, BuildContext ctx) {
+  KeyEventResult onPlayer(RawKeyEvent event, BuildContext ctx) {
     return onKey(event, (keyCode) {
       switch (keyCode) {
         case ENTER:
@@ -41,18 +41,18 @@ class _TvLivePlayerPageState extends PlayerPageTVState<TvLivePlayerPage> {
             _controller.play();
           }
           toggleSnackBar(ctx);
-          return true;
+          return KeyEventResult.handled;
 
         case BACK:
         case BACKSPACE:
           _controller.sendRecent(widget.channel);
           Navigator.of(context).pop();
-          return true;
+          return KeyEventResult.handled;
         case MENU:
           toggleSnackBar(ctx);
-          return true;
+          return KeyEventResult.handled;
       }
-      return false;
+      return KeyEventResult.ignored;
     });
   }
 }

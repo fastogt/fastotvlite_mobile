@@ -32,7 +32,7 @@ class _FilePickerDialogTVState extends BaseFilePickerDialogState {
         onFieldSubmit: (_) => _onEnter(_textFieldNode.text));
   }
 
-  bool _nodeAction(FocusNode node, RawKeyEvent event) {
+  KeyEventResult _nodeAction(FocusNode node, RawKeyEvent event) {
     if (event is RawKeyDownEvent && event.data is RawKeyEventDataAndroid) {
       final RawKeyDownEvent rawKeyDownEvent = event;
       final RawKeyEventDataAndroid rawKeyEventDataAndroid = rawKeyDownEvent.data;
@@ -40,25 +40,27 @@ class _FilePickerDialogTVState extends BaseFilePickerDialogState {
         case ENTER:
         case KEY_CENTER:
           _onEnter(node);
-          break;
+          setState(() {});
+          return KeyEventResult.handled;
         case KEY_LEFT:
           FocusScope.of(context).focusInDirection(TraversalDirection.left);
-          break;
+          setState(() {});
+          return KeyEventResult.handled;
         case KEY_RIGHT:
           FocusScope.of(context).focusInDirection(TraversalDirection.right);
-          break;
+          setState(() {});
+          return KeyEventResult.handled;
         case KEY_UP:
           FocusScope.of(context).focusInDirection(TraversalDirection.up);
-          break;
+          setState(() {});
+          return KeyEventResult.handled;
         case KEY_DOWN:
           FocusScope.of(context).focusInDirection(TraversalDirection.down);
-          break;
-        default:
-          break;
+          setState(() {});
+          return KeyEventResult.handled;
       }
-      setState(() {});
     }
-    return node.hasFocus;
+    return KeyEventResult.ignored;
   }
 
   void _onEnter(FocusNode node) {

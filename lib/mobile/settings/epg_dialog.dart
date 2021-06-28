@@ -113,7 +113,7 @@ class _EpgDialogState extends State<EpgDialog> {
 
   Widget listTile(String title, int value) {
     return RadioListTile(
-        activeColor: Theme.of(context).accentColor,
+        activeColor: Theme.of(context).colorScheme.secondary,
         value: value,
         groupValue: groupValue,
         onChanged: (int value) {
@@ -148,8 +148,8 @@ class _EpgDialogState extends State<EpgDialog> {
                   onChanged: (String text) => _validate(),
                   onFieldSubmitted: (String text) => _validate(),
                   decoration: InputDecoration(
-                      fillColor: Theme.of(context).accentColor,
-                      focusColor: Theme.of(context).accentColor,
+                      fillColor: Theme.of(context).colorScheme.secondary,
+                      focusColor: Theme.of(context).colorScheme.secondary,
                       labelText: _translate(TR_EPG_URL),
                       errorText: _errorText())))
         ]));
@@ -164,13 +164,13 @@ class _EpgDialogState extends State<EpgDialog> {
         actions: <Widget>[
           Opacity(
               opacity: BUTTON_OPACITY,
-              child: FlatButton(
-                  textColor: Theming.of(context).onBrightness(),
-                  child: Text(_translate(TR_CANCEL), style: const TextStyle(fontSize: 14)),
-                  onPressed: () => Navigator.of(context).pop())),
-          FlatButton(
-              textColor: Theme.of(context).accentColor,
-              child: Text(_translate(TR_SUBMIT), style: const TextStyle(fontSize: 14)),
+              child: TextButton(
+                  child: Text(_translate(TR_CANCEL),
+                      style: TextStyle(fontSize: 14, color: Theming.of(context).onBrightness())),
+                  onPressed: Navigator.of(context).pop)),
+          TextButton(
+              child: Text(_translate(TR_SUBMIT),
+                  style: TextStyle(fontSize: 14, color: Theme.of(context).colorScheme.secondary)),
               onPressed: () {
                 _validate();
                 if (validator) {

@@ -49,7 +49,7 @@ class _ThemingState extends State<Theming> {
   void initState() {
     super.initState();
     if (widget.initTheme != null) {
-      _accentColor = widget.initTheme.accentColor;
+      _accentColor = widget.initTheme.colorScheme.secondary;
       if (widget.initTheme.brightness == Brightness.light) {
         customLightTheme = widget.initTheme;
       } else {
@@ -85,7 +85,7 @@ class _ThemingState extends State<Theming> {
   }
 
   Color onAccent({Color dark, Color light}) {
-    if (ThemeData.estimateBrightnessForColor(theme.accentColor) == Brightness.dark) {
+    if (ThemeData.estimateBrightnessForColor(theme.colorScheme.secondary) == Brightness.dark) {
       return dark ?? Colors.white;
     } else {
       return light ?? Colors.black;

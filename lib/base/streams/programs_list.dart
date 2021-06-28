@@ -102,7 +102,7 @@ class _ProgramsListState extends State<_ProgramsList> {
           final curUtc = DateTime.now().millisecondsSinceEpoch;
           final elevation = index == _current ? 1.0 : 0.0;
           final currentColor = curUtc >= program.start && curUtc < program.stop
-              ? Theme.of(context).accentColor
+              ? Theme.of(context).colorScheme.secondary
               : Colors.transparent;
           return Opacity(
               opacity: curUtc < program.stop ? 1.0 : 0.4,

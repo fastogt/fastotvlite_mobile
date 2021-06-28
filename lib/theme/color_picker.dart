@@ -52,7 +52,7 @@ class _ColorPickerState extends State<ColorPicker> {
     return ListTile(
         leading: Icon(Icons.colorize, color: Theming.of(context).onBrightness()),
         title: Text(translate(context, TR_ACCENT_COLOR)),
-        subtitle: Text(Theme.of(context).accentColor.toString()),
+        subtitle: Text(Theme.of(context).colorScheme.secondary.toString()),
         onTap: () {
           final id = Theming.of(context).themeId;
           if (id == CUSTOM_LIGHT_THEME_ID || id == CUSTOM_DARK_THEME_ID) {
@@ -64,7 +64,7 @@ class _ColorPickerState extends State<ColorPicker> {
             });
           }
         },
-        trailing: _colorCircle(Theme.of(context).accentColor));
+        trailing: _colorCircle(Theme.of(context).colorScheme.secondary));
   }
 
   Widget _colorCircle(Color color) {
@@ -82,8 +82,9 @@ class _ColorPickerState extends State<ColorPicker> {
         context: context,
         builder: (_) => ColorPickerDialog(
             title: translate(context, widget.color == 0 ? TR_PRIMARY_COLOR : TR_ACCENT_COLOR),
-            initColor:
-                widget.color == 0 ? Theme.of(context).primaryColor : Theme.of(context).accentColor,
+            initColor: widget.color == 0
+                ? Theme.of(context).primaryColor
+                : Theme.of(context).colorScheme.secondary,
             cancel: translate(context, TR_CANCEL),
             submit: translate(context, TR_SUBMIT)));
   }

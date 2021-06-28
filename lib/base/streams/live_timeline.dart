@@ -52,7 +52,9 @@ class LiveTimeLineState<T extends LiveTimeLine> extends State<T> {
     final height = widget.height ?? 5;
     return Stack(children: <Widget>[
       Container(
-          color: widget.color ?? Theme.of(context).accentColor, height: height, width: _width),
+          color: widget.color ?? Theme.of(context).colorScheme.secondary,
+          height: height,
+          width: _width),
       Container(
           color: Theming.of(context).onBrightness().withOpacity(0.1),
           height: height,

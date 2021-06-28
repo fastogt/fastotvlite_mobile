@@ -35,7 +35,7 @@ class _FocusBorderState extends State<FocusBorder> {
   void _onFocusChange() {
     setState(() {
       if (widget.focus.hasPrimaryFocus) {
-        _color = Theme.of(context).accentColor;
+        _color = Theme.of(context).colorScheme.secondary;
       } else {
         _color = Colors.transparent;
       }

@@ -29,30 +29,30 @@ class _AgePickerTVState extends State<AgePickerTV> {
     ageRating = settings.ageRating();
   }
 
-  bool _listControl(FocusNode node, RawKeyEvent event) {
+  KeyEventResult _listControl(FocusNode node, RawKeyEvent event) {
     final settings = locator<LocalStorageService>();
     return onKey(event, (keyCode) {
       switch (keyCode) {
         case KEY_UP:
           FocusScope.of(context).focusInDirection(TraversalDirection.up);
           setState(() {});
-          return true;
+          return KeyEventResult.handled;
         case KEY_LEFT:
           if (ageRating > 0) {
             ageRating--;
             settings.setAgeRating(ageRating);
           }
           setState(() {});
-          return true;
+          return KeyEventResult.handled;
         case KEY_RIGHT:
           if (ageRating < MAX_IARC_AGE) {
             ageRating++;
             settings.setAgeRating(ageRating);
           }
           setState(() {});
-          return true;
+          return KeyEventResult.handled;
       }
-      return false;
+      return KeyEventResult.ignored;
     });
   }
 
@@ -78,9 +78,7 @@ class _AgePickerTVState extends State<AgePickerTV> {
 
   @override
   Widget build(BuildContext context) {
-    final color = _pickerNode.hasPrimaryFocus ? Theme
-        .of(context)
-        .accentColor : null;
+    final color = _pickerNode.hasPrimaryFocus ? Theme.of(context).colorScheme.secondary : null;
     return Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
       ageWidget(),
       Focus(
@@ -103,7 +101,7 @@ class AgePickerPassword extends StatefulWidget {
 
 class _AgePickerPasswordState extends State<AgePickerPassword> {
   final TextFieldNode passwordNode =
-  TextFieldNode(main: FocusNode(), text: FocusNode(skipTraversal: true));
+      TextFieldNode(main: FocusNode(), text: FocusNode(skipTraversal: true));
   final passwordController = TextEditingController();
   String password;
 
@@ -165,16 +163,12 @@ class _AgePickerPasswordState extends State<AgePickerPassword> {
     final categoriesWidth = query.size.width / 4;
     final sideFieldsWidth = (query.size.width - categoriesWidth) / 2;
     return Scaffold(
-        backgroundColor: Theme
-            .of(context)
-            .primaryColor,
+        backgroundColor: Theme.of(context).primaryColor,
         appBar: AppBar(
             leading: backButton(),
             elevation: 0,
             title: Text(_translate(TR_PARENTAL_CONTROL),
-                style: TextStyle(color: Theming.onCustomColor(Theme
-                    .of(context)
-                    .primaryColor))),
+                style: TextStyle(color: Theming.onCustomColor(Theme.of(context).primaryColor))),
             centerTitle: true),
         body: Center(
             child: SizedBox(
@@ -191,7 +185,7 @@ class _AgePickerPasswordState extends State<AgePickerPassword> {
                 ]))));
   }
 
-  bool onBack(FocusNode node, RawKeyEvent event) {
+  KeyEventResult onBack(FocusNode node, RawKeyEvent event) {
     return onKeyArrows(context, event, onEnter: () {
       Navigator.of(context).pop(false);
     }, onBack: () {

@@ -86,7 +86,7 @@ class _HomeMobileState extends VideoAppState {
     final _theme = Theme.of(context);
     return UnicornDialer(
         backgroundColor: _theme.primaryColor.withOpacity(0.4),
-        parentButtonBackground: _theme.accentColor,
+        parentButtonBackground: _theme.colorScheme.secondary,
         orientation: UnicornOrientation.VERTICAL,
         parentButton: const Icon(Icons.add),
         childButtons: [
@@ -104,7 +104,7 @@ class _HomeMobileState extends VideoAppState {
         hasLabel: true,
         currentButton: FloatingActionButton(
             heroTag: tag,
-            backgroundColor: Theme.of(context).accentColor,
+            backgroundColor: Theme.of(context).colorScheme.secondary,
             mini: true,
             onPressed: () => _onAdd(source),
             child: Icon(icon)));

@@ -12,7 +12,7 @@ class ChannelsListTV extends StatefulWidget {
   final CustomScrollController scrollController;
   final FocusNode focus;
   final void Function() setEpg;
-  final bool Function(FocusNode node, RawKeyEvent event, int index) onChannels;
+  final KeyEventResult Function(FocusNode node, RawKeyEvent event, int index) onChannels;
 
   const ChannelsListTV(
       {this.bloc, this.size, this.onChannels, this.focus, this.scrollController, this.setEpg});
@@ -61,26 +61,18 @@ class ChannelsListTVState extends State<ChannelsListTV> {
             width: _size.width,
             height: _size.height,
             child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
-              Icon(Icons.keyboard_arrow_left, color: _color ?? Theme
-                  .of(context)
-                  .disabledColor),
+              Icon(Icons.keyboard_arrow_left, color: _color ?? Theme.of(context).disabledColor),
               Text(_title(_currentCategory)),
-              Icon(Icons.keyboard_arrow_right, color: _color ?? Theme
-                  .of(context)
-                  .disabledColor)
+              Icon(Icons.keyboard_arrow_right, color: _color ?? Theme.of(context).disabledColor)
             ])));
   }
 
   void _onFocusChange() {
     setState(() {
       if (widget.focus.hasFocus) {
-        _color = Theme
-            .of(context)
-            .accentColor;
+        _color = Theme.of(context).colorScheme.secondary;
       } else {
-        _color = Theme
-            .of(context)
-            .disabledColor;
+        _color = Theme.of(context).disabledColor;
       }
     });
   }
@@ -92,21 +84,21 @@ class ChannelsListTVState extends State<ChannelsListTV> {
     return AppLocalizations.toUtf8(title);
   }
 
-  bool _onCategory(FocusNode node, RawKeyEvent event) {
+  KeyEventResult _onCategory(FocusNode node, RawKeyEvent event) {
     return onKey(event, (keyCode) {
       switch (keyCode) {
         case BACK:
         case BACKSPACE:
         case KEY_UP:
           FocusScope.of(context).focusInDirection(TraversalDirection.up);
-          return true;
+          return KeyEventResult.handled;
 
         case ENTER:
         case KEY_CENTER:
         case KEY_DOWN:
           widget.setEpg();
           FocusScope.of(context).focusInDirection(TraversalDirection.down);
-          return true;
+          return KeyEventResult.handled;
 
         case KEY_RIGHT:
           int _cur = _categories.indexOf(_currentCategory);
@@ -123,7 +115,7 @@ class ChannelsListTVState extends State<ChannelsListTV> {
             widget.scrollController.moveToTop();
           }
           setState(() {});
-          return true;
+          return KeyEventResult.handled;
 
         case KEY_LEFT:
           int _cur = _categories.indexOf(_currentCategory);
@@ -140,9 +132,9 @@ class ChannelsListTVState extends State<ChannelsListTV> {
             widget.scrollController.moveToTop();
           }
           setState(() {});
-          return true;
+          return KeyEventResult.handled;
       }
-      return false;
+      return KeyEventResult.ignored;
     });
   }
 
@@ -168,13 +160,14 @@ class _ChannelsList extends StatelessWidget {
   final ScrollController scrollController;
   final Size size;
   final double itemHeight;
-  final bool Function(FocusNode node, RawKeyEvent event, int index) onKey;
+  final KeyEventResult Function(FocusNode node, RawKeyEvent event, int index) onKey;
 
-  const _ChannelsList({@required this.channels,
-    this.scrollController,
-    @required this.onKey,
-    this.itemHeight,
-    @required this.size});
+  const _ChannelsList(
+      {@required this.channels,
+      this.scrollController,
+      @required this.onKey,
+      this.itemHeight,
+      @required this.size});
 
   @override
   Widget build(BuildContext context) {
@@ -199,7 +192,7 @@ class _ChannelsList extends StatelessWidget {
 class _ChannelTile extends StatefulWidget {
   final LiveStream channel;
   final double itemHeight;
-  final bool Function(FocusNode node, RawKeyEvent event) onKey;
+  final KeyEventResult Function(FocusNode node, RawKeyEvent event) onKey;
 
   const _ChannelTile({@required this.channel, @required this.onKey, this.itemHeight});
 
@@ -256,9 +249,7 @@ class _ChannelTileState extends State<_ChannelTile> {
       return Colors.transparent;
     }
 
-    return Theme
-        .of(context)
-        .focusColor;
+    return Theme.of(context).focusColor;
   }
 
   void _onFocusChange() {

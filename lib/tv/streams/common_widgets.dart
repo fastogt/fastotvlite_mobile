@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 class TvPlayerWrap extends StatefulWidget {
   final Widget child;
   final bool fullscreen;
-  final bool Function(FocusNode node, RawKeyEvent event) onKey;
+  final KeyEventResult Function(FocusNode node, RawKeyEvent event) onKey;
 
   const TvPlayerWrap(this.child, this.fullscreen, this.onKey);
 
@@ -47,7 +47,7 @@ class _TvPlayerWrapState extends State<TvPlayerWrap> {
       return Container(
           height: constraints.maxWidth / 16 * 9,
           decoration:
-          BoxDecoration(color: Colors.black, border: Border.all(color: _color, width: 2)),
+              BoxDecoration(color: Colors.black, border: Border.all(color: _color, width: 2)),
           child: Focus(
               onKey: widget.onKey,
               focusNode: _node,
@@ -65,9 +65,7 @@ class _TvPlayerWrapState extends State<TvPlayerWrap> {
       if (widget.fullscreen || !_node.hasFocus) {
         _color = Colors.transparent;
       } else {
-        _color = Theme
-            .of(context)
-            .accentColor;
+        _color = Theme.of(context).colorScheme.secondary;
       }
     });
   }

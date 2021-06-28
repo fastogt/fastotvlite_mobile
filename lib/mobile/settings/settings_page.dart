@@ -106,7 +106,7 @@ class _LastViewedState extends State<_LastViewed> {
         subtitle: Text(_translate(TR_LAST_VIEWED_SUB)),
         onTap: () => setLastViewed(!_saveLastViewed),
         trailing: Switch.adaptive(
-            activeColor: Theme.of(context).accentColor,
+            activeColor: Theme.of(context).colorScheme.secondary,
             value: _saveLastViewed,
             onChanged: (bool value) => setLastViewed(value)));
   }
