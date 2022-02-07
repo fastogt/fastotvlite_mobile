@@ -24,11 +24,11 @@ class TvChannelNotification extends Notification {
   final NotificationTypeTV title;
   final bool visibility;
 
-  const TvChannelNotification({this.title, this.visibility});
+  const TvChannelNotification({required this.title, required this.visibility});
 }
 
 class PlayerNotification extends Notification {
   final NotificationTypeTV title;
 
-  const PlayerNotification({this.title});
+  const PlayerNotification({required this.title});
 }

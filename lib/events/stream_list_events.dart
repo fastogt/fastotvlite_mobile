@@ -1,9 +1,9 @@
 import 'package:event_bus/event_bus.dart';
 
-class StreamListEvent {
-  static Future<StreamListEvent> getInstance() async {
-    _instance ??= StreamListEvent();
-    return _instance;
+class ClientEvents {
+  static Future<ClientEvents> getInstance() async {
+    _instance ??= ClientEvents();
+    return _instance!;
   }
 
   void publish(dynamic event) {
@@ -15,6 +15,6 @@ class StreamListEvent {
   }
 
   // private:
-  static StreamListEvent _instance;
+  static ClientEvents? _instance;
   final _bus = EventBus(sync: true);
 }

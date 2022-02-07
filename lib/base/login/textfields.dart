@@ -1,5 +1,6 @@
-import 'package:fastotvlite/theme/theme.dart';
+import 'package:fastotv/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_common/utils.dart';
 
 const double TEXTFIELD_PADDING = 4;
@@ -15,24 +16,24 @@ class TextFieldNode {
   final FocusNode main;
   final FocusNode text;
 
-  TextFieldNode({this.main, this.text});
+  TextFieldNode({required this.main, required this.text});
 }
 
 class LoginTextField extends StatefulWidget {
-  final void Function(String term) onFieldChanged;
-  final void Function(String term) onFieldSubmit;
-  final String init;
+  final void Function(String term)? onFieldChanged;
+  final void Function(String term)? onFieldSubmit;
+  final String? init;
   final String hintText;
-  final String Function(String term) validator;
-  final TextEditingController controller;
-  final TextInputType keyboardType;
-  final bool obscureText;
-  final String errorText;
+  final String? Function(String? term)? validator;
+  final TextEditingController? controller;
+  final TextInputType? keyboardType;
+  final bool? obscureText;
+  final String? errorText;
 
-  final FocusNode mainFocus;
-  final FocusNode textFocus;
-  final FocusOnKeyCallback onKey;
-  final bool autoFocus;
+  final FocusNode? mainFocus;
+  final FocusNode? textFocus;
+  final FocusOnKeyCallback? onKey;
+  final bool? autoFocus;
 
   const LoginTextField(
       {this.onKey,
@@ -40,8 +41,8 @@ class LoginTextField extends StatefulWidget {
       this.onFieldSubmit,
       this.onFieldChanged,
       this.mainFocus,
-      this.textFocus,
-      this.hintText,
+      required this.textFocus,
+      required this.hintText,
       this.validator,
       this.controller,
       this.keyboardType,
@@ -56,7 +57,7 @@ class LoginTextField extends StatefulWidget {
 class _LoginTextFieldState extends State<LoginTextField> {
   bool _validator = true;
 
-  TextEditingController _controller;
+  TextEditingController? _controller;
 
   FocusNode _text = FocusNode(skipTraversal: true);
 
@@ -101,7 +102,6 @@ class _LoginTextFieldState extends State<LoginTextField> {
           widget.onFieldSubmit?.call(term);
           if (widget.mainFocus != null) {
             FocusScope.of(context).requestFocus(widget.mainFocus);
-            _text = null;
             _text = FocusNode(skipTraversal: true);
           }
         },
@@ -127,15 +127,15 @@ class _LoginTextFieldState extends State<LoginTextField> {
     widget.onFieldChanged?.call(term);
   }
 
-  String _validate(String term) {
+  String? _validate(String? term) {
     if (widget.validator != null) {
-      final _message = widget.validator(term);
+      final _message = widget.validator!(term);
       if (_message != null) {
         return _message;
       }
     }
 
-    if (term.isEmpty) {
+    if (term == null || term.isEmpty) {
       if (widget.errorText?.isNotEmpty ?? false) {
         return widget.errorText;
       } else {
@@ -173,11 +173,10 @@ class _LoginTextFieldState extends State<LoginTextField> {
 
 class TextControllerListener extends StatefulWidget {
   final List<TextEditingController> controllers;
-  final bool Function(String text) validator;
+  final bool Function(String text)? validator;
   final Widget Function(BuildContext context, bool valid) builder;
 
-  const TextControllerListener(
-      {@required this.controllers, @required this.builder, this.validator});
+  const TextControllerListener({required this.controllers, required this.builder, this.validator});
 
   @override
   _TextControllerListenerState createState() => _TextControllerListenerState();
@@ -211,7 +210,7 @@ class _TextControllerListenerState extends State<TextControllerListener> {
   bool _validate() {
     for (final TextEditingController controller in widget.controllers) {
       if (widget.validator != null) {
-        if (!widget.validator(controller.text)) {
+        if (!widget.validator!(controller.text)) {
           return false;
         }
       } else if (controller.text.isEmpty) {

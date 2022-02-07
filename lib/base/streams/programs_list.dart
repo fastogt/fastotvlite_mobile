@@ -1,7 +1,6 @@
 import 'package:fastotv_dart/commands_info/programme_info.dart';
 import 'package:fastotvlite/base/streams/no_programs.dart';
 import 'package:fastotvlite/base/streams/program_bloc.dart';
-import 'package:fastotvlite/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_common/flutter_common.dart';
 
@@ -19,7 +18,8 @@ class ProgramsListView extends StatefulWidget {
   final double itemHeight;
   final Color textColor;
 
-  const ProgramsListView({this.programsBloc, this.itemHeight, this.textColor});
+  const ProgramsListView(
+      {required this.programsBloc, required this.itemHeight, required this.textColor});
 
   @override
   _ProgramsListViewState createState() => _ProgramsListViewState();
@@ -39,14 +39,13 @@ class _ProgramsListViewState extends State<ProgramsListView> {
                 return NoPrograms(widget.textColor);
               }
               final _index = widget.programsBloc.currentProgramIndex;
-              if (_index == null) {
-                return NoPrograms(widget.textColor);
-              }
+              final stabled = snapshot.data as List<ProgrammeInfo>;
               return _ProgramsList(
-                  programs: snapshot.data,
+                  programs: stabled,
                   bloc: widget.programsBloc,
                   index: _index,
-                  itemHeight: widget.itemHeight);
+                  itemHeight: widget.itemHeight,
+                  textColor: widget.textColor);
             }));
   }
 }
@@ -54,10 +53,16 @@ class _ProgramsListViewState extends State<ProgramsListView> {
 class _ProgramsList extends StatefulWidget {
   final List<ProgrammeInfo> programs;
   final ProgramsBloc bloc;
-  final int index;
-  final double itemHeight;
+  final int? index;
+  final double? itemHeight;
+  final Color textColor;
 
-  const _ProgramsList({this.programs, this.bloc, this.index, this.itemHeight});
+  const _ProgramsList(
+      {required this.programs,
+      required this.bloc,
+      this.index,
+      this.itemHeight,
+      required this.textColor});
 
   @override
   _ProgramsListState createState() => _ProgramsListState();
@@ -66,29 +71,26 @@ class _ProgramsList extends StatefulWidget {
 class _ProgramsListState extends State<_ProgramsList> {
   static const ITEM_HEIGHT = 64.0;
 
-  CustomScrollController _scrollController;
-  ProgrammeInfo programmeInfo;
-  int _current;
-  double _itemHeight;
-  bool _hasTouch = true;
+  late CustomScrollController _scrollController;
+  ProgrammeInfo? programmeInfo;
+  int? _current;
+  late double _itemHeight;
 
   @override
   void initState() {
     super.initState();
-    final device = locator<RuntimeDevice>();
-    _hasTouch = device.hasTouch;
     _itemHeight = widget.itemHeight ?? ITEM_HEIGHT;
     _current = widget.index;
-    programmeInfo = widget.programs[_current];
+    programmeInfo = widget.programs[_current!];
     _scrollController =
-        CustomScrollController(itemHeight: _itemHeight, initOffset: _itemHeight * _current);
+        CustomScrollController(itemHeight: _itemHeight, initOffset: _itemHeight * _current!);
     _initCurrentProgramSubscription();
   }
 
   @override
   void dispose() {
     super.dispose();
-    _scrollController?.dispose();
+    _scrollController.dispose();
   }
 
   @override
@@ -112,28 +114,18 @@ class _ProgramsListState extends State<_ProgramsList> {
                   child: Container(
                       height: _itemHeight,
                       decoration: BoxDecoration(border: Border.all(color: currentColor, width: 2)),
-                      child: _ProgramListTile(program: program, textColor: _textColor()))));
+                      child: _ProgramListTile(program: program, textColor: widget.textColor))));
         });
-  }
-
-  Color _textColor() {
-    if ((_hasTouch && isPortrait(context)) || !_hasTouch) {
-      return null;
-    } else {
-      return Colors.white;
-    }
   }
 
   void _initCurrentProgramSubscription() {
     widget.bloc.currentProgram.listen((program) {
       programmeInfo = program;
-      if (program != null) {
-        _current = widget.bloc.currentProgramIndex;
-        if (_scrollController.controller.hasClients) {
-          _scrollController.jumpToPosition(_current);
-          if (mounted) {
-            setState(() {});
-          }
+      _current = widget.bloc.currentProgramIndex;
+      if (_scrollController.controller!.hasClients && _current != null) {
+        _scrollController.jumpToPosition(_current!);
+        if (mounted) {
+          setState(() {});
         }
       }
     });
@@ -142,9 +134,9 @@ class _ProgramsListState extends State<_ProgramsList> {
 
 class _ProgramListTile extends StatefulWidget {
   final ProgrammeInfo program;
-  final Color textColor;
+  final Color? textColor;
 
-  const _ProgramListTile({this.program, this.textColor});
+  const _ProgramListTile({required this.program, this.textColor});
 
   @override
   _ProgramListTileState createState() => _ProgramListTileState();

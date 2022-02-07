@@ -9,12 +9,16 @@ import 'package:flutter_fastotv_common/base/vods/vod_description.dart';
 class SideInfo extends StatelessWidget {
   final int duration;
   final int primeDate;
-  final String country;
-  final double fontSize;
-  final ScrollController scrollController;
+  final String? country;
+  final double? fontSize;
+  final ScrollController? scrollController;
 
   const SideInfo(
-      {this.country, this.duration, this.primeDate, this.fontSize, this.scrollController});
+      {this.country,
+      required this.duration,
+      required this.primeDate,
+      this.fontSize,
+      this.scrollController});
 
   @override
   Widget build(BuildContext context) {
@@ -36,14 +40,14 @@ class SideInfo extends StatelessWidget {
     return TimeParser.hm(msec - now.timeZoneOffset.inMilliseconds);
   }
 
-  Widget _sideDescription(String title, {String data}) {
-    return SideInfoItem(title: AppLocalizations.toUtf8(title ?? ''), data: data);
+  Widget _sideDescription(String title, {String? data}) {
+    return SideInfoItem(title: AppLocalizations.toUtf8(title), data: data ?? '');
   }
 }
 
 class VodTrailerButton extends StatelessWidget {
   final VodStream channel;
-  final FocusNode focus;
+  final FocusNode? focus;
 
   const VodTrailerButton(this.channel, {this.focus});
 
@@ -93,10 +97,10 @@ class VodPlayButton extends StatelessWidget {
 
   void _onTapped(BuildContext context, VodStream channel) async {
     if (onTap != null) {
-      onTap();
+      onTap?.call();
     } else {
       Navigator.push(context, MaterialPageRoute(builder: (context) {
-        return VodPlayer(channel);
+        return VodPlayer(client, channel);
       }));
     }
   }
@@ -104,15 +108,15 @@ class VodPlayButton extends StatelessWidget {
 
 class DescriptionText extends StatelessWidget {
   final String text;
-  final ScrollController scrollController;
-  final double textSize;
-  final Color textColor;
+  final ScrollController? scrollController;
+  final double? textSize;
+  final Color? textColor;
 
   const DescriptionText(this.text, {this.scrollController, this.textColor, this.textSize});
 
   @override
   Widget build(BuildContext context) {
-    return text?.isEmpty ?? false
+    return text.isEmpty
         ? Center(
             child: NonAvailableBuffer(
             message: translate(context, TR_NO_DESCRIPTION),

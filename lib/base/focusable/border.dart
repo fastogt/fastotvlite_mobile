@@ -4,7 +4,7 @@ class FocusBorder extends StatefulWidget {
   final FocusNode focus;
   final Widget child;
 
-  const FocusBorder({@required this.focus, @required this.child});
+  const FocusBorder({required this.focus, required this.child});
 
   @override
   _FocusBorderState createState() => _FocusBorderState();
@@ -28,13 +28,13 @@ class _FocusBorderState extends State<FocusBorder> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        decoration: BoxDecoration(border: Border.all(color: _color, width: 2)),
+        decoration: BoxDecoration(border: Border.all(color: _color, width: 6)),
         child: widget.child);
   }
 
   void _onFocusChange() {
     setState(() {
-      if (widget.focus.hasPrimaryFocus) {
+      if (widget.focus.hasFocus) {
         _color = Theme.of(context).colorScheme.secondary;
       } else {
         _color = Colors.transparent;

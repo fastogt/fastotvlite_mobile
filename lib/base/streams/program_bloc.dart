@@ -1,80 +1,100 @@
 import 'dart:async';
 
 import 'package:fastotv_dart/commands_info/programme_info.dart';
-import 'package:fastotv_dart/epg_parser.dart';
 import 'package:fastotvlite/channels/live_stream.dart';
+import 'package:fastotvlite/epg_manager.dart';
+import 'package:fastotvlite/service_locator.dart';
+import 'package:flutter_common/managers.dart';
 import 'package:rxdart/rxdart.dart';
 
 class ProgramsBloc {
   final LiveStream channel;
-  final _currentProgramStream = BehaviorSubject<ProgrammeInfo>();
-  final _programsListStream = BehaviorSubject<List<ProgrammeInfo>>();
-  int _current = -1;
-  Stream<List<ProgrammeInfo>> _programsStream;
-  Timer _timer;
+  final _currentProgramStream = BehaviorSubject<ProgrammeInfo?>();
+  final _programsListStream = BehaviorSubject<List<ProgrammeInfo>?>();
+  int? _current;
+  Stream<List<ProgrammeInfo>>? _programsStream;
+  Timer? _timer;
   bool isClosed = false;
 
   ProgramsBloc(this.channel) {
-    if (channel.programs().isNotEmpty) {
-      _setPrograms(channel.programs());
-    } else {
-      _programsStream = _getProgram(channel).asStream();
-      _programsStream.listen(_setPrograms);
+    List<ProgrammeInfo>? programs = channel.programs();
+    if (programs.isEmpty) {
+      final epg = locator<EpgManager>();
+      programs = epg.getEpg(channel.epgId());
     }
-    isClosed = false;
+
+    // need to request
+    if (programs == null) {
+      final epg = locator<EpgManager>();
+      final request = epg.requestEpg(channel.epgId());
+      _programsStream = request.asStream();
+      _programsStream?.listen(_setPrograms);
+      return;
+    }
+
+    _setPrograms(programs);
   }
 
   // private:
-  Future<List<ProgrammeInfo>> _getProgram(LiveStream channel) async {
-    if (channel.programs().isEmpty) {
-      await channel.requestProgrammes();
+  void _setPrograms(List<ProgrammeInfo> data) {
+    channel.setPrograms(data);
+    if (isClosed) {
+      return;
     }
-    final programs = channel.programs();
-    if (programs.isNotEmpty) {
-      return programs;
+
+    if (data.isNotEmpty) {
+      _addProgramList.add(data);
+      _updatePrograms();
+    } else {
+      _addProgramList.add(null);
+      _addProgram.add(null);
     }
-    return null;
   }
 
-  void _setPrograms(data) {
-    if (!isClosed) {
-      _addProgramList.add(data);
-      if (data != null) {
-        _updatePrograms(data);
-      } else {
-        _addProgram.add(null);
+  void _updatePrograms() async {
+    if (isClosed) {
+      return;
+    }
+
+    final ProgrammeInfo? _currentProgram = await _findCurrent();
+    _addProgram.add(_currentProgram);
+    _setTimer(_currentProgram);
+  }
+
+  void _setTimer(ProgrammeInfo? programmeInfo) async {
+    if (programmeInfo == null) {
+      return;
+    }
+
+    final _timeManager = locator<TimeManager>();
+    final curUtc = await _timeManager.realTime();
+    final time = (programmeInfo.stop - programmeInfo.start) - (curUtc - programmeInfo.start);
+    _timer?.cancel();
+    _timer = Timer(Duration(milliseconds: time), () => _updatePrograms());
+  }
+
+  Future<ProgrammeInfo?> _findCurrent() async {
+    final _timeManager = locator<TimeManager>();
+    final int curUtc = await _timeManager.realTime();
+    final program = channel.findProgrammeByTime(curUtc);
+    _current = await _getCurrent(channel.programs());
+
+    if (program == null) {
+      return null;
+    }
+
+    return program;
+  }
+
+  Future<int?> _getCurrent(List<ProgrammeInfo> programs) async {
+    final _timeManager = locator<TimeManager>();
+    final int curUtc = await _timeManager.realTime();
+    for (int i = 0; i < programs.length; i++) {
+      if (curUtc >= programs[i].start && curUtc <= programs[i].stop) {
+        return i;
       }
     }
-  }
-
-  void _updatePrograms(data) {
-    if (!isClosed) {
-      final ProgrammeInfo _currentProgram = _findCurrent();
-      _addProgram.add(_currentProgram);
-      _setTimer(_currentProgram);
-    }
-  }
-
-  void _setTimer(ProgrammeInfo programmeInfo) {
-    if (programmeInfo != null) {
-      final curUtc = DateTime.now().millisecondsSinceEpoch;
-      final time = (programmeInfo.stop - programmeInfo.start) - (curUtc - programmeInfo.start);
-      _timer = Timer(Duration(milliseconds: time), () => _updatePrograms(null));
-    }
-  }
-
-  ProgrammeInfo _findCurrent() {
-    final curUtc = DateTime.now().millisecondsSinceEpoch;
-    final program = channel.findProgrammeByTime(curUtc);
-    final index = getCurrent(channel.programs());
-
-    if (program != null) {
-      _current = null;
-      return null;
-    } else {
-      _current = index;
-      return program;
-    }
+    return null;
   }
 
   Sink get _addProgram => _currentProgramStream.sink;
@@ -82,11 +102,11 @@ class ProgramsBloc {
   Sink get _addProgramList => _programsListStream.sink;
 
   // Public
-  Stream get currentProgram => _currentProgramStream.stream;
+  Stream<ProgrammeInfo?> get currentProgram => _currentProgramStream.stream;
 
-  int get currentProgramIndex => _current;
+  int? get currentProgramIndex => _current;
 
-  Stream get programsList => _programsListStream.stream;
+  Stream<List<ProgrammeInfo>?> get programsList => _programsListStream.stream;
 
   void dispose() {
     _currentProgramStream.close();

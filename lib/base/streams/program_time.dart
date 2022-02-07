@@ -9,11 +9,11 @@ import 'package:flutter_common/flutter_common.dart';
 class LiveTime extends StatefulWidget {
   final ProgrammeInfo programmeInfo;
   final bool isLive;
-  final Color color;
+  final Color? color;
 
-  const LiveTime.current({@required this.programmeInfo, this.color}) : isLive = true;
+  const LiveTime.current({required this.programmeInfo, this.color}) : isLive = true;
 
-  const LiveTime.end({@required this.programmeInfo, this.color}) : isLive = false;
+  const LiveTime.end({required this.programmeInfo, this.color}) : isLive = false;
 
   @override
   LiveTimeState createState() {
@@ -24,11 +24,11 @@ class LiveTime extends StatefulWidget {
 class LiveTimeState<T extends LiveTime> extends State<T> {
   static const REFRESH_TIMELINE_SEC = 1;
 
-  Timer _timer;
+  Timer? _timer;
   String _timeString = '';
 
-  int start;
-  int stop;
+  late int start;
+  late int stop;
 
   @override
   void initState() {
@@ -37,7 +37,7 @@ class LiveTimeState<T extends LiveTime> extends State<T> {
   }
 
   @override
-  void didUpdateWidget(LiveTime oldWidget) {
+  void didUpdateWidget(T oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.programmeInfo != widget.programmeInfo) {
       initTimeline(widget.programmeInfo);

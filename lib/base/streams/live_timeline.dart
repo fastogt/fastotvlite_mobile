@@ -4,15 +4,15 @@ import 'package:fastotv_dart/commands_info/programme_info.dart';
 import 'package:fastotvlite/service_locator.dart';
 import 'package:fastotvlite/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_common/flutter_common.dart';
+import 'package:flutter_common/managers.dart';
 
 class LiveTimeLine extends StatefulWidget {
   final ProgrammeInfo programmeInfo;
   final double width;
-  final double height;
-  final Color color;
+  final double? height;
+  final Color? color;
 
-  const LiveTimeLine({@required this.programmeInfo, @required this.width, this.height, this.color});
+  const LiveTimeLine({required this.programmeInfo, required this.width, this.height, this.color});
 
   @override
   LiveTimeLineState createState() => LiveTimeLineState();
@@ -21,11 +21,11 @@ class LiveTimeLine extends StatefulWidget {
 class LiveTimeLineState<T extends LiveTimeLine> extends State<T> {
   static const REFRESH_TIMELINE_SEC = 1;
 
-  Timer _timer;
+  Timer? _timer;
   double _width = 0;
 
-  int start;
-  int stop;
+  late int start;
+  late int stop;
 
   @override
   void initState() {
@@ -34,7 +34,7 @@ class LiveTimeLineState<T extends LiveTimeLine> extends State<T> {
   }
 
   @override
-  void didUpdateWidget(LiveTimeLine oldWidget) {
+  void didUpdateWidget(T oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.programmeInfo != widget.programmeInfo) {
       initTimeline(widget.programmeInfo);
@@ -64,9 +64,6 @@ class LiveTimeLineState<T extends LiveTimeLine> extends State<T> {
 
   @protected
   void initTimeline(ProgrammeInfo programmeInfo) {
-    if (programmeInfo == null) {
-      return;
-    }
     start = programmeInfo.start;
     stop = programmeInfo.stop;
     _update(programmeInfo);
