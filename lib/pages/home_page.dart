@@ -23,20 +23,20 @@ abstract class HomePage extends StatefulWidget {
 }
 
 abstract class VideoAppState extends State<HomePage> {
-  LiveStreamBloc liveStreamsBloc;
-  VodStreamBloc vodStreamsBloc;
+  LiveStreamBloc? liveStreamsBloc;
+  VodStreamBloc? vodStreamsBloc;
 
-  List<LiveStream> channels() {
+  List<LiveStream>? channels() {
     if (liveStreamsBloc?.map != null) {
-      return liveStreamsBloc.map[TR_ALL];
+      return liveStreamsBloc?.map[TR_ALL];
     }
 
     return null;
   }
 
-  List<VodStream> vods() {
+  List<VodStream>? vods() {
     if (vodStreamsBloc?.map != null) {
-      return vodStreamsBloc.map[TR_ALL];
+      return vodStreamsBloc?.map[TR_ALL];
     }
 
     return null;
@@ -54,18 +54,18 @@ abstract class VideoAppState extends State<HomePage> {
   bool canRequest;
 
   String translate(String key) {
-    return AppLocalizations.of(context).translate(key);
+    return AppLocalizations.of(context)!.translate(key)!;
   }
 
   @override
   void initState() {
     super.initState();
     _fillTypes();
-    final events = locator<StreamListEvent>();
+    final events = locator<ClientEvents>();
     events.subscribe<StreamsListEmptyEvent>().listen((_) => onTypeDelete());
   }
 
-  SearchDelegate get searchDelegate {
+  SearchDelegate? get searchDelegate {
     switch (selectedType) {
       case TR_LIVE_TV:
         return LiveStreamSearch(widget.channels, translate(TR_SEARCH_LIVE));
@@ -90,10 +90,10 @@ abstract class VideoAppState extends State<HomePage> {
     }
   }
 
-  String checkLastType(List<IStream> list, String type) {
+  String? checkLastType(List<IStream> list, String type) {
     final settings = locator<LocalStorageService>();
     final bool isSaved = settings.saveLastViewed();
-    final String lastChannel = settings.lastChannel();
+    final String? lastChannel = settings.lastChannel();
     if (isSaved) {
       for (int i = 0; i < list.length; i++) {
         if (list[i].id() == lastChannel) {
@@ -125,7 +125,7 @@ abstract class VideoAppState extends State<HomePage> {
 
   // private
   void _fillTypes() {
-    String lastType;
+    String? lastType;
     if (widget.channels.isEmpty && widget.vods.isEmpty) {
       selectedType = TR_EMPTY;
       return;

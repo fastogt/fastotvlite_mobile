@@ -62,6 +62,6 @@ class _NothingFound extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
         child: NonAvailableBuffer(
-            icon: Icons.search, message: AppLocalizations.of(context).translate(TR_SEARCH_EMPTY)));
+            icon: Icons.search, message: AppLocalizations.of(context)?.translate(TR_SEARCH_EMPTY)));
   }
 }

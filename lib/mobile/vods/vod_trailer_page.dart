@@ -27,7 +27,7 @@ class VodTrailer extends StatefulWidget {
 }
 
 class VodTrailerPageMobileState extends State<VodTrailer> {
-  PlayerController _controller;
+  late PlayerController _controller;
 
   bool get _castConnected => ChromeCastInfo().castConnected;
 

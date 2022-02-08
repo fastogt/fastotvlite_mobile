@@ -62,7 +62,7 @@ class _HomeMobileState extends VideoAppState {
     }
   }
 
-  Widget _appBar() {
+  PreferredSizeWidget _appBar() {
     double _elevation() {
       if (selectedType == TR_EMPTY) {
         return 4;
@@ -95,7 +95,7 @@ class _HomeMobileState extends VideoAppState {
         ]);
   }
 
-  Widget _dialAction(String title, String tag, PickStreamFrom source, IconData icon) {
+  UnicornButton _dialAction(String title, String tag, PickStreamFrom source, IconData icon) {
     return UnicornButton(
         labelColor: Theming.of(context).onBrightness(),
         labelBackgroundColor: Colors.transparent,
@@ -111,14 +111,14 @@ class _HomeMobileState extends VideoAppState {
   }
 
   void _onAdd(PickStreamFrom source) async {
-    final AddStreamResponse response = await showDialog(
+    final AddStreamResponse? response = await showDialog(
         context: context, builder: (BuildContext context) => FilePickerDialog(source));
     if (response == null) {
-      _drawerKey.currentState.showSnackBar(SnackBar(
+      _drawerKey.currentState?.showSnackBar(SnackBar(
           content: Text(translate(context, TR_NO_CHANNELS_ADDED)),
           action: SnackBarAction(
               label: translate(context, TR_CLOSE),
-              onPressed: () => _drawerKey.currentState.hideCurrentSnackBar())));
+              onPressed: () => _drawerKey.currentState?.hideCurrentSnackBar())));
     } else {
       addStreams(response);
     }

@@ -9,7 +9,7 @@ import 'package:flutter_fastotv_common/base/vods/vod_description.dart';
 class VodDescription extends StatefulWidget {
   final VodStream vod;
 
-  const VodDescription({this.vod});
+  const VodDescription({required this.vod});
 
   VodStream currentVod() {
     return vod;
@@ -98,7 +98,7 @@ class _VodDescriptionState extends State<VodDescription> {
 
   Widget userScore(VodStream currentVod) => UserScore(currentVod.userScore());
 
-  Widget trailerButton(VodStream currentVod, {double padding}) {
+  Widget trailerButton(VodStream currentVod, {double? padding}) {
     return currentVod.trailerUrl() == INVALID_TRAILER_URL
         ? const Spacer()
         : Padding(
@@ -106,7 +106,7 @@ class _VodDescriptionState extends State<VodDescription> {
             child: VodTrailerButton(currentVod));
   }
 
-  Widget playButton(VodStream currentVod, {double padding}) {
+  Widget playButton(VodStream currentVod, {double? padding}) {
     return Padding(
         padding: EdgeInsets.symmetric(horizontal: padding ?? 8), child: VodPlayButton(currentVod));
   }

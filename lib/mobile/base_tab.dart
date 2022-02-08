@@ -10,7 +10,7 @@ import 'package:flutter_common/flutter_common.dart';
 
 abstract class IStreamBaseListPage<T extends IStream, U extends StatefulWidget> extends State<U>
     with TickerProviderStateMixin {
-  TabController tabController;
+  late TabController tabController;
 
   BaseStreamBloc<T> get bloc;
 
@@ -34,7 +34,7 @@ abstract class IStreamBaseListPage<T extends IStream, U extends StatefulWidget> 
         initialData: bloc.streamsMap,
         stream: bloc.streamsMapUpdates,
         builder: (context, snapshot) {
-          if (tabController.length != snapshot.data.length) {
+          if (tabController.length != snapshot.data?.length) {
             _initTabController();
           }
           return Center(
@@ -76,7 +76,7 @@ abstract class IStreamBaseListPage<T extends IStream, U extends StatefulWidget> 
   // public:
   Widget generateTab(String title) {
     if (title == TR_ALL || title == TR_RECENT || title == TR_FAVORITE) {
-      return Tab(text: AppLocalizations.of(context).translate(title));
+      return Tab(text: AppLocalizations.of(context)!.translate(title));
     }
     return Tab(text: AppLocalizations.toUtf8(title));
   }
@@ -84,18 +84,18 @@ abstract class IStreamBaseListPage<T extends IStream, U extends StatefulWidget> 
   List<Widget> generateList() {
     final List<Widget> result = [];
     for (final category in channelsMap.keys) {
-      if (category == TR_FAVORITE && channelsMap[TR_FAVORITE].isEmpty) {
+      if (category == TR_FAVORITE && channelsMap[TR_FAVORITE]!.isEmpty) {
         result.add(NonAvailableBuffer(
           icon: Icons.favorite_border,
           message: noFavorite(),
         ));
-      } else if (category == TR_RECENT && channelsMap[TR_RECENT].isEmpty) {
+      } else if (category == TR_RECENT && channelsMap[TR_RECENT]!.isEmpty) {
         result.add(NonAvailableBuffer(
           icon: Icons.replay,
           message: noRecent(),
         ));
       } else {
-        result.add(listBuilder(channelsMap[category]));
+        result.add(listBuilder(channelsMap[category]!));
       }
     }
     return result;
@@ -119,8 +119,8 @@ abstract class IStreamBaseListPage<T extends IStream, U extends StatefulWidget> 
   void delete(T stream) {
     bloc.delete(stream);
     bloc.updateMap();
-    if (bloc.map[TR_ALL].isEmpty) {
-      final listEvents = locator<StreamListEvent>();
+    if (bloc.map[TR_ALL]!.isEmpty) {
+      final listEvents = locator<ClientEvents>();
       listEvents.publish(StreamsListEmptyEvent());
     }
   }

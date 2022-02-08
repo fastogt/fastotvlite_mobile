@@ -24,12 +24,12 @@ class VodVideoAppState extends IStreamBaseListPage<VodStream, VodTab> {
 
   @override
   String noRecent() {
-    return AppLocalizations.of(context).translate(TR_RECENT_VOD);
+    return AppLocalizations.of(context)!.translate(TR_RECENT_VOD)!;
   }
 
   @override
   String noFavorite() {
-    return AppLocalizations.of(context).translate(TR_FAVORITE_VOD);
+    return AppLocalizations.of(context)!.translate(TR_FAVORITE_VOD)!;
   }
 
   @override

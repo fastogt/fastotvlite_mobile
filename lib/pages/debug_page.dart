@@ -111,7 +111,7 @@ class VersionTileState extends State<VersionTile> {
   Widget _settings(String version) {
     return ListTile(
         leading: Icon(Icons.info, color: Theming.of(context).onBrightness()),
-        title: Text(AppLocalizations.of(context).translate(TR_VERSION)),
+        title: Text(AppLocalizations.of(context)!.translate(TR_VERSION)!),
         subtitle: Text(version),
         onTap: _increment);
   }
