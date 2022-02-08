@@ -22,10 +22,10 @@ class LiveStreamBloc extends BaseStreamBloc<LiveStream> {
   @override
   void saveStreams() {
     final settings = locator<LocalStorageService>();
-    settings.saveLiveChannels(map[TR_ALL]);
+    settings.saveLiveChannels(map[TR_ALL]!);
   }
 
-  void onTap(List<LiveStream> channels, int position, [void Function() onExit]) async {
+  void onTap(List<LiveStream> channels, int position, [void Function()? onExit]) async {
     navigator.push(MaterialPageRoute(builder: (context) {
       return ChannelPage(channels: channels, position: position, addRecent: addRecent);
     })).then((lastPosition) {});

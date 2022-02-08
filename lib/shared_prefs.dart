@@ -137,8 +137,12 @@ class LocalStorageService {
     _preferences!.setBool(_isLastSaved, value);
   }
 
-  void setLastChannel(String url) {
-    _preferences!.setString(_lastChannelKey, url);
+  void setLastChannel(String? url) {
+    if (url == null) {
+      _preferences!.remove(_lastChannelKey);
+    } else {
+      _preferences!.setString(_lastChannelKey, url);
+    }
   }
 
   void setAgeRating(int age) {

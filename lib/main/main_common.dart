@@ -48,14 +48,14 @@ class _MyAppState extends State<MyApp> {
               return MaterialApp(
                   debugShowCheckedModeBanner: false,
                   theme: Theming.of(context).theme,
-                  supportedLocales: AppLocalizations.of(context).supportedLocales,
+                  supportedLocales: AppLocalizations.of(context)!.supportedLocales,
                   // These delegates make sure that the localization data for the proper language is loaded
                   localizationsDelegates: [
-                    AppLocalizations.of(context).delegate,
+                    AppLocalizations.of(context)!.delegate,
                     GlobalMaterialLocalizations.delegate,
                     GlobalWidgetsLocalizations.delegate
                   ],
-                  locale: AppLocalizations.of(context).currentLocale,
+                  locale: AppLocalizations.of(context)!.currentLocale,
                   localeResolutionCallback: (locale, supportedLocales) {
                     for (final supportedLocale in supportedLocales) {
                       if (supportedLocale != null && locale != null) {
@@ -81,7 +81,7 @@ class _MyAppState extends State<MyApp> {
     final langCode = settings.langCode();
     final countryCode = settings.countryCode();
     if (langCode != null && countryCode != null) {
-      savedLocale = Locale(settings.langCode(), settings.countryCode());
+      savedLocale = Locale(langCode, countryCode);
     }
   }
 

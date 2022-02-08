@@ -5,6 +5,7 @@ import 'package:fastotvlite/channels/istream.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_common/flutter_common.dart';
 import 'package:flutter_fastotv_common/chromecast_filler.dart';
+import 'package:player/common/states.dart';
 import 'package:player/controller.dart';
 import 'package:player/widgets/player.dart';
 import 'package:player/widgets/timeline.dart';
@@ -17,8 +18,10 @@ abstract class PlayerPageMobileState<T extends StatefulWidget> extends State<T> 
   IStream get stream;
 
   bool get castConnected => ChromeCastInfo().castConnected;
-  StreamSubscription<bool> _ccConnection;
-  bool _ccConnected;
+  late StreamSubscription<bool> _ccConnection;
+  bool? _ccConnected;
+
+  bool get initizalied => _ccConnected != null;
 
   @override
   void initState() {
@@ -26,7 +29,7 @@ abstract class PlayerPageMobileState<T extends StatefulWidget> extends State<T> 
     _ccConnection = ChromeCastInfo().castConnectedStream.listen((event) {
       if (event) {
         _initChromeCast(stream.primaryUrl(), stream.displayName());
-        WidgetsBinding.instance.addPostFrameCallback((_) {
+        WidgetsBinding.instance!.addPostFrameCallback((_) {
           controller.dispose();
         });
       } else {
@@ -44,7 +47,7 @@ abstract class PlayerPageMobileState<T extends StatefulWidget> extends State<T> 
   void dispose() {
     super.dispose();
     _ccConnection.cancel();
-    controller?.dispose();
+    controller.dispose();
   }
 
   bool isPlaying() {
@@ -85,16 +88,32 @@ abstract class PlayerPageMobileState<T extends StatefulWidget> extends State<T> 
   }
 
   Widget playerArea(String icon) {
-    if (_ccConnected == null) {
+    if (!initizalied) {
       return const AspectRatio(
           aspectRatio: 16 / 9, child: Center(child: CircularProgressIndicator()));
     }
-    return _ccConnected
+    final cc = _ccConnected != null && _ccConnected == true;
+    return cc
         ? AspectRatio(aspectRatio: 16 / 9, child: _chromeCastFiller(icon))
         : LitePlayer(key: _playerKey, controller: controller);
   }
 
   Widget createPlayPauseButton(Color color) {
+    final placeholder = Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Icon(Icons.play_arrow, color: color.withOpacity(0.5)));
+    if (!initizalied) {
+      return placeholder;
+    } else if (castConnected) {
+      return _playPause(color);
+    } else {
+      return PlayerStateListener(controller, builder: (context) {
+        return _playPause(color);
+      }, placeholder: placeholder);
+    }
+  }
+
+  Widget _playPause(Color color) {
     if (isPlaying()) {
       return PlayerButtons.pause(onPressed: pause, color: color);
     } else {

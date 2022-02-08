@@ -141,11 +141,10 @@ class VodStream extends IStream {
             MovieInfo([''], '', '', '', '', '', 0, 0, '', 0, MovieType.VODS),
             true,
             true,
-            null,
+            [],
             0,
             <MetaUrl>[],
-            0
-  );
+            0);
 
   VodStream.fromJson(Map<String, dynamic> json)
       : _channelInfo = VodInfo(
@@ -170,11 +169,10 @@ class VodStream extends IStream {
                 MovieType.VODS),
             true,
             true,
-            null,
+            [],
             0,
             <MetaUrl>[],
-            0
-  );
+            0);
 
   Map<String, dynamic> toJson() => {
         StreamBaseInfo.ID_FIELD: id(),

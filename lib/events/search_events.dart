@@ -3,7 +3,7 @@ import 'package:event_bus/event_bus.dart';
 class SearchEvents {
   static Future<SearchEvents> getInstance() async {
     _instance ??= SearchEvents();
-    return _instance;
+    return _instance!;
   }
 
   void publish(dynamic event) {
@@ -15,7 +15,7 @@ class SearchEvents {
   }
 
   // private:
-  static SearchEvents _instance;
+  static SearchEvents? _instance;
   final _bus = EventBus(sync: true);
 }
 

@@ -23,7 +23,7 @@ class VodStreamBloc extends BaseStreamBloc<VodStream> {
   @override
   void saveStreams() {
     final settings = locator<LocalStorageService>();
-    settings.saveVods(map[TR_ALL]);
+    settings.saveVods(map[TR_ALL]!);
   }
 
   void onTap(VodStream channel) async {

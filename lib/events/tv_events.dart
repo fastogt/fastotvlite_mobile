@@ -3,7 +3,7 @@ import 'package:event_bus/event_bus.dart';
 class TvTabsEvents {
   static Future<TvTabsEvents> getInstance() async {
     _instance ??= TvTabsEvents();
-    return _instance;
+    return _instance!;
   }
 
   void publish(dynamic event) {
@@ -15,7 +15,7 @@ class TvTabsEvents {
   }
 
   // private:
-  static TvTabsEvents _instance;
+  static TvTabsEvents? _instance;
   final _bus = EventBus(sync: true);
 }
 

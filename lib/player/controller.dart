@@ -11,7 +11,7 @@ const VOD_BOTTOM_CONTROL_HEIGHT = 4 + BUTTONS_LINE_HEIGHT + TIMELINE_HEIGHT;
 class BasePlayerController<T extends IStream> extends PlayerController {
   T stream;
 
-  final void Function() onPlay;
+  final void Function()? onPlay;
 
   BasePlayerController(this.stream, [this.onPlay]) : super(initLink: stream.primaryUrl());
 
@@ -36,14 +36,14 @@ class BasePlayerController<T extends IStream> extends PlayerController {
 }
 
 class LivePlayerController extends BasePlayerController<LiveStream> {
-  double initVolume;
+  double? initVolume;
 
   LivePlayerController(LiveStream stream, {this.initVolume}) : super(stream);
 
   @override
   void onPlaying() {
     if (initVolume != null) {
-      setVolume(initVolume);
+      setVolume(initVolume!);
     }
     super.onPlaying();
   }

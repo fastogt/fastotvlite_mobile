@@ -16,7 +16,7 @@ abstract class BaseStreamBloc<T extends IStream> {
     final _search = locator<SearchEvents>();
     _search.subscribe<StreamSearchEvent<T>>().listen((stream) => onSearch(stream.stream));
     map = parseMap(streams);
-    _currentcategory = map[TR_RECENT].isNotEmpty ? TR_RECENT : TR_ALL;
+    _currentcategory = map[TR_RECENT]!.isNotEmpty ? TR_RECENT : TR_ALL;
     streamsMapUpd.add(map);
   }
 
@@ -46,11 +46,11 @@ abstract class BaseStreamBloc<T extends IStream> {
   void onSearch(T stream);
 
   void addFavorite(T stream) {
-    map[TR_FAVORITE].add(stream);
+    map[TR_FAVORITE]!.add(stream);
   }
 
   void deleteFavorite(T stream) {
-    map[TR_FAVORITE].remove(stream);
+    map[TR_FAVORITE]!.remove(stream);
   }
 
   void handleFavorite(bool value, T stream) {
@@ -60,23 +60,23 @@ abstract class BaseStreamBloc<T extends IStream> {
   }
 
   void addRecent(T stream) {
-    if (map[TR_RECENT].contains(stream)) {
+    if (map[TR_RECENT]!.contains(stream)) {
       sortRecent();
     } else {
-      map[TR_RECENT].insert(0, stream);
+      map[TR_RECENT]!.insert(0, stream);
     }
   }
 
   void sortRecent() {
-    map[TR_RECENT].sort((b, a) => a.recentTime().compareTo(b.recentTime()));
+    map[TR_RECENT]!.sort((b, a) => a.recentTime().compareTo(b.recentTime()));
   }
 
   void sortGroup(String group) {
-    map[group].sort((a, b) => a.displayName().compareTo(b.displayName()));
+    map[group]!.sort((a, b) => a.displayName().compareTo(b.displayName()));
   }
 
   void addStream(T stream) {
-    map[TR_ALL].add(stream);
+    map[TR_ALL]!.add(stream);
     _addToGroup(stream);
   }
 
@@ -99,9 +99,9 @@ abstract class BaseStreamBloc<T extends IStream> {
   }
 
   void delete(T stream) {
-    map[TR_FAVORITE].remove(stream);
-    map[TR_RECENT].remove(stream);
-    map[TR_ALL].remove(stream);
+    map[TR_FAVORITE]!.remove(stream);
+    map[TR_RECENT]!.remove(stream);
+    map[TR_ALL]!.remove(stream);
     stream.groups().forEach((group) {
       _removeFromGroup(group, stream);
     });
@@ -112,7 +112,7 @@ abstract class BaseStreamBloc<T extends IStream> {
   void _addToGroup(T stream) {
     for (final String group in stream.groups()) {
       if (map[group] != null) {
-        map[group].add(stream);
+        map[group]!.add(stream);
       } else {
         map[group] = [stream];
       }
@@ -120,7 +120,7 @@ abstract class BaseStreamBloc<T extends IStream> {
   }
 
   void _updateStreamInGroup(T stream, String group) {
-    final List<T> streams = map[group];
+    final List<T> streams = map[group]!;
     for (int i = 0; i < streams.length; i++) {
       if (streams[i].id() == stream.id()) {
         streams[i] = stream;
@@ -130,10 +130,10 @@ abstract class BaseStreamBloc<T extends IStream> {
   }
 
   void _removeFromGroup(String group, T stream) {
-    if (map[group].length == 1) {
+    if (map[group]!.length == 1) {
       map.remove(group);
     } else {
-      map[group].remove(stream);
+      map[group]!.remove(stream);
     }
   }
 }
