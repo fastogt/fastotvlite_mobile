@@ -109,7 +109,7 @@ class _SearchPageState extends State<SearchPage> {
     });
   }
 
-  void _exit(IStream stream) {
+  void _exit(IStream? stream) {
     Navigator.of(context).pop(stream);
   }
 }

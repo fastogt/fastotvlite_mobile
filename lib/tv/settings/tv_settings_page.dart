@@ -154,7 +154,7 @@ class _SettingsTile extends StatefulWidget {
   final String title;
   final void Function() onFocus;
 
-  const _SettingsTile({@required this.title, @required this.onFocus});
+  const _SettingsTile({required this.title, required this.onFocus});
 
   @override
   _SettingsTileState createState() {

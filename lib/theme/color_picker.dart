@@ -77,7 +77,7 @@ class _ColorPickerState extends State<ColorPicker> {
             border: Border.all(color: Theming.of(context).onPrimary())));
   }
 
-  Future<Color> _openColorPicker() async {
+  Future<Color?> _openColorPicker() async {
     return showDialog(
         context: context,
         builder: (_) => ColorPickerDialog(

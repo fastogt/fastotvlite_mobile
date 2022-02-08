@@ -11,18 +11,21 @@ const BLACK_THEME_ID = 'black_theme'; // tv
 
 class Theming extends StatefulWidget {
   final Widget child;
-  final ThemeData initTheme;
+  final ThemeData? initTheme;
 
-  const Theming({Key key, this.child, this.initTheme}) : super(key: key);
+  const Theming({Key? key, required this.child, this.initTheme}) : super(key: key);
 
   @override
   _ThemingState createState() => _ThemingState();
 
-  static _ThemingState of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<_InheritedThemeProvider>().data;
+  static _ThemingState of(BuildContext context, {bool depend = true}) {
+    if (depend) {
+      return context.dependOnInheritedWidgetOfExactType<_InheritedThemeProvider>()!.data;
+    }
+    return context.findAncestorStateOfType<_ThemingState>()!;
   }
 
-  static Color onCustomColor(Color background, {Color dark, Color light}) {
+  static Color onCustomColor(Color background, {Color? dark, Color? light}) {
     if (ThemeData.estimateBrightnessForColor(background) == Brightness.dark) {
       return dark ?? Colors.white;
     } else {
@@ -32,7 +35,7 @@ class Theming extends StatefulWidget {
 }
 
 class _ThemingState extends State<Theming> {
-  String _id;
+  String? _id;
 
   Color _accentColor = Colors.amber;
 
@@ -49,11 +52,11 @@ class _ThemingState extends State<Theming> {
   void initState() {
     super.initState();
     if (widget.initTheme != null) {
-      _accentColor = widget.initTheme.colorScheme.secondary;
-      if (widget.initTheme.brightness == Brightness.light) {
-        customLightTheme = widget.initTheme;
+      _accentColor = widget.initTheme!.colorScheme.secondary;
+      if (widget.initTheme!.brightness == Brightness.light) {
+        customLightTheme = widget.initTheme!;
       } else {
-        customDarkTheme = widget.initTheme;
+        customDarkTheme = widget.initTheme!;
       }
     }
     _init();
@@ -66,34 +69,31 @@ class _ThemingState extends State<Theming> {
 
   ThemeData get theme => _getTheme(_id);
 
-  String get themeId => _id;
+  String? get themeId => _id;
 
-  Color onBrightness({Color dark, Color light}) {
+  Color onBrightness({Color? dark, Color? light}) {
     if (theme.brightness == Brightness.dark) {
       return dark ?? Colors.white;
-    } else {
-      return light ?? Colors.black;
     }
+    return light ?? Colors.black;
   }
 
-  Color onPrimary({Color dark, Color light}) {
+  Color onPrimary({Color? dark, Color? light}) {
     if (ThemeData.estimateBrightnessForColor(theme.primaryColor) == Brightness.dark) {
       return dark ?? Colors.white;
-    } else {
-      return light ?? Colors.black;
     }
+    return light ?? Colors.black;
   }
 
-  Color onAccent({Color dark, Color light}) {
+  Color onAccent({Color? dark, Color? light}) {
     if (ThemeData.estimateBrightnessForColor(theme.colorScheme.secondary) == Brightness.dark) {
       return dark ?? Colors.white;
-    } else {
-      return light ?? Colors.black;
     }
+    return light ?? Colors.black;
   }
 
-  void setTheme(String newId) {
-    _changeTheme(newId);
+  void setTheme(String? newId) {
+    _changeTheme(newId!);
     _update();
   }
 
@@ -122,7 +122,7 @@ class _ThemingState extends State<Theming> {
       }
     }
 
-    final Color _primary = settings.getPrimaryColor();
+    final Color? _primary = settings.getPrimaryColor();
     if (_primary != null) {
       _changePrimaryColor(_primary);
     }
@@ -144,7 +144,7 @@ class _ThemingState extends State<Theming> {
   void _changeTheme(String newId) {
     _id = newId;
     final settings = locator<LocalStorageService>();
-    settings.saveThemeID(_id);
+    settings.saveThemeID(_id!);
   }
 
   void _changePrimaryColor(Color color) {
@@ -164,7 +164,7 @@ class _ThemingState extends State<Theming> {
     blackTheme = blackTheme.setAccent(color);
   }
 
-  ThemeData _getTheme(String id) {
+  ThemeData _getTheme(String? id) {
     switch (id) {
       case LIGHT_THEME_ID:
         return lightTheme;
@@ -185,15 +185,15 @@ class _ThemingState extends State<Theming> {
 extension SetColors on ThemeData {
   ThemeData setAccent(Color color) {
     return copyWith(
-        accentColor: color,
-        elevatedButtonTheme: ElevatedButtonThemeData(
-            style:
-                ElevatedButton.styleFrom(primary: color, onPrimary: Theming.onCustomColor(color))),
-        outlinedButtonTheme:
-            OutlinedButtonThemeData(style: OutlinedButton.styleFrom(primary: color)),
-        textButtonTheme: TextButtonThemeData(
-            style: TextButton.styleFrom(
-                primary: brightness == Brightness.dark ? Colors.white : Colors.black)));
+      colorScheme: colorScheme.copyWith(secondary: color),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(primary: color, onPrimary: Theming.onCustomColor(color))),
+      outlinedButtonTheme: OutlinedButtonThemeData(style: OutlinedButton.styleFrom(primary: color)),
+      textButtonTheme: TextButtonThemeData(
+          style: TextButton.styleFrom(
+              primary: brightness == Brightness.dark ? Colors.white : Colors.black)),
+      progressIndicatorTheme: ProgressIndicatorThemeData(color: color),
+    );
   }
 }
 
@@ -201,9 +201,9 @@ class _InheritedThemeProvider extends InheritedWidget {
   final _ThemingState data;
 
   const _InheritedThemeProvider({
-    this.data,
-    Key key,
-    @required Widget child,
+    required this.data,
+    Key? key,
+    required Widget child,
   }) : super(key: key, child: child);
 
   @override

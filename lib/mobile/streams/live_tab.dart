@@ -29,19 +29,19 @@ class LiveVideoAppState extends IStreamBaseListPage<LiveStream, LiveTab>
 
   @override
   String noRecent() {
-    return AppLocalizations.of(context).translate(TR_RECENT_LIVE);
+    return translate(context, TR_RECENT_LIVE);
   }
 
   @override
   String noFavorite() {
-    return AppLocalizations.of(context).translate(TR_FAVORITE_LIVE);
+    return translate(context, TR_FAVORITE_LIVE);
   }
 
   @override
   void initState() {
     super.initState();
     recentlyViewed.stream.asBroadcastStream().listen((channel) => addRecent(channel));
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
       _lastViewed();
       setState(() {});
     });
@@ -82,7 +82,7 @@ class LiveVideoAppState extends IStreamBaseListPage<LiveStream, LiveTab>
       return;
     }
 
-    final channels = super.channelsMap[TR_ALL];
+    final channels = super.channelsMap[TR_ALL]!;
     for (int i = 0; i < channels.length; i++) {
       if (channels[i].id() == lastChannelID) {
         tabController.animateTo(1);

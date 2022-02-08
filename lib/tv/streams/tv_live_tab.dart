@@ -25,7 +25,7 @@ import 'package:flutter_common/flutter_common.dart';
 import 'package:player/widgets/player.dart';
 
 class ChannelsTabHomeTV extends StatefulWidget {
-  final LiveStreamBlocTV bloc;
+  final LiveStreamBloc bloc;
 
   const ChannelsTabHomeTV(this.bloc);
 

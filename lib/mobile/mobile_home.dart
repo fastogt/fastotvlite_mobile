@@ -1,6 +1,7 @@
 import 'package:dart_chromecast/chromecast.dart';
 import 'package:fastotvlite/base/add_streams/add_stream_dialog.dart';
 import 'package:fastotvlite/base/add_streams/m3u_to_channels.dart';
+import 'package:fastotvlite/channels/istream.dart';
 import 'package:fastotvlite/channels/live_stream.dart';
 import 'package:fastotvlite/channels/vod_stream.dart';
 import 'package:fastotvlite/constants.dart';
@@ -50,9 +51,9 @@ class _HomeMobileState extends VideoAppState {
   Widget _getCurrentTabWidget() {
     switch (selectedType) {
       case TR_LIVE_TV:
-        return LiveTab(_liveKey, liveStreamsBloc);
+        return LiveTab(_liveKey, liveStreamsBloc!);
       case TR_VODS:
-        return VodTab(_vodKey, vodStreamsBloc);
+        return VodTab(_vodKey, vodStreamsBloc!);
 
       default:
         return Center(
@@ -125,7 +126,7 @@ class _HomeMobileState extends VideoAppState {
   }
 
   void _onSearch() async {
-    final result = await showSearch(context: context, delegate: searchDelegate);
+    final result = await showSearch(context: context, delegate: searchDelegate!);
     if (result != null) {
       sendSearchEvent(result);
     }

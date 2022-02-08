@@ -1,6 +1,7 @@
 import 'package:fastotvlite/base/add_streams/add_stream_dialog.dart';
 import 'package:fastotvlite/base/add_streams/m3u_to_channels.dart';
 import 'package:fastotvlite/base/tabbar.dart';
+import 'package:fastotvlite/channels/istream.dart';
 import 'package:fastotvlite/channels/live_stream.dart';
 import 'package:fastotvlite/channels/vod_stream.dart';
 import 'package:fastotvlite/constants.dart';
@@ -38,7 +39,7 @@ class _HomeTVState extends VideoAppState with TickerProviderStateMixin {
 
   String get _currentCategory => videoTypesList[_tabController.index];
 
-  List get _currentStreams {
+  List<IStream> get _currentStreams {
     switch (_currentCategory) {
       case TR_LIVE_TV:
         return channels();
@@ -87,45 +88,43 @@ class _HomeTVState extends VideoAppState with TickerProviderStateMixin {
                 heightFactor: _scale,
                 child: Scaffold(
                     body: Column(children: <Widget>[
-                      Visibility(
-                          visible: isVisible,
-                          child: IconTheme(
-                              data: IconThemeData(color: Theming.of(context).onBrightness()),
-                              child: AppBar(
-                                  leading: const Padding(
-                                      padding: EdgeInsets.fromLTRB(16, 8, 0, 8),
-                                      child: CustomAssetLogo(LOGO_PATH)),
-                                  backgroundColor: Colors.transparent,
-                                  elevation: 0,
-                                  title: Row(children: <Widget>[
-                                    const SizedBox(width: 16),
-                                    Expanded(
-                                        child: SingleChildScrollView(
-                                            child: TabBarEx(_tabController, videoTypesList)))
-                                  ]),
-                                  actions: <Widget>[
-                                    if (selectedType != TR_EMPTY)
-                                      IconButton(icon: const Icon(Icons.search),
-                                          onPressed: _onSearch),
-                                    IconButton(icon: const Icon(Icons.add_circle),
-                                        onPressed: _onAdd),
-                                    IconButton(
-                                        icon: const Icon(Icons.settings), onPressed: _toSettings),
-                                    IconButton(
-                                        icon: const Icon(Icons.power_settings_new),
-                                        onPressed: _showExitDialog),
-                                    _clock()
-                                  ]))),
-                      Expanded(child: _getCurrentTabWidget())
-                    ])))));
+                  Visibility(
+                      visible: isVisible,
+                      child: IconTheme(
+                          data: IconThemeData(color: Theming.of(context).onBrightness()),
+                          child: AppBar(
+                              leading: const Padding(
+                                  padding: EdgeInsets.fromLTRB(16, 8, 0, 8),
+                                  child: CustomAssetLogo(LOGO_PATH)),
+                              backgroundColor: Colors.transparent,
+                              elevation: 0,
+                              title: Row(children: <Widget>[
+                                const SizedBox(width: 16),
+                                Expanded(
+                                    child: SingleChildScrollView(
+                                        child: TabBarEx(_tabController, videoTypesList)))
+                              ]),
+                              actions: <Widget>[
+                                if (selectedType != TR_EMPTY)
+                                  IconButton(icon: const Icon(Icons.search), onPressed: _onSearch),
+                                IconButton(icon: const Icon(Icons.add_circle), onPressed: _onAdd),
+                                IconButton(
+                                    icon: const Icon(Icons.settings), onPressed: _toSettings),
+                                IconButton(
+                                    icon: const Icon(Icons.power_settings_new),
+                                    onPressed: _showExitDialog),
+                                _clock()
+                              ]))),
+                  Expanded(child: _getCurrentTabWidget())
+                ])))));
   }
 
   Widget _getCurrentTabWidget() {
     switch (selectedType) {
       case TR_LIVE_TV:
-        return ChannelsTabHomeTV(liveStreamsBloc);
+        return ChannelsTabHomeTV(liveStreamsBloc!);
       case TR_VODS:
-        return TVVodPage(vodStreamsBloc);
+        return TVVodPage(vodStreamsBloc!);
 
       default:
         return Center(
@@ -143,8 +142,7 @@ class _HomeTVState extends VideoAppState with TickerProviderStateMixin {
     return StreamBuilder<ClockFormatChanged>(
         initialData: ClockFormatChanged(_initFormat),
         stream: tvTabsEvents.subscribe<ClockFormatChanged>(),
-        builder: (context, snapshot) =>
-            Clock.full(textColor: color, hour24: snapshot.data.hour24));
+        builder: (context, snapshot) => Clock.full(textColor: color, hour24: snapshot.data.hour24));
   }
 
   void _initTabController() {
@@ -186,10 +184,10 @@ class _HomeTVState extends VideoAppState with TickerProviderStateMixin {
   }
 
   void _onAdd() async {
-    final PickStreamFrom _source = await showDialog(
+    final PickStreamFrom? _source = await showDialog(
         context: context, builder: (BuildContext context) => const StreamTypePickerTV());
     if (_source != null) {
-      final AddStreamResponse response = await showDialog(
+      final AddStreamResponse? response = await showDialog(
           context: context, builder: (BuildContext context) => FilePickerDialogTV(_source));
       if (response != null) {
         addStreams(response);

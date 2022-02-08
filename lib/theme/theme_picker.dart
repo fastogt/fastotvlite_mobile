@@ -5,7 +5,7 @@ import 'package:fastotvlite/service_locator.dart';
 import 'package:fastotvlite/shared_prefs.dart';
 import 'package:fastotvlite/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_common/utils.dart';
+import 'package:flutter_common/flutter_common.dart';
 
 class ThemePicker extends StatefulWidget {
   const ThemePicker();
@@ -21,7 +21,9 @@ class _ThemePickerState extends State<ThemePicker> {
   void initState() {
     super.initState();
     final settings = locator<LocalStorageService>();
-    themeGroupValue = settings.themeID();
+    if (settings.themeID() != null) {
+      themeGroupValue = settings.themeID()!;
+    }
   }
 
   @override
@@ -72,7 +74,11 @@ class _ThemePickerState extends State<ThemePicker> {
     }
   }
 
-  void handleTheme(String id) {
+  void handleTheme(String? id) {
+    if (id == null) {
+      return;
+    }
+
     setState(() {
       themeGroupValue = id;
     });

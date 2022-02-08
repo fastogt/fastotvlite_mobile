@@ -9,7 +9,7 @@ abstract class _AbstractLiveEditPage extends EditStreamPage<LiveStream> {
 }
 
 abstract class _AbstractLiveEditPageState extends EditStreamPageState<LiveStream> {
-  TextEditingController idController;
+  late TextEditingController idController;
 
   @override
   void initState() {

@@ -8,14 +8,19 @@ import 'package:flutter_fastotv_common/base/controls/preview_icon.dart';
 
 class ChannelsListTV extends StatefulWidget {
   final Size size;
-  final LiveStreamBlocTV bloc;
+  final LiveStreamBloc bloc;
   final CustomScrollController scrollController;
   final FocusNode focus;
   final void Function() setEpg;
   final KeyEventResult Function(FocusNode node, RawKeyEvent event, int index) onChannels;
 
   const ChannelsListTV(
-      {this.bloc, this.size, this.onChannels, this.focus, this.scrollController, this.setEpg});
+      {required this.bloc,
+      this.size,
+      this.onChannels,
+      this.focus,
+      this.scrollController,
+      this.setEpg});
 
   @override
   ChannelsListTVState createState() => ChannelsListTVState();
@@ -141,9 +146,9 @@ class ChannelsListTVState extends State<ChannelsListTV> {
   // channels
   Widget channelsList() {
     final _size = Size(widget.size.width, widget.size.height - LIST_HEADER_SIZE);
-    if (_currentCategory == TR_FAVORITE && channelsMap[TR_FAVORITE].isEmpty) {
+    if (_currentCategory == TR_FAVORITE && channelsMap[TR_FAVORITE]!.isEmpty) {
       return _NoChannels.favorite(_size);
-    } else if (_currentCategory == TR_RECENT && channelsMap[TR_RECENT].isEmpty) {
+    } else if (_currentCategory == TR_RECENT && channelsMap[TR_RECENT]!.isEmpty) {
       return _NoChannels.recent(_size);
     }
     return _ChannelsList(
@@ -159,15 +164,15 @@ class _ChannelsList extends StatelessWidget {
   final List<LiveStream> channels;
   final ScrollController scrollController;
   final Size size;
-  final double itemHeight;
+  final double? itemHeight;
   final KeyEventResult Function(FocusNode node, RawKeyEvent event, int index) onKey;
 
   const _ChannelsList(
-      {@required this.channels,
+      {required this.channels,
       this.scrollController,
-      @required this.onKey,
+      required this.onKey,
       this.itemHeight,
-      @required this.size});
+      required this.size});
 
   @override
   Widget build(BuildContext context) {
@@ -194,7 +199,7 @@ class _ChannelTile extends StatefulWidget {
   final double itemHeight;
   final KeyEventResult Function(FocusNode node, RawKeyEvent event) onKey;
 
-  const _ChannelTile({@required this.channel, @required this.onKey, this.itemHeight});
+  const _ChannelTile({required this.channel, required this.onKey, required this.itemHeight});
 
   @override
   _ChannelTileState createState() => _ChannelTileState();

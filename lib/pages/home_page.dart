@@ -8,6 +8,7 @@ import 'package:fastotvlite/events/ascending.dart';
 import 'package:fastotvlite/events/search_events.dart';
 import 'package:fastotvlite/events/stream_list_events.dart';
 import 'package:fastotvlite/localization/translations.dart';
+import 'package:fastotvlite/mobile/mobile_search.dart';
 import 'package:fastotvlite/mobile/streams/live_search.dart';
 import 'package:fastotvlite/mobile/vods/vod_search.dart';
 import 'package:fastotvlite/service_locator.dart';
@@ -49,9 +50,7 @@ abstract class VideoAppState extends State<HomePage> {
   bool get isStreamsEmpty => channelsEmpty && vodsEmpty;
 
   List<String> videoTypesList = [];
-  String selectedType;
-
-  bool canRequest;
+  late String selectedType;
 
   String translate(String key) {
     return AppLocalizations.of(context)!.translate(key)!;
@@ -65,7 +64,7 @@ abstract class VideoAppState extends State<HomePage> {
     events.subscribe<StreamsListEmptyEvent>().listen((_) => onTypeDelete());
   }
 
-  SearchDelegate? get searchDelegate {
+  IStreamSearchDelegate<IStream>? get searchDelegate {
     switch (selectedType) {
       case TR_LIVE_TV:
         return LiveStreamSearch(widget.channels, translate(TR_SEARCH_LIVE));
@@ -81,10 +80,10 @@ abstract class VideoAppState extends State<HomePage> {
     final _searchEvents = locator<SearchEvents>();
     switch (selectedType) {
       case TR_LIVE_TV:
-        _searchEvents.publish(StreamSearchEvent<LiveStream>(stream));
+        _searchEvents.publish(StreamSearchEvent<LiveStream>(stream as LiveStream));
         break;
       case TR_VODS:
-        _searchEvents.publish(StreamSearchEvent<VodStream>(stream));
+        _searchEvents.publish(StreamSearchEvent<VodStream>(stream as VodStream));
         break;
       default:
     }
@@ -117,9 +116,9 @@ abstract class VideoAppState extends State<HomePage> {
 
   void addStreams(AddStreamResponse response) {
     if (response.type == StreamType.Live) {
-      _addLiveStreams(response.channels);
+      _addLiveStreams(response.channels!);
     } else {
-      _addVodStreams(response.vods);
+      _addVodStreams(response.vods!);
     }
   }
 
@@ -149,9 +148,9 @@ abstract class VideoAppState extends State<HomePage> {
     if (!videoTypesList.contains(TR_LIVE_TV)) {
       _fillLive(streams);
     } else {
-      streams.forEach(liveStreamsBloc.addStream);
+      streams.forEach(liveStreamsBloc!.addStream);
     }
-    liveStreamsBloc.updateMap();
+    liveStreamsBloc?.updateMap();
     if (selectedType != TR_LIVE_TV) {
       setState(() {
         selectedType = TR_LIVE_TV;
@@ -163,9 +162,9 @@ abstract class VideoAppState extends State<HomePage> {
     if (!videoTypesList.contains(TR_VODS)) {
       _fillVods(streams);
     } else {
-      streams.forEach(vodStreamsBloc.addStream);
+      streams.forEach(vodStreamsBloc!.addStream);
     }
-    vodStreamsBloc.updateMap();
+    vodStreamsBloc?.updateMap();
     if (selectedType != TR_VODS) {
       setState(() {
         selectedType = TR_VODS;

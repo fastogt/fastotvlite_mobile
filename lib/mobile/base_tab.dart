@@ -76,7 +76,7 @@ abstract class IStreamBaseListPage<T extends IStream, U extends StatefulWidget> 
   // public:
   Widget generateTab(String title) {
     if (title == TR_ALL || title == TR_RECENT || title == TR_FAVORITE) {
-      return Tab(text: AppLocalizations.of(context)!.translate(title));
+      return Tab(text: translate(context, title));
     }
     return Tab(text: AppLocalizations.toUtf8(title));
   }
