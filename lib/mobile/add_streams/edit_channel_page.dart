@@ -16,11 +16,10 @@ abstract class EditStreamPage<T extends IStream> extends StatefulWidget {
 abstract class EditStreamPageState<T extends IStream> extends State<EditStreamPage<T>> {
   static const int DEFAULT_IARC = 18;
 
-  TextEditingController descriptionController;
-  TextEditingController nameController;
-  TextEditingController iconController;
-  TextEditingController videoLinkController;
-  TextEditingController iarcController;
+  late TextEditingController nameController;
+  late TextEditingController iconController;
+  late TextEditingController videoLinkController;
+  late TextEditingController iarcController;
 
   final GlobalKey<TagsState> _groupsStateKey = GlobalKey<TagsState>();
   List<String> groups = [];
@@ -73,7 +72,7 @@ abstract class EditStreamPageState<T extends IStream> extends State<EditStreamPa
     ];
   }
 
-  Widget _saveButton() {
+  Widget? _saveButton() {
     final accentColor = Theme.of(context).colorScheme.secondary;
     return !validator
         ? null
@@ -84,10 +83,10 @@ abstract class EditStreamPageState<T extends IStream> extends State<EditStreamPa
   }
 
   Widget textField(String hintText, TextEditingController controller,
-      {void Function() onSubmitted}) {
+      {void Function()? onSubmitted}) {
     return TextFormField(
         controller: controller,
-        decoration: InputDecoration(labelText: translate(context, hintText) ?? hintText),
+        decoration: InputDecoration(labelText: translate(context, hintText)),
         keyboardType: TextInputType.text,
         onFieldSubmitted: (String text) {
           onSubmitted?.call();
@@ -98,7 +97,7 @@ abstract class EditStreamPageState<T extends IStream> extends State<EditStreamPa
     return IconButton(
         icon: const Icon(Icons.delete),
         onPressed: () {
-          widget.stream.setId(null);
+          widget.stream.setId('');
           Navigator.of(context).pop(widget.stream);
         });
   }

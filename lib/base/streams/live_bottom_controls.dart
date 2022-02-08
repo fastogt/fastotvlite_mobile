@@ -17,18 +17,18 @@ const double TEXT_PADDING = 16;
 class BottomControls extends StatefulWidget {
   final ProgramsBloc programsBloc;
   final List<Widget>? buttons;
-  final double height;
+  final double? height;
   final Color? backgroundColor;
   final Color? textColor;
-  final bool showName;
+  final bool? showName;
 
   const BottomControls(
       {required this.programsBloc,
       this.buttons,
-      required this.height,
+      this.height,
       this.backgroundColor,
       this.textColor,
-      required this.showName});
+      this.showName});
 
   @override
   _BottomControlsState createState() => _BottomControlsState();

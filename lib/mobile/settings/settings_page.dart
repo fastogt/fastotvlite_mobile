@@ -67,7 +67,9 @@ class _SettingsPageState extends State<SettingsPage> {
         ])));
   }
 
-  String _translate(String key) => AppLocalizations.of(context).translate(key);
+  String _translate(String key) {
+    return translate(context, key);
+  }
 }
 
 class SettingsIcon extends StatelessWidget {
@@ -122,7 +124,9 @@ class _LastViewedState extends State<_LastViewed> {
     });
   }
 
-  String _translate(String key) => AppLocalizations.of(context).translate(key);
+  String _translate(String key) {
+    return translate(context, key);
+  }
 }
 
 class _Controls extends StatefulWidget {
@@ -138,7 +142,7 @@ class _Controls extends StatefulWidget {
 
 class _ControlsState extends State<_Controls> {
   bool _value = true;
-  bool _isSound;
+  late bool _isSound;
 
   @override
   void initState() {
@@ -167,5 +171,7 @@ class _ControlsState extends State<_Controls> {
     });
   }
 
-  String _translate(String key) => AppLocalizations.of(context).translate(key);
+  String _translate(String key) {
+    return translate(context, key);
+  }
 }

@@ -31,7 +31,7 @@ class _TVVodPageState extends State<TVVodPage> with TickerProviderStateMixin {
 
   Map<String, List<VodStream>> get channelsMap => widget.vodStreamsBloc.map;
 
-  TabController _tabController;
+  late TabController _tabController;
   int currentCategory = 2;
 
   void _initTabController() async {
@@ -76,7 +76,7 @@ class _TVVodPageState extends State<TVVodPage> with TickerProviderStateMixin {
 
     String _title(String title) {
       if (title == TR_ALL || title == TR_RECENT || title == TR_FAVORITE) {
-        return AppLocalizations.of(context).translate(title);
+        return translate(context, title);
       }
       return AppLocalizations.toUtf8(title);
     }
@@ -104,12 +104,12 @@ class _TVVodPageState extends State<TVVodPage> with TickerProviderStateMixin {
   List<Widget> _generateList() {
     final List<Widget> result = [];
     for (final category in channelsMap.keys) {
-      if (category == TR_FAVORITE && channelsMap[TR_FAVORITE].isEmpty) {
+      if (category == TR_FAVORITE && channelsMap[TR_FAVORITE]!.isEmpty) {
         result.add(const NonAvailableBuffer(
           icon: Icons.favorite_border,
           message: "You dont' have any favorite channels",
         ));
-      } else if (category == TR_RECENT && channelsMap[TR_RECENT].isEmpty) {
+      } else if (category == TR_RECENT && channelsMap[TR_RECENT]!.isEmpty) {
         result.add(const NonAvailableBuffer(
           icon: Icons.replay,
           message: "You dont' have any recently viewed channels",
@@ -122,7 +122,7 @@ class _TVVodPageState extends State<TVVodPage> with TickerProviderStateMixin {
   }
 
   Widget _cardList(String category) {
-    final _list = channelsMap[category];
+    final _list = channelsMap[category]!;
     return Center(
         child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -171,12 +171,12 @@ class _TVVodPageState extends State<TVVodPage> with TickerProviderStateMixin {
           return KeyEventResult.handled;
 
         case KEY_LEFT:
-          if (FocusScope.of(context).focusedChild.offset.dx > CARD_WIDTH_TV) {
+          if (FocusScope.of(context).focusedChild!.offset.dx > CARD_WIDTH_TV) {
             FocusScope.of(context).focusInDirection(TraversalDirection.left);
           } else {
             FocusScope.of(context).focusInDirection(TraversalDirection.up);
             while (
-                MediaQuery.of(context).size.width - FocusScope.of(context).focusedChild.offset.dx >
+                MediaQuery.of(context).size.width - FocusScope.of(context).focusedChild!.offset.dx >
                     CARD_WIDTH_TV * 2) {
               FocusScope.of(context).focusInDirection(TraversalDirection.right);
             }
@@ -185,11 +185,11 @@ class _TVVodPageState extends State<TVVodPage> with TickerProviderStateMixin {
           return KeyEventResult.handled;
 
         case KEY_RIGHT:
-          if (MediaQuery.of(context).size.width - FocusScope.of(context).focusedChild.offset.dx >
+          if (MediaQuery.of(context).size.width - FocusScope.of(context).focusedChild!.offset.dx >
               CARD_WIDTH_TV * 2) {
             FocusScope.of(context).focusInDirection(TraversalDirection.right);
           } else {
-            while (FocusScope.of(context).focusedChild.offset.dx > CARD_WIDTH_TV) {
+            while (FocusScope.of(context).focusedChild!.offset.dx > CARD_WIDTH_TV) {
               FocusScope.of(context).focusInDirection(TraversalDirection.left);
             }
             FocusScope.of(context).focusInDirection(TraversalDirection.down);
@@ -213,27 +213,28 @@ class _TVVodPageState extends State<TVVodPage> with TickerProviderStateMixin {
 
   void handleFavorite(VodStream channel) {
     void addFavorite(VodStream channel) {
-      channelsMap[TR_FAVORITE].add(channel);
+      channelsMap[TR_FAVORITE]!.add(channel);
     }
 
     void deleteFavorite(VodStream channel) {
-      channelsMap[TR_FAVORITE].remove(channel);
+      channelsMap[TR_FAVORITE]!.remove(channel);
     }
 
     channel.favorite() ? addFavorite(channel) : deleteFavorite(channel);
   }
 
   void addRecent(VodStream channel) {
-    if (channelsMap[TR_RECENT].contains(channel)) {
-      channelsMap[TR_RECENT].sort((b, a) => a.recentTime().compareTo(b.recentTime()));
+    if (channelsMap[TR_RECENT]!.contains(channel)) {
+      channelsMap[TR_RECENT]!.sort((b, a) => a.recentTime().compareTo(b.recentTime()));
     } else {
-      channelsMap[TR_RECENT].insert(0, channel);
+      channelsMap[TR_RECENT]!.insert(0, channel);
     }
   }
 
   void _onSearch(VodStream stream) {
-    for (int i = 0; i < channelsMap[TR_ALL].length; i++) {
-      final s = channelsMap[TR_ALL][i];
+    final channels = channelsMap[TR_ALL]!;
+    for (int i = 0; i < channels.length; i++) {
+      final s = channels[i];
       if (s.displayName() == stream.displayName()) {
         currentCategory = 2;
         _onCardTap(s);
@@ -252,7 +253,7 @@ class _TVVodPageState extends State<TVVodPage> with TickerProviderStateMixin {
         if (value.id() == null) {
           widget.vodStreamsBloc.delete(stream);
           widget.vodStreamsBloc.updateMap();
-          if (widget.vodStreamsBloc.map[TR_ALL].isEmpty) {
+          if (widget.vodStreamsBloc.map[TR_ALL]!.isEmpty) {
             final listEvents = locator<ClientEvents>();
             listEvents.publish(StreamsListEmptyEvent());
           }

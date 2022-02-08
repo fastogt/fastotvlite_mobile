@@ -22,14 +22,14 @@ class LiveFutureTile extends StatefulWidget {
   final int index;
   final ILiveFutureTileObserver observer;
 
-  const LiveFutureTile({this.channels, this.index, this.observer});
+  const LiveFutureTile({required this.channels, required this.index, required this.observer});
 
   @override
   _LiveFutureTileState createState() => _LiveFutureTileState();
 }
 
 class _LiveFutureTileState extends State<LiveFutureTile> {
-  ProgramsBloc programsBloc;
+  late ProgramsBloc programsBloc;
 
   LiveStream get _stream => widget.channels[widget.index];
 
@@ -92,14 +92,14 @@ class _LiveFutureTileState extends State<LiveFutureTile> {
   }
 
   Widget programNameWidget() {
-    String title(ProgrammeInfo programmeInfo) {
+    String title(ProgrammeInfo? programmeInfo) {
       if (programmeInfo != null) {
         return AppLocalizations.toUtf8(programmeInfo.title);
       }
       return 'N/A';
     }
 
-    return StreamBuilder<ProgrammeInfo>(
+    return StreamBuilder<ProgrammeInfo?>(
         stream: programsBloc.currentProgram,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -111,13 +111,13 @@ class _LiveFutureTileState extends State<LiveFutureTile> {
 
   Widget timeLine() {
     final width = MediaQuery.of(context).size.width;
-    return StreamBuilder<ProgrammeInfo>(
+    return StreamBuilder<ProgrammeInfo?>(
         stream: programsBloc.currentProgram,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const SizedBox();
           }
-          return LiveTimeLine(programmeInfo: snapshot.data, width: width, height: 2);
+          return LiveTimeLine(programmeInfo: snapshot.data!, width: width, height: 2);
         });
   }
 }

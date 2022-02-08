@@ -23,14 +23,14 @@ class ChannelPage extends StatefulWidget {
   final int position;
   final void Function(LiveStream stream) addRecent;
 
-  const ChannelPage({this.channels, this.position, this.addRecent});
+  const ChannelPage({required this.channels, required this.position, required this.addRecent});
 
   @override
   _ChannelPageState createState() => _ChannelPageState();
 }
 
 class _ChannelPageState extends PlayerPageMobileState<ChannelPage> {
-  LivePlayerController _controller;
+  late LivePlayerController _controller;
 
   @override
   LiveStream get stream => _currentChannel;
@@ -38,8 +38,8 @@ class _ChannelPageState extends PlayerPageMobileState<ChannelPage> {
   @override
   LivePlayerController get controller => _controller;
 
-  ProgramsBloc programsBloc;
-  int currentPos;
+  late ProgramsBloc programsBloc;
+  late int currentPos;
 
   LiveStream get _currentChannel => widget.channels[currentPos];
 
@@ -83,14 +83,14 @@ class _ChannelPageState extends PlayerPageMobileState<ChannelPage> {
   }
 
   double bottomControlsHeight() {
-    if (programsBloc.currentProgramIndex >= 0) {
+    if (programsBloc.currentProgramIndex! >= 0) {
       return 4 + BUTTONS_LINE_HEIGHT + TEXT_HEIGHT + TIMELINE_HEIGHT + TEXT_PADDING + 16;
     } else {
       return 4 + BUTTONS_LINE_HEIGHT;
     }
   }
 
-  Widget appBar(Color back, Color text) {
+  Widget appBar(Color? back, Color? text) {
     return ChannelPageAppBar(
         backgroundColor: back,
         textColor: text,
@@ -108,7 +108,7 @@ class _ChannelPageState extends PlayerPageMobileState<ChannelPage> {
         ]);
   }
 
-  Widget bottomControls(Color back, Color text, Widget sideListButton) {
+  Widget bottomControls(Color? back, Color text, Widget sideListButton) {
     return Container(
         color: back ?? Theme.of(context).primaryColor,
         width: MediaQuery.of(context).size.width,
@@ -120,7 +120,7 @@ class _ChannelPageState extends PlayerPageMobileState<ChannelPage> {
     return ProgramsListView(programsBloc: programsBloc, textColor: text);
   }
 
-  Widget _controls(Color back, Color text, Widget sideListButton) {
+  Widget _controls(Color? back, Color text, Widget sideListButton) {
     return BottomControls(
         programsBloc: programsBloc,
         buttons: <Widget>[
@@ -163,7 +163,7 @@ class _ChannelPageState extends PlayerPageMobileState<ChannelPage> {
 
   void _initProgramsBloc(int position) {
     setState(() {
-      programsBloc?.dispose();
+      programsBloc.dispose();
       programsBloc = ProgramsBloc(widget.channels[position]);
     });
   }

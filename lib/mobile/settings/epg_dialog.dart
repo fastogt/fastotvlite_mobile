@@ -28,7 +28,7 @@ class _EpgSettingsTileState extends State<EpgSettingsTile> {
   Widget build(BuildContext context) {
     return ListTile(
         leading: const SettingsIcon(Icons.add_to_queue),
-        title: Text(AppLocalizations.of(context).translate(TR_EPG_PROVIDER)),
+        title: Text(translate(context, TR_EPG_PROVIDER)),
         subtitle: Text(_epgUrl),
         onTap: () => _onTap());
   }
@@ -80,7 +80,7 @@ class _EpgDialogState extends State<EpgDialog> {
     super.dispose();
   }
 
-  String _errorText() {
+  String? _errorText() {
     if (validator) {
       return null;
     }
@@ -112,11 +112,15 @@ class _EpgDialogState extends State<EpgDialog> {
   }
 
   Widget listTile(String title, int value) {
-    return RadioListTile(
+    return RadioListTile<int>(
         activeColor: Theme.of(context).colorScheme.secondary,
         value: value,
         groupValue: groupValue,
-        onChanged: (int value) {
+        onChanged: (int? value) {
+          if (value == null) {
+            return;
+          }
+
           setState(() {
             groupValue = value;
           });
@@ -180,5 +184,7 @@ class _EpgDialogState extends State<EpgDialog> {
         ]);
   }
 
-  String _translate(String key) => AppLocalizations.of(context).translate(key);
+  String _translate(String key) {
+    return translate(context, key);
+  }
 }

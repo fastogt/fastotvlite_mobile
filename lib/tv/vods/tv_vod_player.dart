@@ -17,7 +17,7 @@ class TvVodPlayerPage extends StatefulWidget {
 }
 
 class _TvVodPlayerPageState extends PlayerPageTVState<TvVodPlayerPage> {
-  VodPlayerController _controller;
+  late VodPlayerController _controller;
 
   @override
   VodPlayerController get controller => _controller;
@@ -54,9 +54,7 @@ class _TvVodPlayerPageState extends PlayerPageTVState<TvVodPlayerPage> {
         case BACK:
         case BACKSPACE:
           _controller.sendRecent(widget.channel);
-          _controller.setInterruptTime(_controller
-              .position()
-              .inMilliseconds);
+          _controller.setInterruptTime(_controller.position().inMilliseconds);
           Navigator.of(context).pop();
           return KeyEventResult.handled;
         case MENU:

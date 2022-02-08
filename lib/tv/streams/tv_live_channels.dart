@@ -29,7 +29,7 @@ class ChannelsListTV extends StatefulWidget {
 class ChannelsListTVState extends State<ChannelsListTV> {
   static const LIST_HEADER_SIZE = 32.0;
 
-  Color _color;
+  Color? _color;
 
   List<String> get _categories => widget.bloc.categories;
 
@@ -37,7 +37,7 @@ class ChannelsListTVState extends State<ChannelsListTV> {
 
   Map<String, List<LiveStream>> get channelsMap => widget.bloc.streamsMap;
 
-  List<LiveStream> get _currentChannels => channelsMap[_currentCategory];
+  List<LiveStream> get _currentChannels => channelsMap[_currentCategory]!;
 
   @override
   void initState() {
@@ -84,7 +84,7 @@ class ChannelsListTVState extends State<ChannelsListTV> {
 
   String _title(String title) {
     if (title == TR_ALL || title == TR_RECENT || title == TR_FAVORITE) {
-      return AppLocalizations.of(context).translate(title);
+      return translate(context, title);
     }
     return AppLocalizations.toUtf8(title);
   }
@@ -116,7 +116,7 @@ class ChannelsListTVState extends State<ChannelsListTV> {
           if (_categories[_cur] == TR_RECENT) {
             widget.bloc.sortRecent();
           }
-          if (widget.scrollController.controller.hasClients) {
+          if (widget.scrollController.controller!.hasClients) {
             widget.scrollController.moveToTop();
           }
           setState(() {});
@@ -133,7 +133,7 @@ class ChannelsListTVState extends State<ChannelsListTV> {
           if (_categories[_cur] == TR_RECENT) {
             widget.bloc.sortRecent();
           }
-          if (widget.scrollController.controller.hasClients) {
+          if (widget.scrollController.controller!.hasClients) {
             widget.scrollController.moveToTop();
           }
           setState(() {});
@@ -162,7 +162,7 @@ class ChannelsListTVState extends State<ChannelsListTV> {
 
 class _ChannelsList extends StatelessWidget {
   final List<LiveStream> channels;
-  final ScrollController scrollController;
+  final ScrollController? scrollController;
   final Size size;
   final double? itemHeight;
   final KeyEventResult Function(FocusNode node, RawKeyEvent event, int index) onKey;

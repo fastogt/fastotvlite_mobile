@@ -204,7 +204,7 @@ class _TvVodDescriptionState extends State<TvVodDescription> {
             FocusScope.of(context).focusInDirection(TraversalDirection.up);
             return KeyEventResult.handled;
           }
-          if (descriptionController.controller.offset == 0.0) {
+          if (descriptionController.controller!.offset == 0.0) {
             FocusScope.of(context).focusInDirection(TraversalDirection.up);
             return KeyEventResult.handled;
           }

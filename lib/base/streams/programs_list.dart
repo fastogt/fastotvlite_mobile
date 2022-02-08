@@ -15,11 +15,10 @@ String formatProgram(ProgrammeInfo program) {
 
 class ProgramsListView extends StatefulWidget {
   final ProgramsBloc programsBloc;
-  final double itemHeight;
+  double? itemHeight;
   final Color textColor;
 
-  const ProgramsListView(
-      {required this.programsBloc, required this.itemHeight, required this.textColor});
+  ProgramsListView({required this.programsBloc, this.itemHeight, required this.textColor});
 
   @override
   _ProgramsListViewState createState() => _ProgramsListViewState();

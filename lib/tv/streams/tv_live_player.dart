@@ -15,7 +15,7 @@ class TvLivePlayerPage extends StatefulWidget {
 }
 
 class _TvLivePlayerPageState extends PlayerPageTVState<TvLivePlayerPage> {
-  BasePlayerController<LiveStream> _controller;
+  late BasePlayerController<LiveStream> _controller;
 
   @override
   BasePlayerController<LiveStream> get controller => _controller;

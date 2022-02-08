@@ -27,8 +27,8 @@ class _AgeSettingsTileState extends State<AgeSettingsTile> {
   Widget build(BuildContext context) {
     return ListTile(
         leading: const SettingsIcon(Icons.child_care),
-        title: Text(AppLocalizations.of(context).translate(TR_PARENTAL_CONTROL)),
-        subtitle: Text(AppLocalizations.of(context).translate(TR_AGE_RESTRICTION)),
+        title: Text(translate(context, TR_PARENTAL_CONTROL)),
+        subtitle: Text(translate(context, TR_AGE_RESTRICTION)),
         onTap: () => _onTap(),
         trailing: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -60,7 +60,7 @@ class AgeSelector extends StatefulWidget {
 
 class _AgeSelectorState extends State<AgeSelector> {
   int age = IARC_DEFAULT_AGE;
-  String password;
+  late String password;
   static const ITEM_HEIGHT = 48.0;
   TextEditingController passwordController = TextEditingController();
   bool authorized = false;
@@ -82,10 +82,10 @@ class _AgeSelectorState extends State<AgeSelector> {
   }
 
   String _translate(String key) {
-    return AppLocalizations.of(context).translate(key) ?? '';
+    return translate(context, key);
   }
 
-  String _errorText() {
+  String? _errorText() {
     if (validatePassword) {
       return null;
     }
