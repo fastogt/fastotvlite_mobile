@@ -32,14 +32,14 @@ class HomeTV extends HomePage {
 const TABBAR_HEIGHT = 72;
 
 class _HomeTVState extends VideoAppState with TickerProviderStateMixin {
-  TabController _tabController;
+  late TabController _tabController;
   bool isVisible = true;
 
-  double _scale;
+  late double _scale;
 
   String get _currentCategory => videoTypesList[_tabController.index];
 
-  List<IStream> get _currentStreams {
+  List<IStream>? get _currentStreams {
     switch (_currentCategory) {
       case TR_LIVE_TV:
         return channels();
@@ -142,7 +142,8 @@ class _HomeTVState extends VideoAppState with TickerProviderStateMixin {
     return StreamBuilder<ClockFormatChanged>(
         initialData: ClockFormatChanged(_initFormat),
         stream: tvTabsEvents.subscribe<ClockFormatChanged>(),
-        builder: (context, snapshot) => Clock.full(textColor: color, hour24: snapshot.data.hour24));
+        builder: (context, snapshot) =>
+            Clock.full(textColor: color, hour24: snapshot.data!.hour24));
   }
 
   void _initTabController() {
@@ -167,7 +168,7 @@ class _HomeTVState extends VideoAppState with TickerProviderStateMixin {
     final tvTabsEvents = locator<TvTabsEvents>();
     tvTabsEvents.publish(OpenedTvSettings(true));
     final stream = await Navigator.push(
-        context, MaterialPageRoute(builder: (context) => SearchPage(_currentStreams)));
+        context, MaterialPageRoute(builder: (context) => SearchPage(_currentStreams!)));
     tvTabsEvents.publish(OpenedTvSettings(false));
     if (stream != null) {
       sendSearchEvent(stream);
