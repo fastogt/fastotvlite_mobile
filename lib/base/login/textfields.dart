@@ -1,4 +1,4 @@
-import 'package:fastotv/theme/theme.dart';
+import 'package:fastotvlite/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_common/utils.dart';

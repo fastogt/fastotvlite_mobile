@@ -6,13 +6,17 @@ const double BUTTON_HEIGHT = 48;
 
 class FocusRaisedButton extends StatelessWidget {
   final String text;
-  final Function onPressed;
+  final VoidCallback? onPressed;
   final bool active;
-  final bool autoFocus;
+  final bool? autoFocus;
   final FocusNode focusNode;
 
   const FocusRaisedButton(
-      {this.text, this.onPressed, this.active = true, this.autoFocus = false, this.focusNode});
+      {required this.text,
+      this.onPressed,
+      this.active = true,
+      this.autoFocus = false,
+      required this.focusNode});
 
   static const double FOCUSED_ELEVATION = 5;
 
@@ -29,11 +33,11 @@ class FocusRaisedButton extends StatelessWidget {
 }
 
 class FocusCheckButton extends StatelessWidget {
-  final void Function(bool) onChanged;
+  final void Function(bool?) onChanged;
   final bool checkValue;
   final String title;
 
-  const FocusCheckButton({this.checkValue, this.title, this.onChanged});
+  const FocusCheckButton({required this.checkValue, required this.title, required this.onChanged});
 
   @override
   Widget build(BuildContext context) {

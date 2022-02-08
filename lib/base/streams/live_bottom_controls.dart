@@ -16,19 +16,19 @@ const double TEXT_PADDING = 16;
 
 class BottomControls extends StatefulWidget {
   final ProgramsBloc programsBloc;
-  final List<Widget> buttons;
+  final List<Widget>? buttons;
   final double height;
-  final Color backgroundColor;
-  final Color textColor;
+  final Color? backgroundColor;
+  final Color? textColor;
   final bool showName;
 
   const BottomControls(
-      {this.programsBloc,
+      {required this.programsBloc,
       this.buttons,
-      this.height,
+      required this.height,
       this.backgroundColor,
       this.textColor,
-      this.showName});
+      required this.showName});
 
   @override
   _BottomControlsState createState() => _BottomControlsState();
@@ -37,7 +37,7 @@ class BottomControls extends StatefulWidget {
 class _BottomControlsState extends State<BottomControls> {
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<ProgrammeInfo>(
+    return StreamBuilder<ProgrammeInfo?>(
         stream: widget.programsBloc.currentProgram,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -63,7 +63,7 @@ class _BottomControlsState extends State<BottomControls> {
         });
   }
 
-  Widget timeLine(ProgrammeInfo program) {
+  Widget timeLine(ProgrammeInfo? program) {
     if (program == null) {
       return const SizedBox();
     }
@@ -71,7 +71,11 @@ class _BottomControlsState extends State<BottomControls> {
         programmeInfo: program, width: MediaQuery.of(context).size.width, height: TIMELINE_HEIGHT);
   }
 
-  Widget buttons(ProgrammeInfo program) {
+  Widget buttons(ProgrammeInfo? program) {
+    if (program == null) {
+      return const SizedBox();
+    }
+
     const widthPadding = SizedBox(width: 16);
     return SizedBox(
         height: BUTTONS_LINE_HEIGHT,
@@ -86,7 +90,7 @@ class _BottomControlsState extends State<BottomControls> {
         ]));
   }
 
-  Widget programName(ProgrammeInfo program) {
+  Widget programName(ProgrammeInfo? program) {
     if (program == null) {
       return const SizedBox();
     }
@@ -100,10 +104,11 @@ class _BottomControlsState extends State<BottomControls> {
             maxLines: 1));
   }
 
-  Widget detailsButton(ProgrammeInfo p) {
+  Widget detailsButton(ProgrammeInfo? p) {
     if (p == null) {
       return const SizedBox();
     }
+
     if (p.description != null) {
       final color = widget.textColor ?? Theming.onCustomColor(Theme.of(context).primaryColor);
       return Padding(
@@ -126,10 +131,10 @@ class _BottomControlsState extends State<BottomControls> {
 
 class _DetailsDialog extends StatelessWidget {
   final String name;
-  final String category;
-  final String description;
+  final String? category;
+  final String? description;
 
-  const _DetailsDialog({this.name, this.category, this.description});
+  const _DetailsDialog({required this.name, this.category, required this.description});
 
   @override
   Widget build(BuildContext context) {
@@ -145,8 +150,8 @@ class _DetailsDialog extends StatelessWidget {
         child: Text(text, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)));
   }
 
-  Widget _text(String text) {
-    return Text(AppLocalizations.toUtf8(text),
+  Widget _text(String? text) {
+    return Text(AppLocalizations.toUtf8(text ?? ''),
         softWrap: true, style: const TextStyle(fontSize: 16));
   }
 
@@ -162,14 +167,13 @@ class _DetailsDialog extends StatelessWidget {
         _header('Description'),
         _text(description)
       ];
-    } else {
-      return [
-        _header('Name'),
-        _text(name),
-        const Divider(),
-        _header('Description'),
-        _text(description)
-      ];
     }
+    return [
+      _header('Name'),
+      _text(name),
+      const Divider(),
+      _header('Description'),
+      _text(description)
+    ];
   }
 }

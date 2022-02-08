@@ -77,9 +77,9 @@ class VodTrailerButton extends StatelessWidget {
 }
 
 class VodPlayButton extends StatelessWidget {
-  final FocusNode focus;
+  final FocusNode? focus;
   final VodStream channel;
-  final void Function() onTap;
+  final void Function()? onTap;
 
   const VodPlayButton(this.channel, {this.onTap, this.focus});
 
@@ -100,7 +100,7 @@ class VodPlayButton extends StatelessWidget {
       onTap?.call();
     } else {
       Navigator.push(context, MaterialPageRoute(builder: (context) {
-        return VodPlayer(client, channel);
+        return VodPlayer(channel);
       }));
     }
   }

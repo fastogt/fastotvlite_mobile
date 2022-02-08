@@ -29,8 +29,8 @@ abstract class BaseFilePickerDialog extends StatefulWidget {
 }
 
 abstract class BaseFilePickerDialogState extends State<BaseFilePickerDialog> {
-  String m3uText;
-  StreamType _streamType;
+  String? m3uText;
+  StreamType? _streamType;
   bool _inputLink = false;
   bool loading = false;
   bool validator = true;
@@ -80,16 +80,14 @@ abstract class BaseFilePickerDialogState extends State<BaseFilePickerDialog> {
             child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(color))));
   }
 
-  Widget _button(String text, void Function() onPressed) {
+  Widget _button(String text, void Function()? onPressed) {
     final activeColor = hasTouch ? Theme.of(context).colorScheme.secondary : null;
     final disabledColor = Theming.of(context).onBrightness().withOpacity(0.5);
+    final color = !validator ? disabledColor : activeColor!;
     return ElevatedButton(
         style: ElevatedButton.styleFrom(primary: activeColor),
-        child: Text(text,
-            style: hasTouch
-                ? TextStyle(
-                    color: backgroundColorBrightness(!validator ? disabledColor : activeColor))
-                : null),
+        child:
+            Text(text, style: hasTouch ? TextStyle(color: backgroundColorBrightness(color)) : null),
         onPressed: onPressed);
   }
 
@@ -128,7 +126,7 @@ abstract class BaseFilePickerDialogState extends State<BaseFilePickerDialog> {
             autofocus: true,
             groupValue: _streamType,
             value: value,
-            onChanged: (StreamType value) => _onChanged(value)));
+            onChanged: (StreamType? value) => _onChanged(value)));
   }
 
   Widget _fileButtonsRow() {
@@ -149,7 +147,7 @@ abstract class BaseFilePickerDialogState extends State<BaseFilePickerDialog> {
   }
 
   // common
-  void _onChanged(StreamType value) {
+  void _onChanged(StreamType? value) {
     setState(() => _streamType = value);
     if (widget.source == PickStreamFrom.SINGLE_STREAM) {
       _addStream();
@@ -160,38 +158,39 @@ abstract class BaseFilePickerDialogState extends State<BaseFilePickerDialog> {
     setState(() => loading = value);
     LoadingPlaylistNotification(value).dispatch(context);
     if (!value) {
-      AddStreamResponse output;
+      AddStreamResponse? output;
       if (m3uText != null) {
-        if (m3uText.isNotEmpty) {
+        final String text = m3uText!;
+        if (text.isNotEmpty) {
           output = await Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => hasTouch
-                  ? ChannelsPreviewPage(m3uText, _streamType)
-                  : SelectStreamTV(m3uText, _streamType)));
+                  ? ChannelsPreviewPage(text, _streamType!)
+                  : SelectStreamTV(text, _streamType!)));
         }
       }
-      WidgetsBinding.instance.addPostFrameCallback((_) => Navigator.of(context).pop(output));
+      WidgetsBinding.instance?.addPostFrameCallback((_) => Navigator.of(context).pop(output));
     }
   }
 
   void _addStream() async {
-    AddStreamResponse _result;
+    AddStreamResponse? _result;
     if (_streamType == StreamType.Live) {
-      final LiveStream _response = await Navigator.of(context).push(MaterialPageRoute(
+      final LiveStream? _response = await Navigator.of(context).push(MaterialPageRoute(
           builder: (context) =>
               hasTouch ? LiveAddPage(LiveStream.empty()) : LiveAddPageTV(LiveStream.empty())));
       if (_response != null) {
-        _result = AddStreamResponse(StreamType.Live, channels: [_response]);
+        _result = AddStreamResponse(type: StreamType.Live, channels: [_response]);
       }
     } else {
-      final VodStream _response = await Navigator.of(context).push(MaterialPageRoute(
+      final VodStream? _response = await Navigator.of(context).push(MaterialPageRoute(
           builder: (context) =>
               hasTouch ? VodAddPage(VodStream.empty()) : VodAddPageTV(VodStream.empty())));
       if (_response != null) {
-        _result = AddStreamResponse(StreamType.Vod, vods: [_response]);
+        _result = AddStreamResponse(type: StreamType.Vod, vods: [_response]);
       }
     }
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => Navigator.of(context).pop(_result));
+    WidgetsBinding.instance?.addPostFrameCallback((_) => Navigator.of(context).pop(_result));
   }
 
   // link
@@ -222,5 +221,5 @@ abstract class BaseFilePickerDialogState extends State<BaseFilePickerDialog> {
     _setLoading(false);
   }
 
-  String translate(String key) => AppLocalizations.of(context).translate(key);
+  String translate(String key) => AppLocalizations.of(context)?.translate(key) ?? '';
 }

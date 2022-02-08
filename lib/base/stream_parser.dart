@@ -17,7 +17,7 @@ class StreamsParser<T extends IStream> {
       final List<String> temp = element.groups();
       temp.toSet().forEach((singleGroup) => _savePushChannel(singleGroup, element));
     });
-    _channelsMap[TR_RECENT].sort((b, a) => a.recentTime().compareTo(b.recentTime()));
+    _channelsMap[TR_RECENT]!.sort((b, a) => a.recentTime().compareTo(b.recentTime()));
     return _channelsMap;
   }
 
@@ -30,18 +30,18 @@ class StreamsParser<T extends IStream> {
     if (!_channelsMap.containsKey(category)) {
       _channelsMap[category] = [];
     }
-    _channelsMap[category].add(element);
+    _channelsMap[category]!.add(element);
   }
 
   void _savePushFavorite(T element) {
     if (element.favorite()) {
-      _channelsMap[TR_FAVORITE].add(element);
+      _channelsMap[TR_FAVORITE]!.add(element);
     }
   }
 
   void _savePushRecent(T element) {
     if (element.recentTime() > 0) {
-      _channelsMap[TR_RECENT].insert(0, element);
+      _channelsMap[TR_RECENT]!.insert(0, element);
     }
   }
 }

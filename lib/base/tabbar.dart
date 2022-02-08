@@ -19,7 +19,7 @@ class TabBarEx extends StatefulWidget {
 }
 
 class _TabBarExState extends State<TabBarEx> {
-  bool _hasTouch;
+  late bool _hasTouch;
 
   bool isActive(int index) => widget.controller.index == index;
 
@@ -80,7 +80,7 @@ class _TabBarExState extends State<TabBarEx> {
         title == TR_FAVORITE ||
         title == TR_LIVE_TV ||
         title == TR_VODS) {
-      return AppLocalizations.of(context).translate(title);
+      return AppLocalizations.of(context)?.translate(title) ?? '';
     }
     return AppLocalizations.toUtf8(title);
   }
@@ -91,11 +91,10 @@ class _TabBarExState extends State<TabBarEx> {
           fontSize: TabBarEx.TABBAR_FONT_SIZE_TV,
           color: Theming.of(context).onBrightness(),
           fontWeight: FontWeight.bold);
-    } else {
-      return TextStyle(
-          fontSize: TabBarEx.TABBAR_FONT_SIZE_TV,
-          color: Theming.of(context).onBrightness(light: Colors.black87, dark: Colors.white70),
-          fontWeight: FontWeight.normal);
     }
+    return TextStyle(
+        fontSize: TabBarEx.TABBAR_FONT_SIZE_TV,
+        color: Theming.of(context).onBrightness(light: Colors.black87, dark: Colors.white70),
+        fontWeight: FontWeight.normal);
   }
 }

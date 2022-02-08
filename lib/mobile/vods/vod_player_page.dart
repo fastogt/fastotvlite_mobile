@@ -23,7 +23,7 @@ class VodPlayer extends StatefulWidget {
 }
 
 class VodPlayerPageMobileState extends PlayerPageMobileState<VodPlayer> {
-  VodPlayerController _controller;
+  late VodPlayerController _controller;
 
   @override
   VodStream get stream => widget.channel;
@@ -87,7 +87,8 @@ class VodPlayerPageMobileState extends PlayerPageMobileState<VodPlayer> {
 
   int position() {
     if (ChromeCastInfo().castConnected) {
-      return ChromeCastInfo().position()?.toInt();
+      final pos = ChromeCastInfo().position();
+      return pos!.toInt();
     }
     return controller.position().inMilliseconds;
   }

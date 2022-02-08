@@ -1,6 +1,7 @@
 import 'package:fastotvlite/base/add_streams/m3u_to_channels.dart';
 import 'package:fastotvlite/base/vods/constants.dart';
 import 'package:fastotvlite/base/vods/vod_card_favorite_pos.dart';
+import 'package:fastotvlite/channels/istream.dart';
 import 'package:fastotvlite/channels/live_stream.dart';
 import 'package:fastotvlite/channels/vod_stream.dart';
 import 'package:fastotvlite/service_locator.dart';
@@ -15,8 +16,8 @@ abstract class BaseSelectStreamPage<T extends StatefulWidget> extends State<T> {
   List<LiveStream> channels = [];
   List<VodStream> vods = [];
   List<FocusNode> nodes = [];
-  int count;
-  bool _hasTouch;
+  late int count;
+  late bool _hasTouch;
 
   StreamType type();
 
@@ -38,9 +39,11 @@ abstract class BaseSelectStreamPage<T extends StatefulWidget> extends State<T> {
 
   // private
   void _parseText() async {
-    final AddStreamResponse result = await M3UParser(m3uText(), type()).parseChannelsFromString();
-    channels = result.channels;
-    vods = result.vods;
+    final AddStreamResponse? result = await M3UParser(m3uText(), type()).parseChannelsFromString();
+    if (result != null) {
+      channels = result.channels!;
+      vods = result.vods!;
+    }
     final current = selectedList();
     count = current.length;
     current.forEach((element) {
@@ -55,7 +58,7 @@ abstract class BaseSelectStreamPage<T extends StatefulWidget> extends State<T> {
   }
 
   // public
-  List selectedList() {
+  List<IStream> selectedList() {
     return type() == StreamType.Live ? channels : vods;
   }
 
@@ -65,10 +68,13 @@ abstract class BaseSelectStreamPage<T extends StatefulWidget> extends State<T> {
     final current = selectedList();
     for (int i = 0; i < current.length; i++) {
       if (checkValues[i]) {
-        type() == StreamType.Live ? outputLive.add(current[i]) : outputVods.add(current[i]);
+        type() == StreamType.Live
+            ? outputLive.add(current[i] as LiveStream)
+            : outputVods.add(current[i] as VodStream);
       }
     }
-    Navigator.of(context).pop(AddStreamResponse(type(), channels: outputLive, vods: outputVods));
+    Navigator.of(context)
+        .pop(AddStreamResponse(type: type(), channels: outputLive, vods: outputVods));
   }
 
   void onBack() {

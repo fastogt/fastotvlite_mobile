@@ -12,10 +12,10 @@ enum StreamType { Live, Vod }
 
 class AddStreamResponse {
   StreamType type;
-  List<LiveStream> channels = [];
-  List<VodStream> vods = [];
+  List<LiveStream>? channels = [];
+  List<VodStream>? vods = [];
 
-  AddStreamResponse(this.type, {this.channels, this.vods});
+  AddStreamResponse({required this.type, this.channels, this.vods});
 }
 
 const ID_FIELD = 'id';
@@ -37,15 +37,16 @@ class M3UParser {
   static const GROUP_TAG = 'group-title=';
 
   // public
-  Future<AddStreamResponse> parseChannelsFromString() async {
+  Future<AddStreamResponse?> parseChannelsFromString() async {
     final streams = _splitChannelInfo(file);
     if (streams == null) {
       return null;
     }
+
     if (type == StreamType.Live) {
-      return AddStreamResponse(type, channels: streams);
+      return AddStreamResponse(type: type, channels: streams as List<LiveStream>);
     }
-    return AddStreamResponse(type, vods: streams);
+    return AddStreamResponse(type: type, vods: streams as List<VodStream>);
   }
 
   // private
@@ -55,16 +56,16 @@ class M3UParser {
     final _epg =
         EpgInfo(m3u[ID_FIELD], [m3u[PRIMARY_URL_FIELD]], m3u[NAME_FIELD], m3u[ICON_FIELD], []);
     final _channelInfo = ChannelInfo(m3u[ID_FIELD], m3u[GROUP_FIELD], 21, false, 0, 0, false, _epg,
-        true, true, null, 0, <MetaUrl>[], 0, true);
+        true, true, [], 0, <MetaUrl>[], 0, true);
 
     return LiveStream(_channelInfo, _epgLink);
   }
 
   VodStream _createVodStream(Map<String, dynamic> m3u) {
-    final _movieInfo = MovieInfo([m3u[PRIMARY_URL_FIELD]], '', m3u[NAME_FIELD], m3u[ICON_FIELD], '', '',
-        0.0, 0, '', 0, MovieType.VODS);
+    final _movieInfo = MovieInfo([m3u[PRIMARY_URL_FIELD]], '', m3u[NAME_FIELD], m3u[ICON_FIELD], '',
+        '', 0.0, 0, '', 0, MovieType.VODS);
     final vodInfo = VodInfo(m3u[ID_FIELD], m3u[GROUP_FIELD], 21, false, 0, 0, false, _movieInfo,
-        true, true, null, 0, <MetaUrl>[], 0);
+        true, true, [], 0, <MetaUrl>[], 0);
 
     return VodStream(vodInfo);
   }
@@ -110,15 +111,19 @@ class M3UParser {
     };
   }
 
-  List<dynamic> _splitChannelInfo(String streamsString) {
+  List<dynamic>? _splitChannelInfo(String streamsString) {
     final List<LiveStream> channels = [];
     final List<VodStream> vods = [];
 
     List<String> result = [];
 
     final divider = _findDivider(streamsString);
+    if (divider == null) {
+      return null;
+    }
+
     try {
-      result = streamsString?.split(divider);
+      result = streamsString.split(divider);
     } catch (e) {
       return null;
     }
@@ -137,7 +142,7 @@ class M3UParser {
     return type == StreamType.Live ? channels : vods;
   }
 
-  String _findDivider(String m3u) {
+  String? _findDivider(String m3u) {
     final reg = RegExp('#EXTINF:-1([ -~]*)tvg');
     final _match = reg.firstMatch(m3u)?.group(0);
     try {
@@ -149,10 +154,10 @@ class M3UParser {
 }
 
 class _TagsM3U {
-  String id;
-  String name;
-  String icon;
-  List<String> group;
+  String? id;
+  String? name;
+  String? icon;
+  List<String>? group;
 
   _TagsM3U({this.group, this.icon, this.id, this.name});
 }

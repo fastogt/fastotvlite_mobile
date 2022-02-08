@@ -11,12 +11,12 @@ class StreamFilePicker {
   StreamFilePicker();
 
   // private
-  String _path;
-  String _m3uText;
+  String? _path;
+  String? _m3uText;
 
-  Future<File> _openFileExplorer() async {
+  Future<File?> _openFileExplorer() async {
     try {
-      final FilePickerResult result = await FilePicker.platform.pickFiles(type: FileType.any);
+      final FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.any);
       if (result == null) {
         return null;
       }
@@ -25,12 +25,12 @@ class StreamFilePicker {
     } on PlatformException catch (e) {
       log("Unsupported operation: $e");
     }
-    return _path == null ? null : File(_path);
+    return _path == null ? null : File(_path!);
   }
 
   // public
-  Future<String> file() async {
-    final File _file = await _openFileExplorer();
+  Future<String?> file() async {
+    final File? _file = await _openFileExplorer();
     try {
       _m3uText = await _file?.readAsString();
     } on FileSystemException catch (e) {

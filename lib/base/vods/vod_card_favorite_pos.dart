@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 
 class VodFavoriteButton extends StatelessWidget {
   final Widget child;
-  final double height;
-  final double width;
+  final double? height;
+  final double? width;
 
-  const VodFavoriteButton({@required this.child, this.height, this.width});
+  const VodFavoriteButton({required this.child, this.height, this.width});
 
   static const HEIGHT = 36.0;
 
