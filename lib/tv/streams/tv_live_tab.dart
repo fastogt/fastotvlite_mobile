@@ -40,7 +40,7 @@ class _ChannelsTabHomeTVState extends State<ChannelsTabHomeTV> {
 
   bool notFullScreen = true;
 
-  LivePlayerController _controller;
+  LivePlayerController? _controller;
 
   String get _currentCategory => widget.bloc.category;
 
@@ -52,18 +52,18 @@ class _ChannelsTabHomeTVState extends State<ChannelsTabHomeTV> {
 
   List<String> get _categories => channelsMap.keys.toList();
 
-  List<LiveStream> get _currentChannels => channelsMap[_currentCategory];
+  List<LiveStream> get _currentChannels => channelsMap[_currentCategory]!;
 
   LiveStream get _currentStream => _currentChannels[currentChannel];
 
-  LiveStream _playing;
+  late LiveStream _playing;
 
-  LiveStream _playingEPG;
+  late LiveStream _playingEPG;
 
   final CustomScrollController _channelsController =
       CustomScrollController(itemHeight: TV_LIST_ITEM_SIZE);
 
-  ProgramsBloc programsBloc;
+  late ProgramsBloc programsBloc;
 
   bool _updateGuideOnScroll = false;
 
@@ -89,8 +89,8 @@ class _ChannelsTabHomeTVState extends State<ChannelsTabHomeTV> {
   @override
   void dispose() {
     super.dispose();
-    _controller.dispose();
-    programsBloc?.dispose();
+    _controller?.dispose();
+    programsBloc.dispose();
   }
 
   @override
@@ -133,7 +133,7 @@ class _ChannelsTabHomeTVState extends State<ChannelsTabHomeTV> {
   }
 
   Widget playerArea(Size availableSpace) {
-    return TvPlayerWrap(LitePlayer(controller: _controller), !notFullScreen, _onPlayer);
+    return TvPlayerWrap(LitePlayer(controller: _controller!), !notFullScreen, _onPlayer);
   }
 
   Widget channelInfo(Size availableSpace, double scale) {
@@ -168,9 +168,9 @@ class _ChannelsTabHomeTVState extends State<ChannelsTabHomeTV> {
   void controlFromTabs(bool settingsOpened) {
     if (mounted) {
       if (settingsOpened) {
-        _controller.pause();
+        _controller!.pause();
       } else {
-        _controller.playStream(_playing);
+        _controller!.playStream(_playing);
       }
     }
   }
@@ -195,10 +195,10 @@ class _ChannelsTabHomeTVState extends State<ChannelsTabHomeTV> {
       return;
     }
 
-    final channels = channelsMap[TR_ALL];
+    final channels = channelsMap[TR_ALL]!;
     for (int i = 0; i < channels.length; i++) {
       if (channels[i].id() == lastChannelID) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
+        WidgetsBinding.instance!.addPostFrameCallback((_) {
           currentChannel = i;
           _playChannel(i);
           _channelsController.moveToPosition(i);
@@ -247,7 +247,7 @@ class _ChannelsTabHomeTVState extends State<ChannelsTabHomeTV> {
     currentChannel = index;
     _playing = _currentChannels[currentChannel];
     initPlayerPage(_playing);
-    _controller.playStream(_playing);
+    _controller?.playStream(_playing);
     _setPrograms(index);
   }
 
@@ -258,7 +258,7 @@ class _ChannelsTabHomeTVState extends State<ChannelsTabHomeTV> {
 
     if (show) {
       _isSnackbarActive = true;
-      final snack = PlayerSnackbarTV(context, _playing.displayName(), _controller.isPlaying());
+      final snack = PlayerSnackbarTV(context, _playing.displayName(), _controller!.isPlaying());
       ScaffoldMessenger.of(context).showSnackBar(snack).closed.then((_) {
         _isSnackbarActive = false;
       });
@@ -284,12 +284,13 @@ class _ChannelsTabHomeTVState extends State<ChannelsTabHomeTV> {
 
   // search
   void _onSearch(LiveStream stream) {
-    for (int i = 0; i < channelsMap[TR_ALL].length; i++) {
-      final s = channelsMap[TR_ALL][i];
+    final channels = channelsMap[TR_ALL]!;
+    for (int i = 0; i < channels.length; i++) {
+      final s = channels[i];
       if (s.id() == stream.id()) {
         final result = _categories[_categories.indexOf(TR_ALL)];
         widget.bloc.setCategory(result);
-        if (_channelsController.controller.hasClients) {
+        if (_channelsController.controller!.hasClients) {
           _channelsController.moveToPosition(i);
         }
         _playChannel(i);
@@ -300,7 +301,7 @@ class _ChannelsTabHomeTVState extends State<ChannelsTabHomeTV> {
 
   // recent
   void _sendRecent() {
-    _controller.sendRecent(_playing);
+    _controller?.sendRecent(_playing);
     if (_currentCategory != TR_RECENT) {
       widget.bloc.addRecent(_playing);
     }
@@ -356,11 +357,11 @@ class _ChannelsTabHomeTVState extends State<ChannelsTabHomeTV> {
             setFullscreenOff(false);
             _showSnackBar(true);
           } else {
-            if (_controller.isPlaying()) {
-              _controller.pause();
+            if (_controller!.isPlaying()) {
+              _controller!.pause();
               _showSnackBar(!_isSnackbarActive);
             } else {
-              _controller.play();
+              _controller!.play();
               _showSnackBar(!_isSnackbarActive);
             }
           }
@@ -426,7 +427,7 @@ class _ChannelsTabHomeTVState extends State<ChannelsTabHomeTV> {
     if (notFullScreen) {
       settings.setLastChannel(null);
       widget.bloc.sortRecent();
-      WidgetsBinding.instance.addPostFrameCallback((_) {
+      WidgetsBinding.instance!.addPostFrameCallback((_) {
         _channelsController.moveToTop();
       });
     } else {
@@ -452,8 +453,8 @@ class _ChannelsTabHomeTVState extends State<ChannelsTabHomeTV> {
   void _delete() {
     widget.bloc.delete(_currentStream);
     widget.bloc.updateMap();
-    if (widget.bloc.map[TR_ALL].isEmpty) {
-      final listEvents = locator<StreamListEvent>();
+    if (widget.bloc.map[TR_ALL]!.isEmpty) {
+      final listEvents = locator<ClientEvents>();
       listEvents.publish(StreamsListEmptyEvent());
     }
   }
@@ -467,24 +468,23 @@ class _TimeLine extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<ProgrammeInfo>(
+    return StreamBuilder<ProgrammeInfo?>(
         stream: programsBloc.currentProgram,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting || snapshot.data == null) {
             return const SizedBox();
           }
+          final ProgrammeInfo p = snapshot.data!;
           return SizedBox(
               width: size.width,
               child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
-                LiveTime.current(
-                    programmeInfo: snapshot.data, color: Theming.of(context).onBrightness()),
+                LiveTime.current(programmeInfo: p, color: Theming.of(context).onBrightness()),
                 LiveTimeLine(
-                    programmeInfo: snapshot.data,
+                    programmeInfo: p,
                     width: size.width / 1.6,
                     height: 6,
                     color: Theme.of(context).colorScheme.secondary),
-                LiveTime.end(
-                    programmeInfo: snapshot.data, color: Theming.of(context).onBrightness())
+                LiveTime.end(programmeInfo: p, color: Theming.of(context).onBrightness())
               ]));
         });
   }
@@ -498,7 +498,7 @@ class _ProgramName extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<ProgrammeInfo>(
+    return StreamBuilder<ProgrammeInfo?>(
         stream: programsBloc.currentProgram,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting || snapshot.data == null) {
@@ -520,13 +520,13 @@ class _ProgramDescription extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<ProgrammeInfo>(
+    return StreamBuilder<ProgrammeInfo?>(
         stream: programsBloc.currentProgram,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            final ProgrammeInfo p = snapshot.data;
+            final ProgrammeInfo p = snapshot.data!;
             if (p.description != null) {
-              return SingleChildScrollView(child: Text(AppLocalizations.toUtf8(p.description)));
+              return SingleChildScrollView(child: Text(translate(context, p.description!)));
             }
           }
           return const SizedBox();

@@ -253,7 +253,7 @@ class _TVVodPageState extends State<TVVodPage> with TickerProviderStateMixin {
           widget.vodStreamsBloc.delete(stream);
           widget.vodStreamsBloc.updateMap();
           if (widget.vodStreamsBloc.map[TR_ALL].isEmpty) {
-            final listEvents = locator<StreamListEvent>();
+            final listEvents = locator<ClientEvents>();
             listEvents.publish(StreamsListEmptyEvent());
           }
         } else {
