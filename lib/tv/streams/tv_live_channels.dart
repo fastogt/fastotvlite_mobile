@@ -16,11 +16,11 @@ class ChannelsListTV extends StatefulWidget {
 
   const ChannelsListTV(
       {required this.bloc,
-      this.size,
-      this.onChannels,
-      this.focus,
-      this.scrollController,
-      this.setEpg});
+      required this.size,
+      required this.onChannels,
+      required this.focus,
+      required this.scrollController,
+      required this.setEpg});
 
   @override
   ChannelsListTVState createState() => ChannelsListTVState();
@@ -56,7 +56,7 @@ class ChannelsListTVState extends State<ChannelsListTV> {
     return Column(children: <Widget>[_categoryTitle(), const Divider(height: 0.0), channelsList()]);
   }
 
-  // categody
+  // category
   Widget _categoryTitle() {
     final _size = Size(widget.size.width, LIST_HEADER_SIZE);
     return Focus(

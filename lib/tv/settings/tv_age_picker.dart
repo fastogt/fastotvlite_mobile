@@ -72,7 +72,7 @@ class _AgePickerTVState extends State<AgePickerTV> {
           }
         },
         leading: Icon(Icons.child_care, color: Theming.of(context).onBrightness()),
-        title: Text(AppLocalizations.of(context).translate(TR_AGE_RESTRICTION),
+        title: Text(translate(context, TR_AGE_RESTRICTION),
             softWrap: true, style: const TextStyle(fontSize: 20)));
   }
 
@@ -103,7 +103,7 @@ class _AgePickerPasswordState extends State<AgePickerPassword> {
   final TextFieldNode passwordNode =
       TextFieldNode(main: FocusNode(), text: FocusNode(skipTraversal: true));
   final passwordController = TextEditingController();
-  String password;
+  late String password;
 
   @override
   void initState() {
@@ -113,7 +113,7 @@ class _AgePickerPasswordState extends State<AgePickerPassword> {
   }
 
   String _translate(String key) {
-    return AppLocalizations.of(context).translate(key);
+    return translate(context, key);
   }
 
   @override
@@ -137,7 +137,11 @@ class _AgePickerPasswordState extends State<AgePickerPassword> {
       textFocus: passwordNode.text,
       controller: passwordController,
       hintText: _translate(TR_PASSWORD),
-      validator: (text) {
+      validator: (String? text) {
+        if (text == null) {
+          return null;
+        }
+
         if (text.isEmpty) {
           return _translate(TR_ERROR_FORM);
         } else if (passwordController.text != password) {

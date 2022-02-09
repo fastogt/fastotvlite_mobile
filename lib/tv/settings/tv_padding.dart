@@ -16,9 +16,8 @@ class PaddingSettings extends StatefulWidget {
 }
 
 class _PaddingSettingsState extends State<PaddingSettings> {
-  double percent;
+  late double percent;
   TextStyle textStyle = const TextStyle(fontSize: 32);
-  TextStyle symbolsStyle;
   final FocusNode _node = FocusNode();
 
   @override
@@ -37,7 +36,7 @@ class _PaddingSettingsState extends State<PaddingSettings> {
 
   @override
   Widget build(BuildContext context) {
-    symbolsStyle = TextStyle(fontSize: 32, color: _iconsColor());
+    TextStyle symbolsStyle = TextStyle(fontSize: 32, color: _iconsColor());
     return Focus(
         focusNode: _node,
         onKey: _listControl,

@@ -16,7 +16,7 @@ class ClockFormatPickerTV extends StatefulWidget {
 class _ClockFormatPickerTVState extends State<ClockFormatPickerTV> {
   int _currentSelection = 0;
 
-  List<Locale> get supportedLocales => AppLocalizations.of(context).supportedLocales;
+  List<Locale> get supportedLocales => AppLocalizations.of(context)!.supportedLocales;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +36,11 @@ class _ClockFormatPickerTVState extends State<ClockFormatPickerTV> {
         onChanged: _changeFormat);
   }
 
-  void _changeFormat(int value) async {
+  void _changeFormat(int? value) async {
+    if (value == null) {
+      return;
+    }
+
     _currentSelection = value;
     final bool is24 = value == 0;
     final settings = locator<LocalStorageService>();

@@ -156,7 +156,8 @@ class _TVVodPageState extends State<TVVodPage> with TickerProviderStateMixin {
   KeyEventResult _onCard(RawKeyEvent event, VodStream channel) {
     if (event is RawKeyDownEvent && event.data is RawKeyEventDataAndroid) {
       final RawKeyDownEvent rawKeyDownEvent = event;
-      final RawKeyEventDataAndroid rawKeyEventDataAndroid = rawKeyDownEvent.data;
+      final RawKeyEventDataAndroid rawKeyEventDataAndroid =
+          rawKeyDownEvent.data as RawKeyEventDataAndroid;
       switch (rawKeyEventDataAndroid.keyCode) {
         case ENTER:
         case KEY_CENTER:

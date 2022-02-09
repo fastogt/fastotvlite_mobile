@@ -2,7 +2,7 @@ import 'package:fastotvlite/base/add_streams/add_stream_dialog.dart';
 import 'package:fastotvlite/localization/translations.dart';
 import 'package:fastotvlite/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_common/localization.dart';
+import 'package:flutter_common/flutter_common.dart';
 
 class StreamTypePickerTV extends StatefulWidget {
   const StreamTypePickerTV();
@@ -12,7 +12,7 @@ class StreamTypePickerTV extends StatefulWidget {
 }
 
 class _StreamTypePickerTVState extends State<StreamTypePickerTV> {
-  PickStreamFrom _source;
+  PickStreamFrom? _source;
 
   @override
   Widget build(BuildContext context) {
@@ -24,23 +24,21 @@ class _StreamTypePickerTVState extends State<StreamTypePickerTV> {
           _button('CANCEL', () => _exit(), 1.0),
           _button('OK', () => _onProceed(), _source == null ? 0.5 : 1.0)
         ],
-        content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              _typeTile(PickStreamFrom.PLAYLIST),
-              _typeTile(PickStreamFrom.SINGLE_STREAM)
-            ]));
+        content: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+          _typeTile(PickStreamFrom.PLAYLIST),
+          _typeTile(PickStreamFrom.SINGLE_STREAM)
+        ]));
   }
 
   Widget _typeTile(PickStreamFrom value) {
     return ListTile(
-        title: Text(AppLocalizations.of(context)
-            .translate(value == PickStreamFrom.SINGLE_STREAM ? TR_SINGLE_STREAM : TR_PLAYLIST)),
+        title: Text(translate(
+            context, value == PickStreamFrom.SINGLE_STREAM ? TR_SINGLE_STREAM : TR_PLAYLIST)),
         leading: Radio(
             autofocus: true,
             groupValue: _source,
             value: value,
-            onChanged: (PickStreamFrom value) => setState(() => _source = value)));
+            onChanged: (PickStreamFrom? value) => setState(() => _source = value)));
   }
 
   Widget _button(String text, void Function() onPressed, double opacity) {
@@ -49,7 +47,7 @@ class _StreamTypePickerTVState extends State<StreamTypePickerTV> {
         child: Text(text, style: TextStyle(color: buttonTextColor)), onPressed: onPressed);
   }
 
-  void _exit({PickStreamFrom source}) => Navigator.of(context).pop(_source);
+  void _exit({PickStreamFrom? source}) => Navigator.of(context).pop(_source);
 
   void _onProceed() async {
     if (_source != null) {

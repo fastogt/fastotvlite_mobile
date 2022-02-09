@@ -35,7 +35,8 @@ class _FilePickerDialogTVState extends BaseFilePickerDialogState {
   KeyEventResult _nodeAction(FocusNode node, RawKeyEvent event) {
     if (event is RawKeyDownEvent && event.data is RawKeyEventDataAndroid) {
       final RawKeyDownEvent rawKeyDownEvent = event;
-      final RawKeyEventDataAndroid rawKeyEventDataAndroid = rawKeyDownEvent.data;
+      final RawKeyEventDataAndroid rawKeyEventDataAndroid =
+          rawKeyDownEvent.data as RawKeyEventDataAndroid;
       switch (rawKeyEventDataAndroid.keyCode) {
         case ENTER:
         case KEY_CENTER:

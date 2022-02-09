@@ -15,9 +15,9 @@ class LanguagePickerTV extends StatefulWidget {
 class _LanguagePickerTVState extends State<LanguagePickerTV> {
   int _currentSelection = 0;
 
-  List<String> get supportedLanguages => AppLocalizations.of(context).supportedLanguages;
+  List<String> get supportedLanguages => AppLocalizations.of(context)!.supportedLanguages;
 
-  List<Locale> get supportedLocales => AppLocalizations.of(context).supportedLocales;
+  List<Locale> get supportedLocales => AppLocalizations.of(context)!.supportedLocales;
 
   @override
   Widget build(BuildContext context) {
@@ -37,10 +37,14 @@ class _LanguagePickerTVState extends State<LanguagePickerTV> {
         onChanged: _changeLanguage);
   }
 
-  void _changeLanguage(int value) async {
+  void _changeLanguage(int? value) async {
+    if (value == null) {
+      return;
+    }
+
     _currentSelection = value;
     final selectedLocale = supportedLocales[value];
-    AppLocalizations.of(context).load(selectedLocale);
+    AppLocalizations.of(context)!.load(selectedLocale);
     final settings = locator<LocalStorageService>();
     settings.setLangCode(selectedLocale.languageCode);
     settings.setCountryCode(selectedLocale.countryCode);
@@ -48,6 +52,6 @@ class _LanguagePickerTVState extends State<LanguagePickerTV> {
   }
 
   int currentLanguageIndex() {
-    return supportedLocales.indexOf(AppLocalizations.of(context).currentLocale) ?? 0;
+    return supportedLocales.indexOf(AppLocalizations.of(context)!.currentLocale) ?? 0;
   }
 }

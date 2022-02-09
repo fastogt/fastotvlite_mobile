@@ -6,10 +6,10 @@ import 'package:flutter_common/flutter_common.dart';
 abstract class EditStreamPageTV<T extends StatefulWidget> extends State<T> {
   static const int DEFAULT_IARC = 18;
 
-  TextEditingController nameController;
-  TextEditingController videoLinkController;
-  TextEditingController iconController;
-  TextEditingController iarcController;
+  late TextEditingController nameController;
+  late TextEditingController videoLinkController;
+  late TextEditingController iconController;
+  late TextEditingController iarcController;
 
   final nameFieldNode = TextFieldNode(main: FocusNode(), text: FocusNode(skipTraversal: true));
   final urlFieldNode = TextFieldNode(main: FocusNode(), text: FocusNode(skipTraversal: true));
@@ -36,9 +36,7 @@ abstract class EditStreamPageTV<T extends StatefulWidget> extends State<T> {
 
   @override
   Widget build(BuildContext context) {
-    final primaryColor = Theme
-        .of(context)
-        .primaryColor;
+    final primaryColor = Theme.of(context).primaryColor;
     final appBarTextColor = backgroundColorBrightness(primaryColor);
     return Scaffold(
         appBar: AppBar(
@@ -82,7 +80,7 @@ abstract class EditStreamPageTV<T extends StatefulWidget> extends State<T> {
   }
 
   void exitAndDelete() {
-    stream().setId(null);
+    stream().setId("");
     Navigator.of(context).pop(stream());
   }
 

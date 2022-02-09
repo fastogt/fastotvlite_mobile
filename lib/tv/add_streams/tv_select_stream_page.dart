@@ -21,7 +21,7 @@ class _SelectStreamTVState extends BaseSelectStreamPage<SelectStreamTV> {
   final FocusNode _backButtonNode = FocusNode();
   final FocusNode _saveButtonNode = FocusNode();
   final FocusScopeNode _channelsScope = FocusScopeNode();
-  double scale;
+  late double scale;
 
   @override
   String m3uText() => widget.m3uText;
@@ -76,7 +76,7 @@ class _SelectStreamTVState extends BaseSelectStreamPage<SelectStreamTV> {
                 body: _body())));
   }
 
-  Color _buttonColor(FocusNode node) {
+  Color? _buttonColor(FocusNode node) {
     return node.hasPrimaryFocus ? Theme.of(context).colorScheme.secondary : null;
   }
 
@@ -106,7 +106,8 @@ class _SelectStreamTVState extends BaseSelectStreamPage<SelectStreamTV> {
   KeyEventResult _onAppBar(FocusNode node, RawKeyEvent event) {
     if (event is RawKeyDownEvent && event.data is RawKeyEventDataAndroid) {
       final RawKeyDownEvent rawKeyDownEvent = event;
-      final RawKeyEventDataAndroid rawKeyEventDataAndroid = rawKeyDownEvent.data;
+      final RawKeyEventDataAndroid rawKeyEventDataAndroid =
+          rawKeyDownEvent.data as RawKeyEventDataAndroid;
       switch (rawKeyEventDataAndroid.keyCode) {
         case ENTER:
         case KEY_CENTER:
@@ -156,7 +157,8 @@ class _SelectStreamTVState extends BaseSelectStreamPage<SelectStreamTV> {
   KeyEventResult _onTile(FocusNode node, RawKeyEvent event) {
     if (event is RawKeyDownEvent && event.data is RawKeyEventDataAndroid) {
       final RawKeyDownEvent rawKeyDownEvent = event;
-      final RawKeyEventDataAndroid rawKeyEventDataAndroid = rawKeyDownEvent.data;
+      final RawKeyEventDataAndroid rawKeyEventDataAndroid =
+          rawKeyDownEvent.data as RawKeyEventDataAndroid;
       switch (rawKeyEventDataAndroid.keyCode) {
         case ENTER:
         case KEY_CENTER:
@@ -206,7 +208,8 @@ class _SelectStreamTVState extends BaseSelectStreamPage<SelectStreamTV> {
   KeyEventResult _onCard(FocusNode node, RawKeyEvent event) {
     if (event is RawKeyDownEvent && event.data is RawKeyEventDataAndroid) {
       final RawKeyDownEvent rawKeyDownEvent = event;
-      final RawKeyEventDataAndroid rawKeyEventDataAndroid = rawKeyDownEvent.data;
+      final RawKeyEventDataAndroid rawKeyEventDataAndroid =
+          rawKeyDownEvent.data as RawKeyEventDataAndroid;
       switch (rawKeyEventDataAndroid.keyCode) {
         case ENTER:
         case KEY_CENTER:
@@ -216,11 +219,11 @@ class _SelectStreamTVState extends BaseSelectStreamPage<SelectStreamTV> {
 
         /// Moves around cards
         case KEY_LEFT:
-          if (_channelsScope.focusedChild.offset.dx > CARD_WIDTH) {
+          if (_channelsScope.focusedChild!.offset.dx > CARD_WIDTH) {
             _channelsScope.focusInDirection(TraversalDirection.left);
           } else {
             _channelsScope.focusInDirection(TraversalDirection.up);
-            while (MediaQuery.of(context).size.width - _channelsScope.focusedChild.offset.dx >
+            while (MediaQuery.of(context).size.width - _channelsScope.focusedChild!.offset.dx >
                 CARD_WIDTH * 2) {
               _channelsScope.focusInDirection(TraversalDirection.right);
             }
@@ -229,11 +232,11 @@ class _SelectStreamTVState extends BaseSelectStreamPage<SelectStreamTV> {
           return KeyEventResult.handled;
 
         case KEY_RIGHT:
-          if (MediaQuery.of(context).size.width - _channelsScope.focusedChild.offset.dx >
+          if (MediaQuery.of(context).size.width - _channelsScope.focusedChild!.offset.dx >
               CARD_WIDTH * 2) {
             _channelsScope.focusInDirection(TraversalDirection.right);
           } else {
-            while (_channelsScope.focusedChild.offset.dx > CARD_WIDTH) {
+            while (_channelsScope.focusedChild!.offset.dx > CARD_WIDTH) {
               _channelsScope.focusInDirection(TraversalDirection.left);
             }
             _channelsScope.focusInDirection(TraversalDirection.down);
