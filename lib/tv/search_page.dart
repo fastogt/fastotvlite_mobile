@@ -18,7 +18,7 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   final TextFieldNode _textFieldNode =
-  TextFieldNode(main: FocusNode(), text: FocusNode(skipTraversal: true));
+      TextFieldNode(main: FocusNode(), text: FocusNode(skipTraversal: true));
   final TextEditingController _controller = TextEditingController(text: '');
   List<IStream> _streams = [];
 
@@ -37,17 +37,11 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Theming
-            .of(context)
-            .theme
-            .scaffoldBackgroundColor,
+        backgroundColor: Theming.of(context).theme.scaffoldBackgroundColor,
         appBar: AppBar(
             centerTitle: true,
             elevation: 0,
-            backgroundColor: Theming
-                .of(context)
-                .theme
-                .scaffoldBackgroundColor,
+            backgroundColor: Theming.of(context).theme.scaffoldBackgroundColor,
             iconTheme: IconThemeData(color: Theming.of(context).onBrightness()),
             title: FractionallySizedBox(child: field(), widthFactor: 0.5),
             leading: IconButton(

@@ -3,7 +3,6 @@ import 'package:fastotvlite/localization/translations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_common/flutter_common.dart';
 import 'package:flutter_fastotv_common/base/controls/preview_icon.dart';
-import 'package:flutter_tags/flutter_tags.dart';
 
 enum EditResult { ADD, EDIT, DELETE }
 
@@ -21,7 +20,6 @@ abstract class EditStreamPageState<T extends IStream> extends State<EditStreamPa
   late TextEditingController videoLinkController;
   late TextEditingController iarcController;
 
-  final GlobalKey<TagsState> _groupsStateKey = GlobalKey<TagsState>();
   List<String> groups = [];
 
   bool validator = true;
@@ -103,36 +101,15 @@ abstract class EditStreamPageState<T extends IStream> extends State<EditStreamPa
   }
 
   Widget groupsField() {
-    return Tags(
-        key: _groupsStateKey,
-        textField: TagsTextField(
-            hintText: 'Add group',
-            constraintSuggestion: false,
-            suggestions: [],
-            onSubmitted: (String str) {
-              setState(() {
-                groups.add(str);
-              });
-            }),
-        itemCount: groups.length,
-        itemBuilder: (int index) {
-          final item = groups[index];
-
-          return ItemTags(
-              // Each ItemTags must contain a Key. Keys allow Flutter to
-              // uniquely identify widgets.
-              key: Key(index.toString()),
-              index: index,
-              title: item,
-              combine: ItemTagsCombine.withTextBefore,
-              icon: ItemTagsIcon(icon: Icons.add),
-              removeButton: ItemTagsRemoveButton(onRemoved: () {
-                setState(() {
-                  groups.removeAt(index);
-                });
-                return true;
-              }));
-        });
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: ChipListField(
+        values: groups,
+        hintText: 'Groups',
+        onItemAdded: (value) => setState(() => groups.add(value)),
+        onItemRemoved: (index) => setState(() => groups.removeAt(index)),
+      ),
+    );
   }
 
   void _validate() {
