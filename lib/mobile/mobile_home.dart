@@ -82,7 +82,7 @@ class _HomeMobileState extends VideoAppState {
         ]);
   }
 
-  var isDialOpen = ValueNotifier<bool>(false);
+  ValueNotifier<bool> isDialOpen = ValueNotifier<bool>(false);
   Widget _floatingButton() {
     final _theme = Theme.of(context);
     return SpeedDial(
@@ -101,7 +101,6 @@ class _HomeMobileState extends VideoAppState {
   }
 
   SpeedDialChild _dialAction(String title, String tag, PickStreamFrom source, IconData icon) {
-    final _theme = Theme.of(context);
     return SpeedDialChild(
         labelBackgroundColor: Colors.transparent,
         label: translate(context, title),
