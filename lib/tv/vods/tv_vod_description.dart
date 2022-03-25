@@ -116,7 +116,7 @@ class _TvVodDescriptionState extends State<TvVodDescription> {
         child: FocusBorder(
             focus: infoNode,
             child: SideInfo(
-                country: AppLocalizations.toUtf8(widget.channel.country() ?? ''),
+                country: AppLocalizations.toUtf8(widget.channel.country()),
                 duration: widget.channel.duration(),
                 primeDate: widget.channel.primeDate(),
                 fontSize: INFO_FONT_SIZE * _scaleFactor,

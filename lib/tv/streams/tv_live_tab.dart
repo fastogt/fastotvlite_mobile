@@ -198,7 +198,7 @@ class _ChannelsTabHomeTVState extends State<ChannelsTabHomeTV> {
     final channels = channelsMap[TR_ALL]!;
     for (int i = 0; i < channels.length; i++) {
       if (channels[i].id() == lastChannelID) {
-        WidgetsBinding.instance!.addPostFrameCallback((_) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
           currentChannel = i;
           _playChannel(i);
           _channelsController.moveToPosition(i);
@@ -427,7 +427,7 @@ class _ChannelsTabHomeTVState extends State<ChannelsTabHomeTV> {
     if (notFullScreen) {
       settings.setLastChannel(null);
       widget.bloc.sortRecent();
-      WidgetsBinding.instance!.addPostFrameCallback((_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
         _channelsController.moveToTop();
       });
     } else {

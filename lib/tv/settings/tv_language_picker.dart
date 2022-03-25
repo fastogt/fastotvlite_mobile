@@ -52,6 +52,6 @@ class _LanguagePickerTVState extends State<LanguagePickerTV> {
   }
 
   int currentLanguageIndex() {
-    return supportedLocales.indexOf(AppLocalizations.of(context)!.currentLocale) ?? 0;
+    return supportedLocales.indexOf(AppLocalizations.of(context)!.currentLocale);
   }
 }

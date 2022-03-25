@@ -29,7 +29,7 @@ abstract class PlayerPageMobileState<T extends StatefulWidget> extends State<T> 
     _ccConnection = ChromeCastInfo().castConnectedStream.listen((event) {
       if (event) {
         _initChromeCast(stream.primaryUrl(), stream.displayName());
-        WidgetsBinding.instance!.addPostFrameCallback((_) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
           controller.dispose();
         });
       } else {
