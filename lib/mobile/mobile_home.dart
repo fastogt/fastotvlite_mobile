@@ -13,7 +13,7 @@ import 'package:fastotvlite/pages/home_page.dart';
 import 'package:fastotvlite/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_common/flutter_common.dart';
-import 'package:unicorndial/unicorndial.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 class HomeMobile extends HomePage {
   const HomeMobile(List<LiveStream> channels, List<VodStream> vods) : super(channels, vods);
@@ -82,31 +82,37 @@ class _HomeMobileState extends VideoAppState {
         ]);
   }
 
+  var isDialOpen = ValueNotifier<bool>(false);
   Widget _floatingButton() {
     final _theme = Theme.of(context);
-    return UnicornDialer(
-        backgroundColor: _theme.primaryColor.withOpacity(0.4),
-        parentButtonBackground: _theme.colorScheme.secondary,
-        orientation: UnicornOrientation.VERTICAL,
-        parentButton: const Icon(Icons.add),
-        childButtons: [
+    return SpeedDial(
+        backgroundColor: _theme.primaryColor.withOpacity(0.5),
+        foregroundColor: _theme.colorScheme.secondary,
+        icon: Icons.add,
+        activeIcon: Icons.close,
+        spacing: 10,
+        elevation: 1.0,
+        animationSpeed: 200,
+        openCloseDial: isDialOpen,
+        children: [
           _dialAction(TR_SINGLE_STREAM, "single", PickStreamFrom.SINGLE_STREAM, Icons.add_to_queue),
           _dialAction(TR_PLAYLIST, "playlist", PickStreamFrom.PLAYLIST, Icons.playlist_add)
         ]);
   }
 
-  UnicornButton _dialAction(String title, String tag, PickStreamFrom source, IconData icon) {
-    return UnicornButton(
-        labelColor: Theming.of(context).onBrightness(),
+  SpeedDialChild _dialAction(String title, String tag, PickStreamFrom source, IconData icon) {
+    final _theme = Theme.of(context);
+    return SpeedDialChild(
         labelBackgroundColor: Colors.transparent,
-        labelText: translate(context, title),
-        labelHasShadow: false,
-        hasLabel: true,
-        currentButton: FloatingActionButton(
+        label: translate(context, title),
+        child: FloatingActionButton(
             heroTag: tag,
             backgroundColor: Theme.of(context).colorScheme.secondary,
             mini: true,
-            onPressed: () => _onAdd(source),
+            onPressed: () {
+              isDialOpen.value = !isDialOpen.value;
+              _onAdd(source);
+            },
             child: Icon(icon)));
   }
 

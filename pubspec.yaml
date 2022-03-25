@@ -21,7 +21,7 @@ dependencies:
   get_it: ^7.2.0
   numberpicker: ^2.1.1
   shared_preferences: ^2.0.13
-  unicorndial: ^1.1.5
+  flutter_speed_dial: ^5.0.0+1
   uuid: ^3.0.6
 
   dart_chromecast:
