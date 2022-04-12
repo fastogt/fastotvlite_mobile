@@ -168,7 +168,7 @@ abstract class BaseFilePickerDialogState extends State<BaseFilePickerDialog> {
                   : SelectStreamTV(text, _streamType!)));
         }
       }
-      WidgetsBinding.instance.addPostFrameCallback((_) => Navigator.of(context).pop(output));
+      WidgetsBinding.instance!.addPostFrameCallback((_) => Navigator.of(context).pop(output));
     }
   }
 
@@ -190,7 +190,7 @@ abstract class BaseFilePickerDialogState extends State<BaseFilePickerDialog> {
       }
     }
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => Navigator.of(context).pop(_result));
+    WidgetsBinding.instance!.addPostFrameCallback((_) => Navigator.of(context).pop(_result));
   }
 
   // link

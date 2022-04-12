@@ -16,7 +16,7 @@ abstract class BaseSelectStreamPage<T extends StatefulWidget> extends State<T> {
   List<LiveStream> channels = [];
   List<VodStream> vods = [];
   List<FocusNode> nodes = [];
-  late int count;
+  int count = 0;
   late bool _hasTouch;
 
   StreamType type();
@@ -28,10 +28,10 @@ abstract class BaseSelectStreamPage<T extends StatefulWidget> extends State<T> {
   @override
   void initState() {
     super.initState();
-    _parseText();
 
     final device = locator<RuntimeDevice>();
     _hasTouch = device.hasTouch;
+    _parseText();
   }
 
   @override
@@ -61,6 +61,7 @@ abstract class BaseSelectStreamPage<T extends StatefulWidget> extends State<T> {
   List<IStream> selectedList() {
     return type() == StreamType.Live ? channels : vods;
   }
+
 
   void onSave() {
     final List<LiveStream> outputLive = [];

@@ -41,7 +41,7 @@ class LiveVideoAppState extends IStreamBaseListPage<LiveStream, LiveTab>
   void initState() {
     super.initState();
     recentlyViewed.stream.asBroadcastStream().listen((channel) => addRecent(channel));
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
       _lastViewed();
       setState(() {});
     });

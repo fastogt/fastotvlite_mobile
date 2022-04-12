@@ -1,7 +1,7 @@
 name: fastotvlite
 description: FastoTV Lite IPTV player.
 homepage: https://fastotv.com
-version: 1.13.8+33
+version: 1.14.0+34
 
 publish_to: none
 
@@ -21,7 +21,7 @@ dependencies:
   get_it: ^7.2.0
   numberpicker: ^2.1.1
   shared_preferences: ^2.0.13
-  flutter_speed_dial: ^5.0.0+1
+  flutter_speed_dial: ^5.1.0
   uuid: ^3.0.6
 
   dart_chromecast:
