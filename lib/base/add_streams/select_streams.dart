@@ -16,7 +16,7 @@ abstract class BaseSelectStreamPage<T extends StatefulWidget> extends State<T> {
   List<LiveStream> channels = [];
   List<VodStream> vods = [];
   List<FocusNode> nodes = [];
-  int count = 0;
+  late int count;
   late bool _hasTouch;
 
   StreamType type();
@@ -41,8 +41,8 @@ abstract class BaseSelectStreamPage<T extends StatefulWidget> extends State<T> {
   void _parseText() async {
     final AddStreamResponse? result = await M3UParser(m3uText(), type()).parseChannelsFromString();
     if (result != null) {
-      channels = result.channels!;
-      vods = result.vods!;
+      channels = result.channels != null ? result.channels! : [];
+      vods = result.vods != null ? result.vods! : [];
     }
     final current = selectedList();
     count = current.length;
@@ -61,7 +61,6 @@ abstract class BaseSelectStreamPage<T extends StatefulWidget> extends State<T> {
   List<IStream> selectedList() {
     return type() == StreamType.Live ? channels : vods;
   }
-
 
   void onSave() {
     final List<LiveStream> outputLive = [];

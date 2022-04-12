@@ -117,7 +117,11 @@ class _LiveFutureTileState extends State<LiveFutureTile> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const SizedBox();
           }
-          return LiveTimeLine(programmeInfo: snapshot.data!, width: width, height: 2);
+          if (snapshot.data != null) {
+            return LiveTimeLine(programmeInfo: snapshot.data!, width: width, height: 2);
+          }
+
+          return const SizedBox();
         });
   }
 }

@@ -12,8 +12,8 @@ enum StreamType { Live, Vod }
 
 class AddStreamResponse {
   StreamType type;
-  List<LiveStream>? channels = [];
-  List<VodStream>? vods = [];
+  List<LiveStream>? channels;
+  List<VodStream>? vods;
 
   AddStreamResponse({required this.type, this.channels, this.vods});
 }

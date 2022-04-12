@@ -38,7 +38,7 @@ class _ChannelPageState extends PlayerPageMobileState<ChannelPage> {
   @override
   LivePlayerController get controller => _controller;
 
-  late ProgramsBloc programsBloc;
+  ProgramsBloc? programsBloc;
   late int currentPos;
 
   LiveStream get _currentChannel => widget.channels[currentPos];
@@ -53,7 +53,7 @@ class _ChannelPageState extends PlayerPageMobileState<ChannelPage> {
   @override
   void dispose() {
     super.dispose();
-    programsBloc.dispose();
+    programsBloc?.dispose();
   }
 
   @override
@@ -83,7 +83,8 @@ class _ChannelPageState extends PlayerPageMobileState<ChannelPage> {
   }
 
   double bottomControlsHeight() {
-    if (programsBloc.currentProgramIndex! >= 0) {
+    final currentIndex = programsBloc?.currentProgramIndex;
+    if (currentIndex != null && currentIndex >= 0) {
       return 4 + BUTTONS_LINE_HEIGHT + TEXT_HEIGHT + TIMELINE_HEIGHT + TEXT_PADDING + 16;
     } else {
       return 4 + BUTTONS_LINE_HEIGHT;
@@ -117,12 +118,12 @@ class _ChannelPageState extends PlayerPageMobileState<ChannelPage> {
   }
 
   Widget sideListContent(Color text) {
-    return ProgramsListView(programsBloc: programsBloc, textColor: text);
+    return ProgramsListView(programsBloc: programsBloc!, textColor: text);
   }
 
   Widget _controls(Color? back, Color text, Widget sideListButton) {
     return BottomControls(
-        programsBloc: programsBloc,
+        programsBloc: programsBloc!,
         buttons: <Widget>[
           PlayerButtons.previous(onPressed: _moveToPrevChannel, color: text),
           _playPause(text),
@@ -163,7 +164,7 @@ class _ChannelPageState extends PlayerPageMobileState<ChannelPage> {
 
   void _initProgramsBloc(int position) {
     setState(() {
-      programsBloc.dispose();
+      programsBloc?.dispose();
       programsBloc = ProgramsBloc(widget.channels[position]);
     });
   }
