@@ -32,6 +32,11 @@ class LiveStream extends IStream {
   }
 
   @override
+  List<String> get urls {
+    return _channelInfo.epg.urls;
+  }
+
+  @override
   String primaryUrl() {
     return _channelInfo.primaryLink();
   }

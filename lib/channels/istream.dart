@@ -30,4 +30,6 @@ abstract class IStream {
   int recentTime();
 
   void setRecentTime(int value);
+
+  List<String> get urls;
 }

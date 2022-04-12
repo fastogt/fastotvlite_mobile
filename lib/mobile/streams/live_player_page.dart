@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:core';
 
 import 'package:dart_chromecast/chromecast.dart';
@@ -59,39 +58,33 @@ class _ChannelPageState extends PlayerPageMobileState<ChannelPage> {
   @override
   Widget build(BuildContext context) {
     final settings = locator<LocalStorageService>();
-    return WillPopScope(
-        onWillPop: () {
-          _sendRecent();
-          Navigator.of(context).pop(currentPos);
-          return Future.value(true);
-        },
-        child: AppBarPlayer.sideList(
-            appbar: appBar,
-            child: playerArea(_currentChannel.icon()),
-            bottomControls: bottomControls,
-            sideList: sideListContent,
-            bottomControlsHeight: bottomControlsHeight(),
-            onDoubleTap: () {
-              if (isPlaying()) {
-                pause();
-              } else {
-                play();
-              }
-            },
-            absoulteBrightness: settings.brightnessChange(),
-            absoulteSound: settings.soundChange()));
+    return AppBarPlayer.sideList(
+        appbar: appBar,
+        child: playerArea(_currentChannel.icon()),
+        bottomControls: bottomControls,
+        sideList: sideListContent,
+        bottomControlsHeight: bottomControlsHeight(),
+        onDoubleTap: !initizalied
+            ? null
+            : isPlaying()
+                ? pause
+                : play,
+        onLongTapLeft: !initizalied ? null : onLongTapLeft,
+        onLongTapRight: !initizalied ? null : onLongTapRight,
+        absoulteBrightness: settings.brightnessChange(),
+        absoulteSound: settings.soundChange());
   }
 
   double bottomControlsHeight() {
     final currentIndex = programsBloc?.currentProgramIndex;
+
     if (currentIndex != null && currentIndex >= 0) {
       return 4 + BUTTONS_LINE_HEIGHT + TEXT_HEIGHT + TIMELINE_HEIGHT + TEXT_PADDING + 16;
-    } else {
-      return 4 + BUTTONS_LINE_HEIGHT;
     }
+    return 4 + BUTTONS_LINE_HEIGHT;
   }
 
-  Widget appBar(Color? back, Color? text) {
+  Widget appBar(Color? back, Color text) {
     return ChannelPageAppBar(
         backgroundColor: back,
         textColor: text,
@@ -114,7 +107,7 @@ class _ChannelPageState extends PlayerPageMobileState<ChannelPage> {
         color: back ?? Theme.of(context).primaryColor,
         width: MediaQuery.of(context).size.width,
         height: bottomControlsHeight(),
-        child: _controls(back, text, sideListButton));
+        child: initizalied ? _controls(back, text, sideListButton) : const SizedBox());
   }
 
   Widget sideListContent(Color text) {
@@ -126,21 +119,12 @@ class _ChannelPageState extends PlayerPageMobileState<ChannelPage> {
         programsBloc: programsBloc!,
         buttons: <Widget>[
           PlayerButtons.previous(onPressed: _moveToPrevChannel, color: text),
-          _playPause(text),
+          createPlayPauseButton(text),
           PlayerButtons.next(onPressed: _moveToNextChannel, color: text),
           sideListButton
         ],
         textColor: text,
         backgroundColor: back);
-  }
-
-  Widget _playPause(Color text) {
-    return PlayerStateListener(controller, builder: (context) {
-      return createPlayPauseButton(text);
-    },
-        placeholder: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Icon(Icons.play_arrow, color: text.withOpacity(0.5))));
   }
 
   void _moveToPrevChannel() {

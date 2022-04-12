@@ -36,8 +36,7 @@ class _LiveFutureTileState extends State<LiveFutureTile> {
   @override
   void initState() {
     super.initState();
-    final channel = widget.channels[widget.index];
-    programsBloc = ProgramsBloc(channel);
+    programsBloc = ProgramsBloc(_stream);
   }
 
   @override
@@ -117,11 +116,12 @@ class _LiveFutureTileState extends State<LiveFutureTile> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const SizedBox();
           }
-          if (snapshot.data != null) {
-            return LiveTimeLine(programmeInfo: snapshot.data!, width: width, height: 2);
+
+          if (!snapshot.hasData) {
+            return const SizedBox();
           }
 
-          return const SizedBox();
+          return LiveTimeLine(programmeInfo: snapshot.data!, width: width, height: 2);
         });
   }
 }

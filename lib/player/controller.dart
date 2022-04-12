@@ -9,14 +9,16 @@ import 'package:player/controller.dart';
 const VOD_BOTTOM_CONTROL_HEIGHT = 4 + BUTTONS_LINE_HEIGHT + TIMELINE_HEIGHT;
 
 class BasePlayerController<T extends IStream> extends PlayerController {
+  int _currentUrl = 0;
   T stream;
 
-  final void Function()? onPlay;
+  List<String> get urls => stream.urls;
+  final Function? onPlay;
 
-  BasePlayerController(this.stream, [this.onPlay]) : super(initLink: stream.primaryUrl());
+  BasePlayerController(this.stream, [this.onPlay]) : super(initLink: stream.urls[0]);
 
   @override
-  String get currentLink => stream.primaryUrl();
+  String get currentLink => urls[_currentUrl];
 
   @override
   void onPlaying() {

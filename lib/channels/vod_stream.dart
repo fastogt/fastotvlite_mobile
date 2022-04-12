@@ -23,6 +23,11 @@ class VodStream extends IStream {
   }
 
   @override
+  List<String> get urls {
+    return _channelInfo.vod.urls;
+  }
+
+  @override
   void setPrimaryUrl(String value) {
     _channelInfo.vod.urls[0] = value;
   }
