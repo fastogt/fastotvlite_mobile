@@ -19,13 +19,14 @@ class ThemePickerTV extends StatefulWidget {
 class _ThemePickerTVState extends State<ThemePickerTV> {
   static const THEME_LIST = [TR_LIGHT, TR_DARK, TR_BLACK];
 
-  String themeGroupValue = LIGHT_THEME_ID;
+  String themeGroupValue = DARK_THEME_ID;
+
+  final settings = locator<LocalStorageService>();
 
   @override
   void initState() {
     super.initState();
-    final settings = locator<LocalStorageService>();
-    themeGroupValue = settings.themeID() ?? LIGHT_THEME_ID;
+    themeGroupValue = settings.themeID() ?? DARK_THEME_ID;
   }
 
   @override
@@ -45,6 +46,11 @@ class _ThemePickerTVState extends State<ThemePickerTV> {
         title: Text(translate(context, text), style: const TextStyle(fontSize: 20)),
         value: themeId,
         groupValue: themeGroupValue,
-        onChanged: Theming.of(context).setTheme);
+        onChanged: (value) => _saveTheme(value));
+  }
+
+  void _saveTheme(String? id) {
+    Theming.of(context).setTheme(id);
+    themeGroupValue = settings.themeID() ?? DARK_THEME_ID;
   }
 }
