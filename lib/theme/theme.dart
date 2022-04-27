@@ -116,9 +116,9 @@ class _ThemingState extends State<Theming> {
     _id = settings.themeID();
     if (_id == null) {
       if (_hasTouch) {
-        _id = CUSTOM_LIGHT_THEME_ID;
+        _id = CUSTOM_DARK_THEME_ID;
       } else {
-        _id = LIGHT_THEME_ID;
+        _id = DARK_THEME_ID;
       }
     }
 

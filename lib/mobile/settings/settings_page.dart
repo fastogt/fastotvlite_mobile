@@ -37,6 +37,7 @@ class _SettingsPageState extends State<SettingsPage> {
     final color = Theming.of(context).onPrimary();
     return Scaffold(
         appBar: AppBar(
+            backgroundColor: Theme.of(context).primaryColor,
             iconTheme: IconThemeData(color: color),
             title: Text(_translate(TR_SETTINGS), style: TextStyle(color: color))),
         body: SingleChildScrollView(

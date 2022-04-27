@@ -72,6 +72,7 @@ class _HomeMobileState extends VideoAppState {
 
     final Color iconColor = backgroundColorBrightness(Theme.of(context).primaryColor);
     return AppBar(
+        backgroundColor: Theme.of(context).primaryColor,
         elevation: _elevation(),
         iconTheme: IconThemeData(color: iconColor),
         actionsIconTheme: IconThemeData(color: iconColor),
