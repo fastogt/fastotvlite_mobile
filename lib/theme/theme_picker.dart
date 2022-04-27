@@ -15,7 +15,7 @@ class ThemePicker extends StatefulWidget {
 }
 
 class _ThemePickerState extends State<ThemePicker> {
-  String themeGroupValue = LIGHT_THEME_ID;
+  String themeGroupValue = CUSTOM_DARK_THEME_ID;
 
   @override
   void initState() {
