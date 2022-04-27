@@ -81,9 +81,11 @@ abstract class BaseFilePickerDialogState extends State<BaseFilePickerDialog> {
   }
 
   Widget _button(String text, void Function()? onPressed) {
-    final activeColor = hasTouch ? Theme.of(context).colorScheme.secondary : null;
+    final activeColor = hasTouch
+        ? Theme.of(context).colorScheme.secondary
+        : Theming.of(context).onBrightness().withOpacity(0.5);
     final disabledColor = Theming.of(context).onBrightness().withOpacity(0.5);
-    final color = !validator ? disabledColor : activeColor!;
+    final color = !validator ? disabledColor : activeColor;
     return ElevatedButton(
         style: ElevatedButton.styleFrom(primary: activeColor),
         child:

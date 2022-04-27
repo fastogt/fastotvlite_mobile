@@ -192,9 +192,9 @@ class _HomeTVState extends VideoAppState with TickerProviderStateMixin {
           context: context, builder: (BuildContext context) => FilePickerDialogTV(_source));
       if (response != null) {
         addStreams(response);
-        _initTabController();
-        setState(() {});
       }
+      _initTabController();
+        setState(() {});
     }
   }
 
