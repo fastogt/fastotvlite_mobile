@@ -101,8 +101,10 @@ class _HomeTVState extends VideoAppState with TickerProviderStateMixin {
                               title: Row(children: <Widget>[
                                 const SizedBox(width: 16),
                                 Expanded(
-                                    child: SingleChildScrollView(
-                                        child: TabBarEx(_tabController, videoTypesList)))
+                                    child: _tabController.length != 0
+                                        ? SingleChildScrollView(
+                                            child: TabBarEx(_tabController, videoTypesList))
+                                        : Container())
                               ]),
                               actions: <Widget>[
                                 if (selectedType != TR_EMPTY)
@@ -194,7 +196,7 @@ class _HomeTVState extends VideoAppState with TickerProviderStateMixin {
         addStreams(response);
       }
       _initTabController();
-        setState(() {});
+      setState(() {});
     }
   }
 
