@@ -2,7 +2,7 @@
 
 About FastoTVLite
 ===============
-FastoTVLite - is a crossplatform free iptv/stream player. <br />
+FastoTVLite - is a crossplatform iptv/ott/streaming player. <br />
 
 ### Android Mobile/Tablet:
 ![](https://gitlab.com/fastogt/fastocloud_ott/docs/-/raw/main/images/android_mobile/walk.png)
