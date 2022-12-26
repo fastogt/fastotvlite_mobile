@@ -5,16 +5,16 @@ About FastoTVLite
 FastoTVLite - is a crossplatform free iptv/stream player. <br />
 
 ### Android Mobile/Tablet:
-![](https://fastotv.com/app/api/static/images/promo/android.png)
+![](https://gitlab.com/fastogt/fastocloud_ott/docs/-/raw/main/images/android_mobile/walk.png)
 
 ### Android TV:
-![](https://fastotv.com/app/api/static/images/promo/android_tv.png)
+![](https://gitlab.com/fastogt/fastocloud_ott/docs/-/raw/main/images/vods_logo.jpg)
 
 ### iPhone:
-![](https://fastotv.com/app/api/static/images/promo/iphone.jpeg)
+![](https://gitlab.com/fastogt/fastocloud_ott/docs/-/raw/main/images/race_live.jpg)
 
 ### iPad:
-![](https://fastotv.com/app/api/static/images/promo/ipad.png)
+![](https://gitlab.com/fastogt/fastocloud_ott/docs/-/raw/main/images/british_cat.png)
 
 Visit our site: [FastoTV](https://www.fastotv.com)
 
@@ -24,8 +24,8 @@ Download
 You can download compiled version (for Mac OS X, Windows, FreeBSD and Linux) from our site:<br />
 [FastoTV](https://www.fastotv.com)
 
-### [Android](https://play.google.com/store/apps/details?id=com.fastotv.lite)
-### [Apple](https://apps.apple.com/us/app/fastotvlite/id1496936356)
+### [Android](https://play.google.com/store/apps/details?id=com.crocott)
+### [Apple](https://apps.apple.com/us/app/crocott/id1642691103)
 
 Contribute
 ==========
