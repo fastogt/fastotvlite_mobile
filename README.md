@@ -22,7 +22,7 @@ Download
 ========
 
 You can download compiled version (for Mac OS X, Windows, FreeBSD and Linux) from our site:<br />
-[FastoTV](https://www.fastotv.com)
+[FastoTV](https://www.crocott.com)
 
 ### [Android](https://play.google.com/store/apps/details?id=com.crocott)
 ### [Apple](https://apps.apple.com/us/app/crocott/id1642691103)
