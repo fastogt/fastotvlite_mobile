@@ -16,7 +16,7 @@ FastoTVLite - is a crossplatform iptv/ott/streaming player. <br />
 ### iPad:
 ![](https://gitlab.com/fastogt/fastocloud_ott/docs/-/raw/main/images/british_cat.png)
 
-Visit our site: [FastoTV](https://www.fastotv.com)
+Visit our site: [FastoTV](https://www.crocott.com)
 
 Download
 ========
